@@ -1,0 +1,1 @@
+from fitTracker.tests import *
