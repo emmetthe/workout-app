@@ -8,6 +8,7 @@ function App() {
       <Routes>
         <Route path="login" element={<LoginForm />} />
         {/* <Route path="signin" /> */}
+        <Route path="/" element={'testing react routes'} />
       </Routes>
     </BrowserRouter>
   );
