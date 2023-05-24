@@ -1,17 +1,20 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css';
-import LoginForm from './session/loginForm';
-import SignUpForm from './session/signUpForm';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import routes from './routes';
+import Navbar from './components/Navbar'
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="login" element={<LoginForm />} />
-        <Route path="register" element={<SignUpForm />} />
-        <Route path="/" element={'testing react routes'} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <Router>
+        <Navbar />
+        <Routes>
+          {routes.map((route) => (
+            <Route exact key={route.path} path={route.path} element={route.element} />
+          ))}
+        </Routes>
+      </Router>
+    </>
   );
 }
 
