@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navigate, Link } from 'react-router-dom';
-import { loginAsync, signUpAsync } from '../slices/authSlice';
+import { signUpAsync } from '../../slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import CSRFToken from '../components/CSRFToken';
+import CSRFToken from '../CSRFToken';
+import { clearErrors } from '../../slices/errorSlice';
 
 const Register = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const error = useSelector((state) => state.auth.error);
+  const error = useSelector((state) => state.errors);
   const dispatch = useDispatch();
   localStorage.removeItem('to');
 
@@ -16,10 +17,12 @@ const Register = () => {
     re_password: ''
   });
   const [accountCreated, setAccountCreated] = useState(false);
-
   const areAllFieldsFilled = formData['username'] !== '' && formData['password'] !== '' && formData['re_password'] !== '';
-
   const { username, password, re_password } = formData;
+
+  useEffect(() => {
+    dispatch(clearErrors());
+  }, []);
 
   const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -46,7 +49,7 @@ const Register = () => {
         <form onSubmit={(e) => onSubmit(e)}>
           <CSRFToken />
           <div className="form-group">
-            <p>{error ? error : null}</p>
+            <div>{error ? error : null}</div>
 
             <label className="form-label">Username: </label>
             <input

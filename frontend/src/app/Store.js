@@ -1,10 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authSlice from '../slices/authSlice';
+import authReducer from '../slices/authSlice';
+import logger from 'redux-logger'
+import errorReducer from '../slices/errorSlice'
 
 export const store = configureStore({
   reducer: {
-    auth: authSlice,
-  }
+    auth: authReducer,
+    errors: errorReducer
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
 
 export default store;
