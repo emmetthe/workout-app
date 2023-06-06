@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
+import { receiveErrors, clearErrors } from './errorSlice';
 
 const initialState = {
   isAuthenticated: null,
-  error: '',
   profile: [],
   username: ''
 };
@@ -54,7 +54,7 @@ export const checkAuthenticatedAsync = () => async (dispatch) => {
       dispatch(is_authenticated(false));
     }
   } catch (err) {
-    dispatch(hasError(err.message));
+    dispatch(receiveErrors(err.message));
   }
 };
 
@@ -71,14 +71,17 @@ export const loginAsync = (username, password) => async (dispatch) => {
   try {
     const res = await axios.post('/users/login/', body, config);
 
+    // dispatch(clearErrors());
+
     if (res.data.success === 'User authenticated') {
       dispatch(login(res.data));
       dispatch(LoadUserAsync());
     } else {
-      dispatch(hasError(res.data.error));
+      // dispatch(hasError(res.data.error));
+      dispatch(receiveErrors(res.data.error));
     }
   } catch (err) {
-    dispatch(hasError(err.message));
+    dispatch(receiveErrors(err.message));
   }
 };
 
@@ -100,7 +103,7 @@ export const logoutAsync = () => async (dispatch) => {
     dispatch(logout(res.data));
     window.localStorage.removeItem('to');
   } catch (err) {
-    dispatch(hasError(err.message));
+    dispatch(receiveErrors(err.message));
   }
 };
 
@@ -117,13 +120,16 @@ export const signUpAsync = (username, password, re_password) => async (dispatch)
 
   try {
     const res = await axios.post('/users/signup/', body, config);
-    if (res.data.success == 'User created successfully') {
+
+    // dispatch(clearErrors());
+
+    if (res.data.success === 'User created successfully') {
       dispatch(signup(res.data));
     } else {
-      dispatch(hasError(res.data.error));
+      dispatch(receiveErrors(res.data.error));
     }
   } catch (err) {
-    dispatch(hasError(err.message));
+    dispatch(receiveErrors(err.message));
   }
 };
 
@@ -144,7 +150,7 @@ export const delAccountAsync = () => async (dispatch) => {
     await axios.delete('/accounts/delete/', config, body);
     dispatch(deleteAccount());
   } catch (err) {
-    dispatch(hasError(err.message));
+    dispatch(receiveErrors(err.message));
   }
 };
 
@@ -170,11 +176,11 @@ const authSlice = createSlice({
     },
     is_authenticated: (state, action) => {
       state.isAuthenticated = true;
-    },
-    hasError: (state, action) => {
-      state.isAuthenticated = false;
-      state.error = action.payload;
     }
+    // hasError: (state, action) => {
+    //   state.isAuthenticated = false;
+    //   state.error = action.payload;
+    // }
   },
 
   extraReducers: {
@@ -196,10 +202,10 @@ const authSlice = createSlice({
     [UpdateProfileAsync.fulfilled]: (state, action) => {
       state.profile = action.payload.profile;
       state.username = action.payload.username;
-      state.first_name = action.payload.profile.first_name;
-      state.last_name = action.payload.profile.last_name;
-      state.phone = action.payload.profile.phone;
-      state.city = action.payload.profile.city;
+      // state.first_name = action.payload.profile.first_name;
+      // state.last_name = action.payload.profile.last_name;
+      // state.phone = action.payload.profile.phone;
+      // state.city = action.payload.profile.city;
       state.error = '';
     },
 
