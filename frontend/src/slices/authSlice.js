@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
-import { receiveErrors, clearErrors } from './errorSlice';
+import { receiveErrors } from './errorSlice';
 
 const initialState = {
   isAuthenticated: null,
@@ -9,12 +9,27 @@ const initialState = {
   username: ''
 };
 
+/**
+ * GET '/profile/user' to retrieve user data
+ *
+ * generates action types:
+ * - pending: 'auth/load_user/pending'
+ * - fulfilled: 'auth/load_user/fulfilled'
+ * - rejected: 'auth/load_user/rejected'
+ * @returns user data
+ */
 export const LoadUserAsync = createAsyncThunk('auth/load_user', async () => {
   return axios.get('/profile/user').then((response) => {
     return response.data;
   });
 });
 
+/**
+ * PUT '/profile/update/'
+ * - updates user profile
+ * @params first name, last name, city, phone
+ * @returns none
+ */
 export const UpdateProfileAsync = createAsyncThunk('auth/update_user', async (profile_object) => {
   const body = JSON.stringify({
     withCredentials: true,
@@ -36,6 +51,10 @@ export const UpdateProfileAsync = createAsyncThunk('auth/update_user', async (pr
   return axios.put('/profile/update/', body, config).then((response) => response.data);
 });
 
+/**
+ * GET '/users/is_authenticated'
+ * - authenticates current user and modifies redux store
+ */
 export const checkAuthenticatedAsync = () => async (dispatch) => {
   const config = {
     headers: {
@@ -58,6 +77,13 @@ export const checkAuthenticatedAsync = () => async (dispatch) => {
   }
 };
 
+/**
+ * POST '/users/is_authenticated'
+ * - Creates POST request to allow user sign in
+ * @requires CSRFToken, User Authenticated
+ * @params username, password
+ * @returns none
+ */
 export const loginAsync = (username, password) => async (dispatch) => {
   const config = {
     headers: {
@@ -71,13 +97,10 @@ export const loginAsync = (username, password) => async (dispatch) => {
   try {
     const res = await axios.post('/users/login/', body, config);
 
-    // dispatch(clearErrors());
-
     if (res.data.success === 'User authenticated') {
       dispatch(login(res.data));
       dispatch(LoadUserAsync());
     } else {
-      // dispatch(hasError(res.data.error));
       dispatch(receiveErrors(res.data.error));
     }
   } catch (err) {
@@ -85,6 +108,11 @@ export const loginAsync = (username, password) => async (dispatch) => {
   }
 };
 
+/**
+ * POST '/users/logout'
+ * - Creates POST request to sign out user
+ * @requires CSRFToken, User Authenticated
+ */
 export const logoutAsync = () => async (dispatch) => {
   const config = {
     headers: {
@@ -107,6 +135,13 @@ export const logoutAsync = () => async (dispatch) => {
   }
 };
 
+/**
+ * POST '/users/signup/'
+ * - Creates POST request to register user
+ * @requires CSRFToken
+ * @params username, password, confirm password
+ * @returns none
+ */
 export const signUpAsync = (username, password, re_password) => async (dispatch) => {
   const config = {
     headers: {
@@ -121,8 +156,6 @@ export const signUpAsync = (username, password, re_password) => async (dispatch)
   try {
     const res = await axios.post('/users/signup/', body, config);
 
-    // dispatch(clearErrors());
-
     if (res.data.success === 'User created successfully') {
       dispatch(signup(res.data));
     } else {
@@ -133,6 +166,11 @@ export const signUpAsync = (username, password, re_password) => async (dispatch)
   }
 };
 
+/**
+ * DEL '/accounts/delete/'
+ * - Permanently removes current user's account
+ * @requires CSRFToken
+ */
 export const delAccountAsync = () => async (dispatch) => {
   const config = {
     headers: {
@@ -215,6 +253,12 @@ const authSlice = createSlice({
   }
 });
 
+/**
+dispatched inside components and other async functions
+*/
 export const { login, logout, signup, deleteAccount, is_authenticated, hasError } = authSlice.actions;
 
+/**
+ * reducer for user auth
+ */
 export default authSlice.reducer;

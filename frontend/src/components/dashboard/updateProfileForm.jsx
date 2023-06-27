@@ -1,37 +1,45 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Box, Button, TextField } from '@mui/material';
+import CloseIcon from '@material-ui/icons/Close';
+import { CloseButtonStyle } from './profileFormStyle';
 
-const UpdateProfileForm = ({ onSubmit }) => {
+const UpdateProfileForm = ({ handleSubmit, handleClose }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    phone: '',
-    city: ''
+    city: '',
+    phone: ''
   });
-  const { firstName, lastName } = formData;
   const dispatch = useDispatch();
-  const error = useSelector((state) => state.errors);
+  const inputRef = useRef('');
+  const errors = useSelector((state) => state.errors);
+  const { firstName, lastName, phone, city } = useSelector((state) => state.auth.profile);
 
-  const onChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  // const onChange = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // };
 
   return (
     <>
-      <form onSubmit={(e) => onSubmit(e)}>
-        <label>
-          First Name:
-          <input className="form-control" type="text" onChange={(e) => onChange(e)} value={firstName} />
-        </label>
+      <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
+        <Button sx={CloseButtonStyle} onClick={handleClose}>
+          <CloseIcon />
+        </Button>
 
-        <label>
-          Last Name:
-          <input className="form-control" type="text" onChange={(e) => onChange(e)} value={lastName} />
-        </label>
+        <TextField id="outlined-helperText" label="First Name" margin="normal" defaultValue={firstName} />
 
-        <button type="submit">Update</button>
-      </form>
+        <TextField id="outlined-helperText" label="Last Name" margin="normal" defaultValue={lastName} />
+
+        <TextField id="outlined-helperText" label="City" margin="normal" defaultValue={city} />
+
+        <TextField id="outlined-helperText" label="Phone" margin="normal" defaultValue={phone} />
+
+        <Button variant="outlined" type="submit" onClick={handleSubmit}>
+          Update
+        </Button>
+      </Box>
     </>
   );
 };

@@ -1,10 +1,11 @@
+import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../slices/authSlice';
 import logger from 'redux-logger';
 import errorReducer from '../slices/errorSlice';
 import storage from 'redux-persist/lib/storage';
 import { combineReducers } from 'redux';
-import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
+import modalReducer from '../slices/modalSlice'
 
 const persistConfig = {
   key: 'main-root',
@@ -12,7 +13,8 @@ const persistConfig = {
 };
 const reducers = combineReducers({
   auth: authReducer,
-  errors: errorReducer
+  errors: errorReducer,
+  modal: modalReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);
