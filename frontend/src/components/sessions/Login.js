@@ -71,7 +71,7 @@ const Login = () => {
           />
         </div>
         <button type="submit">Login</button>
-        <button type="submit" onClick={() => setFormData({ username: 'demo', password: '12345678' })}>
+        <button type="submit" onClick={() => dispatch(loginAsync('demo', '12345678'))}>
           Demo
         </button>
       </form>

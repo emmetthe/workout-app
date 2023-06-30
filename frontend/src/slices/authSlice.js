@@ -33,9 +33,8 @@ export const LoadUserAsync = createAsyncThunk('auth/load_user', async () => {
 export const UpdateProfileAsync = createAsyncThunk('auth/update_user', async (profile_object) => {
   const body = JSON.stringify({
     withCredentials: true,
-    first_name: profile_object['first_name'],
-    last_name: profile_object['last_name'],
-    position: profile_object['position'],
+    first_name: profile_object['firstName'],
+    last_name: profile_object['lastName'],
     phone: profile_object['phone'],
     city: profile_object['city']
   });
@@ -240,8 +239,8 @@ const authSlice = createSlice({
     [UpdateProfileAsync.fulfilled]: (state, action) => {
       state.profile = action.payload.profile;
       state.username = action.payload.username;
-      // state.first_name = action.payload.profile.first_name;
-      // state.last_name = action.payload.profile.last_name;
+      state.firstName = action.payload.profile.first_name;
+      state.lastName = action.payload.profile.last_name;
       // state.phone = action.payload.profile.phone;
       // state.city = action.payload.profile.city;
       state.error = '';
