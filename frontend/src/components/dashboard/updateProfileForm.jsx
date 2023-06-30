@@ -1,17 +1,20 @@
 import React from 'react';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Box, Button, TextField } from '@mui/material';
+import CloseIcon from '@material-ui/icons/Close';
+import { CloseButtonStyle } from './profileFormStyle';
 
-const UpdateProfileForm = ({ onSubmit }) => {
+const UpdateProfileForm = ({ handleSubmit, handleClose }) => {
+  const { firstName, lastName, phone, city } = useSelector((state) => state.auth.profile);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    phone: '',
-    city: ''
+    firstName,
+    lastName,
+    city,
+    phone
   });
-  const { firstName, lastName } = formData;
   const dispatch = useDispatch();
-  const error = useSelector((state) => state.errors);
+  const errors = useSelector((state) => state.errors);
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,19 +22,30 @@ const UpdateProfileForm = ({ onSubmit }) => {
 
   return (
     <>
-      <form onSubmit={(e) => onSubmit(e)}>
-        <label>
-          First Name:
-          <input className="form-control" type="text" onChange={(e) => onChange(e)} value={firstName} />
-        </label>
+      <Box component="form" autoComplete="off" onSubmit={(e) => handleSubmit(e, formData)}>
+        <Button sx={CloseButtonStyle} onClick={handleClose}>
+          <CloseIcon />
+        </Button>
 
-        <label>
-          Last Name:
-          <input className="form-control" type="text" onChange={(e) => onChange(e)} value={lastName} />
-        </label>
+        <TextField
+          id="outlined-helperText"
+          label="First Name"
+          margin="normal"
+          name="firstName"
+          defaultValue={firstName}
+          onChange={onChange}
+        />
 
-        <button type="submit">Update</button>
-      </form>
+        <TextField id="outlined-helperText" label="Last Name" margin="normal" name="lastName" defaultValue={lastName} onChange={onChange} />
+
+        <TextField id="outlined-helperText" label="City" margin="normal" name="city" defaultValue={city} onChange={onChange} />
+
+        <TextField id="outlined-helperText" label="Phone" margin="normal" name="phone" defaultValue={phone} onChange={onChange} />
+
+        <Button variant="outlined" type="submit" onClick={(e) => handleSubmit(e, formData)}>
+          Update
+        </Button>
+      </Box>
     </>
   );
 };

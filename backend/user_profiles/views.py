@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
 from .models import UserProfile
+from django.utils import timezone
 
 
 class GetUserProfilesView(APIView):
@@ -38,17 +39,15 @@ class UpdateUserProfileView(APIView):
         try:
             user = self.request.user
             username = user.username
-
             data = self.request.data
             first_name = data['first_name']
             last_name = data['last_name']
-            position = data['position']
             phone = data['phone']
             city = data['city']
+            updated = timezone.now()
 
             UserProfile.objects.filter(user=user).update(
-                first_name=first_name, last_name=last_name, position=position, phone=phone, city=city)
-
+                first_name=first_name, last_name=last_name, phone=phone, city=city, updated=updated)
             user_profile = UserProfile.objects.get(user=user)
             user_profile = UserProfileSerializer(user_profile)
 

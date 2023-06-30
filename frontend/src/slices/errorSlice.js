@@ -1,8 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const initialState = {
+  errors: ''
+};
+
+/**
+ * Retrieves errors from backend
+ * - initialState: ''
+ * - reducers:
+ *    - receiveErrors
+ *    - clearErrors
+ */
 export const errorSlice = createSlice({
   name: 'errors',
-  initialState: '',
+  initialState,
   reducers: {
     receiveErrors: (state, action) => {
       return action.payload;
@@ -11,7 +22,8 @@ export const errorSlice = createSlice({
   }
 });
 
-export const {receiveErrors, clearErrors} = errorSlice.actions
+// actions dispatched inside components/other slices
+export const { receiveErrors, clearErrors } = errorSlice.actions;
 export const selectErrors = (state) => state.errors;
 
 export default errorSlice.reducer;
