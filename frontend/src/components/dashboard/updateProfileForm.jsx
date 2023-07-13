@@ -1,19 +1,19 @@
 import React from 'react';
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Box, Button, TextField } from '@mui/material';
 import CloseIcon from '@material-ui/icons/Close';
 import { CloseButtonStyle } from './profileFormStyle';
 
 const UpdateProfileForm = ({ handleSubmit, handleClose }) => {
-  const { firstName, lastName, phone, city } = useSelector((state) => state.auth.profile);
+  const { firstName, lastName, bodyWeight, height } = useSelector((state) => state.auth.profile);
   const [formData, setFormData] = useState({
     firstName,
     lastName,
-    city,
-    phone
+    bodyWeight,
+    height
   });
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const errors = useSelector((state) => state.errors);
 
   const onChange = (e) => {
@@ -27,6 +27,8 @@ const UpdateProfileForm = ({ handleSubmit, handleClose }) => {
           <CloseIcon />
         </Button>
 
+        {errors ? <>{errors}</> : null}
+
         <TextField
           id="outlined-helperText"
           label="First Name"
@@ -38,9 +40,16 @@ const UpdateProfileForm = ({ handleSubmit, handleClose }) => {
 
         <TextField id="outlined-helperText" label="Last Name" margin="normal" name="lastName" defaultValue={lastName} onChange={onChange} />
 
-        <TextField id="outlined-helperText" label="City" margin="normal" name="city" defaultValue={city} onChange={onChange} />
+        <TextField id="outlined-helperText" label="height" margin="normal" name="height" defaultValue={height} onChange={onChange} />
 
-        <TextField id="outlined-helperText" label="Phone" margin="normal" name="phone" defaultValue={phone} onChange={onChange} />
+        <TextField
+          id="outlined-helperText"
+          label="Body Weight"
+          margin="normal"
+          name="bodyWeight"
+          defaultValue={bodyWeight}
+          onChange={onChange}
+        />
 
         <Button variant="outlined" type="submit" onClick={(e) => handleSubmit(e, formData)}>
           Update

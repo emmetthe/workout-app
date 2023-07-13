@@ -35,8 +35,8 @@ export const UpdateProfileAsync = createAsyncThunk('auth/update_user', async (pr
     withCredentials: true,
     first_name: profile_object['firstName'],
     last_name: profile_object['lastName'],
-    phone: profile_object['phone'],
-    city: profile_object['city']
+    height: profile_object['height'],
+    bodyWeight: profile_object['bodyWeight']
   });
 
   const config = {
