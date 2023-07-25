@@ -8,7 +8,6 @@ class UserProfile(models.Model):
     last_name = models.CharField(max_length=255, default='')
     body_weight = models.CharField(max_length=20, default='')
     body_wt_in_lbs = models.BooleanField(default=True)
-    height = models.CharField(max_length=20, default='')
     lifting_wt_in_lbs = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

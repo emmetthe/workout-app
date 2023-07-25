@@ -44,11 +44,10 @@ class UpdateUserProfileView(APIView):
             first_name = data['first_name']
             last_name = data['last_name']
             body_weight = data['body_weight']
-            height = data['height']
             updated = timezone.now()
 
             UserProfile.objects.filter(user=user).update(
-                first_name=first_name, last_name=last_name, body_weight=body_weight, height=height, updated=updated)
+                first_name=first_name, last_name=last_name, body_weight=body_weight, updated=updated)
             user_profile = UserProfile.objects.get(user=user)
             user_profile = UserProfileSerializer(user_profile)
 
