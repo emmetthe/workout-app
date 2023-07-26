@@ -21,7 +21,7 @@ const UpdateProfileForm = ({ handleSubmit, handleClose }) => {
 
   return (
     <>
-      <Box component="form" autoComplete="off" onSubmit={(e) => handleSubmit(e, formData)} container sx={UpdateProfileMainStyle}>
+      <Box component="form" autoComplete="off" onSubmit={(e) => handleSubmit(e, formData)} sx={UpdateProfileMainStyle}>
         <Button sx={CloseButtonStyle} onClick={handleClose}>
           <CloseIcon />
         </Button>

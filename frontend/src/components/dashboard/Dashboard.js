@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import React from 'react';
+// import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { UpdateProfileAsync, delAccountAsync } from '../../slices/authSlice';
+import { UpdateProfileAsync } from '../../slices/authSlice';
 import ModalForm from '../modal/modal';
 import { showModal } from '../../slices/modalSlice';
 import Button from '@mui/material/Button';

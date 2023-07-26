@@ -4,6 +4,7 @@ import { signUpAsync } from '../../slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import CSRFToken from '../CSRFToken';
 import { clearErrors } from '../../slices/errorSlice';
+// import { Box } from '@mui/material';
 
 const Register = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -22,7 +23,7 @@ const Register = () => {
 
   useEffect(() => {
     dispatch(clearErrors());
-  }, []);
+  }, [dispatch]);
 
   const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 

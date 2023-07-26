@@ -4,6 +4,7 @@ import CSRFToken from '../CSRFToken';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginAsync } from '../../slices/authSlice';
 import { clearErrors } from '../../slices/errorSlice';
+import { Box, Button, Typography } from '@mui/material';
 
 const Login = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -19,7 +20,7 @@ const Login = () => {
 
   useEffect(() => {
     dispatch(clearErrors());
-  }, []);
+  }, [dispatch]);
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -37,49 +38,42 @@ const Login = () => {
   }
 
   return (
-    <div className="container mt-5">
+    <Box>
       <h1>Sign In</h1>
       <p>Sign into your account</p>
 
       <div>{error ? error : null}</div>
 
-      <form onSubmit={(e) => onSubmit(e)} autoFocus>
+      <Box component="form" onSubmit={(e) => onSubmit(e)} autoFocus>
         <CSRFToken />
-        <div className="form-group">
-          <label className="form-label">Username: </label>
-          <input
-            className="form-control"
-            type="text"
-            name="username"
-            onChange={(e) => onChange(e)}
-            value={username}
-            required
-            autoComplete="true"
-          />
+        <div>
+          <label>Username: </label>
+          <input type="text" name="username" onChange={(e) => onChange(e)} value={username} required autoComplete="true" />
         </div>
 
-        <div className="form-group">
-          <label className="form-label mt-3">Password: </label>
-          <input
-            className="form-control"
-            type="password"
-            name="password"
-            onChange={(e) => onChange(e)}
-            value={password}
-            required
-            autoComplete="true"
-          />
+        <div>
+          <label>Password: </label>
+          <input type="password" name="password" onChange={(e) => onChange(e)} value={password} required autoComplete="true" />
         </div>
-        <button type="submit">Login</button>
-        <button type="submit" onClick={() => dispatch(loginAsync('demo', '12345678'))}>
+        <Button variant="outlined" type="submit">
+          Login
+        </Button>
+        <Button
+          variant="outlined"
+          type="submit"
+          onClick={(e) => {
+            e.preventDefault();
+            dispatch(loginAsync('demo', '12345678'));
+          }}
+        >
           Demo
-        </button>
-      </form>
+        </Button>
+      </Box>
 
-      <p className="mt-3">
+      <Typography variant="body2">
         Don't have an Account? <Link to="/register">Sign Up</Link>
-      </p>
-    </div>
+      </Typography>
+    </Box>
   );
 };
 
