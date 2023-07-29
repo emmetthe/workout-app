@@ -82,7 +82,7 @@ const UpdateProfileForm = ({ handleSubmit, handleClose }) => {
             name="bodyWeight"
             defaultValue={bodyWeight}
             InputProps={{
-              endAdornment: <InputAdornment>{bodyWtInLbs ? 'lbs' : 'kg'}</InputAdornment>
+              endAdornment: <InputAdornment position="end">{bodyWtInLbs ? 'lbs' : 'kg'}</InputAdornment>
             }}
             onChange={onChange}
             sx={UpdateFormWeight}

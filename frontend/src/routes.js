@@ -3,11 +3,13 @@ import Register from './components/sessions/Register';
 import Login from './components/sessions/Login';
 import Dashboard from './components/dashboard/Dashboard';
 import PrivateRoute from './hocs/PrivateRoute';
+import WorkoutHome from './components/workout-programs/workoutsHome';
 
 const routes = [
   { path: '/', element: <Home /> },
   { path: '/login', element: <Login /> },
   { path: '/register', element: <Register /> },
+  {path: '/workouts', element: <WorkoutHome/>},
   {
     path: '/dashboard',
     element: (
