@@ -49,6 +49,11 @@ const Navbar = () => {
             <NavLink className="nav-link" exact="true" to="/">
               Home
             </NavLink>
+            <li>
+              <NavLink className="nav-link" exact="true" to="/workouts">
+                Find Workouts
+              </NavLink>
+            </li>
           </li>
           {isAuthenticated ? authLinks : guestLinks}
         </ul>

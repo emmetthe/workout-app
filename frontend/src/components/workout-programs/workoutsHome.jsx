@@ -26,6 +26,7 @@ const WorkoutHome = () => {
   const exercisesPerPage = 9;
   const paginationRange = 5; // Show 5 page numbers at a time
   const [selectedMuscle, setSelectedMuscle] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
 
   useEffect(() => {
     // Fetch all exercises on component mount
@@ -61,9 +62,13 @@ const WorkoutHome = () => {
       filtered = filtered.filter((exercise) => exercise.target.Primary && exercise.target.Primary.includes(selectedMuscle));
     }
 
+    if (selectedCategory) {
+      filtered = filtered.filter((exercise) => exercise.Category && exercise.Category === selectedCategory);
+    }
+
     setFilteredExercises(filtered);
     setCurrentPage(1); // Reset page to 1 whenever the search query or selected muscle changes
-  }, [searchQuery, selectedMuscle, exercises]);
+  }, [searchQuery, selectedMuscle, selectedCategory, exercises]);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -71,6 +76,10 @@ const WorkoutHome = () => {
 
   const handleMuscleFilterChange = (event) => {
     setSelectedMuscle(event.target.value);
+  };
+
+  const handleCategoryFilterChange = (event) => {
+    setSelectedCategory(event.target.value);
   };
 
   // Pagination logic
@@ -92,6 +101,7 @@ const WorkoutHome = () => {
     <Container>
       <div className={classes.filterContainer}>
         <TextField label="Search exercises" variant="outlined" value={searchQuery} onChange={handleSearchChange} fullWidth />
+
         {/* Filter by targeted muscle */}
         <div className={classes.filter}>
           <ExerciseFilter
@@ -104,15 +114,23 @@ const WorkoutHome = () => {
                   .map((exercise) => exercise.target.Primary)
                   .flat()
               )
-            )}
+            ).sort((a, b) => a.localeCompare(b))}
+            // category filters
+            selectedCategory={selectedCategory}
+            handleCategoryFilterChange={handleCategoryFilterChange}
+            categoryOptions={Array.from(
+              new Set(exercises.filter((exercise) => exercise.Category !== undefined).map((exercise) => exercise.Category))
+            ).sort((a, b) => a.localeCompare(b))}
           />
         </div>
       </div>
+
       <Grid container spacing={2}>
         <Grid item xs={12}>
           {/* Display exercise list */}
           <ExerciseList exercises={currentExercises} />
         </Grid>
+
         <Grid item xs={12}>
           {/* Pagination controls */}
           <ExercisePagination
