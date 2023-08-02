@@ -13,6 +13,7 @@ const ExerciseFilter = ({
     <div>
       <Select value={selectedMuscle} onChange={handleMuscleFilterChange} variant="outlined" fullWidth displayEmpty>
         <MenuItem value="">All Muscles</MenuItem>
+
         {muscleOptions.map((muscle) => (
           <MenuItem key={muscle} value={muscle}>
             {muscle}
@@ -22,6 +23,7 @@ const ExerciseFilter = ({
 
       <Select value={selectedCategory} onChange={handleCategoryFilterChange} variant="outlined" fullWidth displayEmpty>
         <MenuItem value="">All Categories</MenuItem>
+
         {categoryOptions.map((category) => (
           <MenuItem key={category} value={category}>
             {category}

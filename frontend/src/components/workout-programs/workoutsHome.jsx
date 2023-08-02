@@ -40,7 +40,10 @@ const WorkoutHome = () => {
         });
         // Sort exercises alphabetically by name
         response.data.sort((a, b) => a.exercise_name.localeCompare(b.exercise_name));
-        setExercises(response.data);
+        // remove duplicate exercises
+        let exerciseList = response.data.filter((v, i, a) => a.findIndex((v2) => v2.exercise_name === v.exercise_name) === i);
+
+        setExercises(exerciseList);
       } catch (error) {
         console.error('Error fetching exercises:', error);
       }
