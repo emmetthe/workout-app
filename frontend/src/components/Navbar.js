@@ -1,7 +1,77 @@
+// import React, { Fragment } from 'react';
+// import { NavLink } from 'react-router-dom';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { logoutAsync } from '../slices/authSlice';
+
+// const Navbar = () => {
+//   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+//   const dispatch = useDispatch();
+//   const handleLogOut = (e) => {
+//     e.preventDefault();
+//     dispatch(logoutAsync());
+//   };
+
+//   const authLinks = (
+//     <Fragment>
+//       <li className="nav-item">
+//         <NavLink className="nav-link" to="/dashboard">
+//           Dashboard
+//         </NavLink>
+//       </li>
+//       <li className="nav-item">
+//         <a className="nav-link" onClick={(e) => handleLogOut(e)} href="#!">
+//           Logout
+//         </a>
+//       </li>
+//     </Fragment>
+//   );
+
+//   const guestLinks = (
+//     <Fragment>
+//       <li className="nav-item">
+//         <NavLink className="nav-link" exact="true" to="/login">
+//           Login
+//         </NavLink>
+//       </li>
+//       <li className="nav-item">
+//         <NavLink className="nav-link" exact="true" to="/register">
+//           Register
+//         </NavLink>
+//       </li>
+//     </Fragment>
+//   );
+
+//   return (
+//     <nav>
+//       <div className="collapse navbar-collapse" id="navbarText">
+//         <ul className="navbar-nav mr-auto">
+//           <li className="nav-item active">
+//             <NavLink className="nav-link" exact="true" to="/">
+//               Home
+//             </NavLink>
+//           </li>
+
+//           <li>
+//             <NavLink className="nav-link" exact="true" to="/workouts">
+//               Find Exercises
+//             </NavLink>
+//           </li>
+
+//           {isAuthenticated ? authLinks : guestLinks}
+//         </ul>
+//       </div>
+//     </nav>
+//   );
+// };
+
+// export default Navbar;
+
 import React, { Fragment } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutAsync } from '../slices/authSlice';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
 
 const Navbar = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -11,56 +81,59 @@ const Navbar = () => {
     dispatch(logoutAsync());
   };
 
-  const authLinks = (
-    <Fragment>
-      <li className="nav-item">
-        <NavLink className="nav-link" to="/dashboard">
-          Dashboard
-        </NavLink>
-      </li>
-      <li className="nav-item">
-        <a className="nav-link" onClick={(e) => handleLogOut(e)} href="#!">
-          Logout
-        </a>
-      </li>
-    </Fragment>
-  );
+  const navLinkStyle = {
+    color: 'white',
+    textDecoration: 'none',
+    marginRight: '16px'
+  };
 
-  const guestLinks = (
-    <Fragment>
-      <li className="nav-item">
-        <NavLink className="nav-link" exact="true" to="/login">
-          Login
-        </NavLink>
-      </li>
-      <li className="nav-item">
-        <NavLink className="nav-link" exact="true" to="/register">
-          Register
-        </NavLink>
-      </li>
-    </Fragment>
-  );
+  const buttonGroupStyle = {
+    marginLeft: 'auto',
+    display: 'flex',
+    alignItems: 'center'
+  };
 
   return (
-    <nav>
-      <div className="collapse navbar-collapse" id="navbarText">
-        <ul className="navbar-nav mr-auto">
-          <li className="nav-item active">
-            <NavLink className="nav-link" exact="true" to="/">
-              Home
-            </NavLink>
-          </li>
+    <AppBar position="static" sx={{ marginBottom: '50px' }}>
+      <Toolbar>
+        <nav>
+          <ul style={{ listStyleType: 'none', display: 'flex', alignItems: 'center' }}>
+            <li>
+              <NavLink style={{ ...navLinkStyle }} exact to="/">
+                Home
+              </NavLink>
+            </li>
+            <li>
+              <NavLink style={navLinkStyle} exact to="/workouts">
+                Find Exercises
+              </NavLink>
+            </li>
+          </ul>
+        </nav>
 
-          <li>
-            <NavLink className="nav-link" exact="true" to="/workouts">
-              Find Exercises
-            </NavLink>
-          </li>
-
-          {isAuthenticated ? authLinks : guestLinks}
-        </ul>
-      </div>
-    </nav>
+        <div style={buttonGroupStyle}>
+          {isAuthenticated ? (
+            <Fragment>
+              <NavLink style={{ ...navLinkStyle }} to="/dashboard">
+                Dashboard
+              </NavLink>
+              <a style={{ ...navLinkStyle }} onClick={(e) => handleLogOut(e)} href="#!">
+                Logout
+              </a>
+            </Fragment>
+          ) : (
+            <Fragment>
+              <NavLink style={{ ...navLinkStyle }} exact to="/login">
+                Login
+              </NavLink>
+              <NavLink style={navLinkStyle} exact to="/register">
+                Register
+              </NavLink>
+            </Fragment>
+          )}
+        </div>
+      </Toolbar>
+    </AppBar>
   );
 };
 
