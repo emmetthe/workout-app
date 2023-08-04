@@ -4,7 +4,7 @@ import CSRFToken from '../CSRFToken';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginAsync } from '../../slices/authSlice';
 import { clearErrors } from '../../slices/errorSlice';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Typography, TextField, Container, Grid } from '@mui/material';
 
 const Login = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -38,42 +38,70 @@ const Login = () => {
   }
 
   return (
-    <Box>
-      <h1>Sign In</h1>
-      <p>Sign into your account</p>
+    <Container maxWidth="xs">
+      <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Typography variant="h5">Sign In</Typography>
+        <Typography variant="body2" sx={{ mt: 2, mb: 1 }}>
+          Sign into your account
+        </Typography>
 
-      <div>{error ? error : null}</div>
+        {error && (
+          <Typography color="error" variant="body2" sx={{ mt: 2, mb: 1 }}>
+            {error}
+          </Typography>
+        )}
 
-      <Box component="form" onSubmit={(e) => onSubmit(e)} autoFocus>
-        <CSRFToken />
-        <div>
-          <label>Username: </label>
-          <input type="text" name="username" onChange={(e) => onChange(e)} value={username} required autoComplete="true" />
-        </div>
+        <Box component="form" onSubmit={onSubmit} autoFocus sx={{ mt: 2 }}>
+          <CSRFToken />
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Username"
+                name="username"
+                onChange={onChange}
+                value={username}
+                required
+                autoComplete="true"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Password"
+                type="password"
+                name="password"
+                onChange={onChange}
+                value={password}
+                required
+                autoComplete="true"
+              />
+            </Grid>
+          </Grid>
 
-        <div>
-          <label>Password: </label>
-          <input type="password" name="password" onChange={(e) => onChange(e)} value={password} required autoComplete="true" />
-        </div>
-        <Button variant="outlined" type="submit">
-          Login
-        </Button>
-        <Button
-          variant="outlined"
-          type="submit"
-          onClick={(e) => {
-            e.preventDefault();
-            dispatch(loginAsync('demo', '12345678'));
-          }}
-        >
-          Demo
-        </Button>
+          <Button fullWidth variant="contained" type="submit" sx={{ mt: 2 }}>
+            Login
+          </Button>
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(loginAsync('demo', '12345678'));
+            }}
+            sx={{ mt: 2 }}
+          >
+            Demo
+          </Button>
+        </Box>
+
+        <Typography variant="body2" sx={{ mt: 2 }}>
+          Don't have an Account? <Link to="/register">Sign Up</Link>
+        </Typography>
       </Box>
-
-      <Typography variant="body2">
-        Don't have an Account? <Link to="/register">Sign Up</Link>
-      </Typography>
-    </Box>
+    </Container>
   );
 };
 

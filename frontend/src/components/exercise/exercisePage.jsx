@@ -27,6 +27,7 @@ const ExercisePage = () => {
           <Typography variant="subtitle1">Type: {exercise.Category}</Typography>
 
           <Typography variant="h6">Instructions:</Typography>
+
           <ol>
             {steps.map((step, i) => (
               <li key={i}>
@@ -37,6 +38,7 @@ const ExercisePage = () => {
 
           {/* Add more information about the exercise here */}
 
+          {/* video player */}
           <Grid container direction="column" alignItems="center" spacing={2}>
             {videoURL.map((url, index) => (
               <Grid item key={index}>
@@ -46,6 +48,7 @@ const ExercisePage = () => {
                       {showVideos[index] ? 'Hide Video' : 'Show Video'}
                     </Button>
                   </Grid>
+
                   {showVideos[index] && (
                     <Grid item>
                       <Grid container justifyContent="center">

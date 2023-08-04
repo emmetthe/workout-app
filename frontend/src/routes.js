@@ -11,7 +11,7 @@ const routes = [
   { path: '/login', element: <Login /> },
   { path: '/register', element: <Register /> },
   { path: '/workouts', element: <WorkoutHome /> },
-  { path: `/exercise/:id`, element: <ExercisePage /> },
+  { path: `/exercise/:exerciseName`, element: <ExercisePage /> },
   {
     path: '/dashboard',
     element: (
