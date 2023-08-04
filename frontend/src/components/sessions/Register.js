@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CSRFToken from '../CSRFToken';
 import { clearErrors } from '../../slices/errorSlice';
 import { TextField, Button, Container, Paper, Typography, CssBaseline } from '@mui/material';
+import { Alert } from '@mui/material';
 
 const Register = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -55,7 +56,7 @@ const Register = () => {
         <form onSubmit={(e) => onSubmit(e)}>
           <CSRFToken />
           <div>
-            <div>{error ? error : null}</div>
+            <div>{error && <Alert severity="error">{error}</Alert>}</div>
 
             <TextField
               variant="outlined"

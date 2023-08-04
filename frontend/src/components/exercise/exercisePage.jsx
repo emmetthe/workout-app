@@ -52,7 +52,7 @@ const ExercisePage = () => {
                   {showVideos[index] && (
                     <Grid item>
                       <Grid container justifyContent="center">
-                        <video ref={videoRefs.current[index]} width="300" height="auto" controls autoPlay>
+                        <video ref={videoRefs.current[index]} width="600" height="auto" controls autoPlay>
                           <source src={url} />
                         </video>
                       </Grid>

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginAsync } from '../../slices/authSlice';
 import { clearErrors } from '../../slices/errorSlice';
 import { Box, Button, Typography, TextField, Container, Grid } from '@mui/material';
+import { Alert } from '@mui/material';
 
 const Login = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -45,11 +46,7 @@ const Login = () => {
           Sign into your account
         </Typography>
 
-        {error && (
-          <Typography color="error" variant="body2" sx={{ mt: 2, mb: 1 }}>
-            {error}
-          </Typography>
-        )}
+        <div>{error && <Alert severity="error">{error}</Alert>}</div>
 
         <Box component="form" onSubmit={onSubmit} autoFocus sx={{ mt: 2 }}>
           <CSRFToken />
