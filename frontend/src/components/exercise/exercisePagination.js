@@ -1,23 +1,33 @@
 import React from 'react';
 import { Button } from '@mui/material';
-import { styled } from '@mui/styles';
 
-const PaginationWrapper = styled('div')({
+const paginationWrapperStyle = {
   display: 'flex',
   justifyContent: 'center',
   marginTop: '16px'
-});
+};
 
-const PaginationButtonStyle = {
+const paginationButtonStyle = {
   marginLeft: '2px',
   marginRight: '2px',
   minWidth: '80px'
 };
 
+const nextButtonStyle = {
+  marginLeft: '2px',
+  marginRight: '2px',
+  minWidth: '107px'
+};
+
 const ExercisePagination = ({ currentPage, totalPages, pageNumbers, handlePageChange }) => {
   return (
-    <PaginationWrapper>
-      <Button variant="contained" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} sx={PaginationButtonStyle}>
+    <div style={paginationWrapperStyle}>
+      <Button
+        variant="contained"
+        onClick={() => handlePageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        style={paginationButtonStyle}
+      >
         Previous
       </Button>
 
@@ -26,7 +36,7 @@ const ExercisePagination = ({ currentPage, totalPages, pageNumbers, handlePageCh
           key={pageNumber}
           variant={currentPage === pageNumber ? 'contained' : 'outlined'}
           onClick={() => handlePageChange(pageNumber)}
-          sx={PaginationButtonStyle}
+          style={paginationButtonStyle}
         >
           {pageNumber}
         </Button>
@@ -36,15 +46,11 @@ const ExercisePagination = ({ currentPage, totalPages, pageNumbers, handlePageCh
         variant="contained"
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        sx={{
-          marginLeft: '2px',
-          marginRight: '2px',
-          minWidth: '100px'
-        }}
+        style={nextButtonStyle}
       >
         Next
       </Button>
-    </PaginationWrapper>
+    </div>
   );
 };
 

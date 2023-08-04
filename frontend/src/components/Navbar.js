@@ -58,6 +58,7 @@ const Navbar = () => {
               <NavLink style={{ ...navLinkStyle }} exact to="/login">
                 Login
               </NavLink>
+
               <NavLink style={navLinkStyle} exact to="/register">
                 Register
               </NavLink>

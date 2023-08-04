@@ -4,32 +4,23 @@ import { Grid, TextField, Container } from '@mui/material';
 import ExerciseFilter from './exerciseFilter';
 import ExercisePagination from './exercisePagination';
 import ExerciseList from './exerciseList';
-import { makeStyles } from '@material-ui/core';
-
-const useStyles = makeStyles((theme) => ({
-  filterContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: theme.spacing(2)
-  },
-  filter: {
-    minWidth: 200,
-    marginLeft: theme.spacing(2)
-  }
-}));
+import Autocomplete from '@mui/material/Autocomplete';
+import CircularProgress from '@mui/material/CircularProgress'; // For loading indicator
 
 const ExerciseHome = () => {
+  // State variables
   const [exercises, setExercises] = useState([]);
   const [filteredExercises, setFilteredExercises] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const exercisesPerPage = 9;
-  const paginationRange = 5; // Show 5 page numbers at a time
   const [selectedMuscle, setSelectedMuscle] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
 
+  const exercisesPerPage = 9;
+  const paginationRange = 5; // Show 5 page numbers at a time
+
+  // Fetch all exercises on component mount
   useEffect(() => {
-    // Fetch all exercises on component mount
     const fetchExercises = async () => {
       try {
         const response = await axios.get(process.env.REACT_APP_GET_ALL_EXERCISE_API_URL, {
@@ -51,8 +42,8 @@ const ExerciseHome = () => {
     fetchExercises();
   }, []);
 
+  // Filter exercises based on search query and selected muscle
   useEffect(() => {
-    // Filter exercises based on search query and selected muscle
     let filtered = exercises;
 
     if (searchQuery) {
@@ -95,52 +86,60 @@ const ExerciseHome = () => {
   const indexOfFirstExercise = indexOfLastExercise - exercisesPerPage;
   const currentExercises = filteredExercises.slice(indexOfFirstExercise, indexOfLastExercise);
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-  };
+  const muscleList = Array.from(
+    new Set(
+      exercises
+        .filter((exercise) => exercise.target.Primary !== undefined)
+        .map((exercise) => exercise.target.Primary)
+        .flat()
+    )
+  );
+  const categoryList = Array.from(
+    new Set(
+      exercises
+        .filter((exercise) => exercise.Category !== undefined)
+        .map((exercise) => exercise.Category)
+        .flat()
+    )
+  );
 
-  const classes = useStyles();
   return (
     <Container>
-      <div className={classes.filterContainer}>
-        <TextField label="Search exercises" variant="outlined" value={searchQuery} onChange={handleSearchChange} fullWidth />
+      <ExerciseFilter
+        muscles={{
+          all: muscleList,
+          selected: selectedMuscle
+        }}
+        categories={{
+          all: categoryList,
+          selected: selectedCategory
+        }}
+        onMuscleFilterChange={handleMuscleFilterChange}
+        onCategoryFilterChange={handleCategoryFilterChange}
+      />
 
-        {/* Filter by targeted muscle */}
-        <div className={classes.filter}>
-          <ExerciseFilter
-            selectedMuscle={selectedMuscle}
-            handleMuscleFilterChange={handleMuscleFilterChange}
-            muscleOptions={Array.from(
-              new Set(
-                exercises
-                  .filter((exercise) => exercise.target.Primary !== undefined)
-                  .map((exercise) => exercise.target.Primary)
-                  .flat()
-              )
-            ).sort((a, b) => a.localeCompare(b))}
-            // category filters
-            selectedCategory={selectedCategory}
-            handleCategoryFilterChange={handleCategoryFilterChange}
-            categoryOptions={Array.from(
-              new Set(exercises.filter((exercise) => exercise.Category !== undefined).map((exercise) => exercise.Category))
-            ).sort((a, b) => a.localeCompare(b))}
-          />
-        </div>
-      </div>
+      <TextField
+        label="Search exercises"
+        variant="outlined"
+        value={searchQuery}
+        onChange={handleSearchChange}
+        fullWidth
+        sx={{ marginBottom: 5 }}
+      />
 
-      {/* Display exercise list */}
+      {/* exercise list */}
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <ExerciseList exercises={currentExercises} />
         </Grid>
 
-        {/* Pagination controls */}
+        {/* pagination controls */}
         <Grid item xs={12}>
           <ExercisePagination
             currentPage={currentPage}
             totalPages={totalPages}
             pageNumbers={pageNumbers}
-            handlePageChange={handlePageChange}
+            handlePageChange={setCurrentPage}
           />
         </Grid>
       </Grid>
