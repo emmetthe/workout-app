@@ -16,7 +16,7 @@ const Navbar = () => {
   const navLinkStyle = {
     color: 'white',
     textDecoration: 'none',
-    marginRight: '16px'
+    marginRight: '16px',
   };
 
   const buttonGroupStyle = {

@@ -4,7 +4,7 @@ import { signUpAsync } from '../../slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import CSRFToken from '../CSRFToken';
 import { clearErrors } from '../../slices/errorSlice';
-import { TextField, Button, Container, Paper, Typography, CssBaseline } from '@mui/material';
+import { TextField, Button, Container, Paper, Typography } from '@mui/material';
 import { Alert } from '@mui/material';
 
 const Register = () => {
@@ -44,7 +44,6 @@ const Register = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
       <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
         <Typography variant="h5" gutterBottom>
           Create an account
@@ -101,7 +100,7 @@ const Register = () => {
           </div>
         </form>
 
-        <Typography variant="body2" gutterBottom>
+        <Typography variant="body2" gutterBottom sx={{ marginTop: 2 }}>
           Already have an Account? <Link to="/login">Sign In</Link>
         </Typography>
       </Paper>

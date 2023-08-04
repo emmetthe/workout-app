@@ -1,11 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import routes from './routes';
-import Navbar from './components/Navbar'
+import Navbar from './components/Navbar';
+import { CssBaseline } from '@material-ui/core';
 
 function App() {
   return (
     <>
+      <CssBaseline />
       <Router>
         <Navbar />
         <Routes>

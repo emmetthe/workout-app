@@ -34,6 +34,7 @@ const ExercisePage = () => {
             </Typography>
           )}
 
+          {/* combine with primary */}
           {Secondary && (
             <Typography variant="subtitle1">
               Muscles Targeted: {Secondary.map((muscle, i) => muscle + `${i !== Secondary.length - 1 ? ', ' : ''}`)}
