@@ -46,10 +46,7 @@ const Register = () => {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
-        <Typography variant="h5" component="h1">
-          Register for an Account
-        </Typography>
-        <Typography variant="body1" gutterBottom>
+        <Typography variant="h5" gutterBottom>
           Create an account
         </Typography>
 

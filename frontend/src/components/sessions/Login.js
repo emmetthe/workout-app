@@ -41,8 +41,7 @@ const Login = () => {
   return (
     <Container maxWidth="xs">
       <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Typography variant="h5">Sign In</Typography>
-        <Typography variant="body2" sx={{ mt: 2, mb: 1 }}>
+        <Typography variant="h5" sx={{ mt: 2, mb: 1 }}>
           Sign into your account
         </Typography>
 

@@ -7,7 +7,9 @@ const ExercisePage = () => {
   const exercise = location.state;
   const { videoURL, steps } = exercise;
 
+  // create a ref for each URL in the videoURL array, refs will be used to access the video
   const videoRefs = useRef(videoURL.map(() => React.createRef()));
+  // initialized as an array of booleans to determine whether each video should be shown or hidden on the page.
   const [showVideos, setShowVideos] = useState(videoURL.map(() => false));
 
   const toggleVideo = (index) => {
