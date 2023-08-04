@@ -7,6 +7,7 @@ const ExercisePage = () => {
   const exercise = location.state;
   const { videoURL, steps, target, exercise_name, Category, Difficulty } = exercise;
   const { Primary, Secondary } = target;
+  const targetMuscles = [...(Primary || []), ...(Secondary || [])];
 
   // create a ref for each URL in the videoURL array, refs will be used to access the video
   const videoRefs = useRef(videoURL.map(() => React.createRef()));
@@ -25,24 +26,15 @@ const ExercisePage = () => {
     <Grid container direction="column" alignItems="center" spacing={2}>
       {exercise && (
         <Grid item>
+          {/* general information */}
           <Typography variant="h4">{exercise_name}</Typography>
           <Typography variant="subtitle1">Difficulty: {Difficulty}</Typography>
           <Typography variant="subtitle1">Type: {Category}</Typography>
-          {Primary && (
-            <Typography variant="subtitle1">
-              Muscles Targeted: {Primary.map((muscle, i) => muscle + `${i !== Primary.length - 1 ? ', ' : ''}`)}
-            </Typography>
-          )}
-
-          {/* combine with primary */}
-          {Secondary && (
-            <Typography variant="subtitle1">
-              Muscles Targeted: {Secondary.map((muscle, i) => muscle + `${i !== Secondary.length - 1 ? ', ' : ''}`)}
-            </Typography>
-          )}
+          <Typography variant="subtitle1">
+            Muscles Targeted: {targetMuscles.map((muscle, i) => muscle + `${i !== targetMuscles.length - 1 ? ', ' : ''}`)}
+          </Typography>
 
           <Typography variant="h6">Instructions:</Typography>
-
           <ol>
             {steps.map((step, i) => (
               <li key={i}>
