@@ -94,7 +94,7 @@ const Register = () => {
               autoComplete="false"
             />
 
-            <Button type="submit" variant="contained" color="primary" fullWidth disabled={!areAllFieldsFilled}>
+            <Button type="submit" variant="contained" color="primary" fullWidth disabled={!areAllFieldsFilled} sx={{mt: 1}}>
               Sign Up
             </Button>
           </div>
