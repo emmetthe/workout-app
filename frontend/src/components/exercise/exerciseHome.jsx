@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const WorkoutHome = () => {
+const ExerciseHome = () => {
   const [exercises, setExercises] = useState([]);
   const [filteredExercises, setFilteredExercises] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -128,14 +128,14 @@ const WorkoutHome = () => {
         </div>
       </div>
 
+      {/* Display exercise list */}
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          {/* Display exercise list */}
           <ExerciseList exercises={currentExercises} />
         </Grid>
 
+        {/* Pagination controls */}
         <Grid item xs={12}>
-          {/* Pagination controls */}
           <ExercisePagination
             currentPage={currentPage}
             totalPages={totalPages}
@@ -148,4 +148,4 @@ const WorkoutHome = () => {
   );
 };
 
-export default WorkoutHome;
+export default ExerciseHome;
