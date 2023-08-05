@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Grid, TextField, Container } from '@mui/material';
+import { Grid, TextField, Container, CircularProgress } from '@mui/material';
 import ExerciseFilter from './exerciseFilter';
 import ExercisePagination from './exercisePagination';
 import ExerciseList from './exerciseList';
 import Autocomplete from '@mui/material/Autocomplete';
-import CircularProgress from '@mui/material/CircularProgress'; // For loading indicator
 
 const ExerciseHome = () => {
   // State variables
@@ -15,6 +14,7 @@ const ExerciseHome = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedMuscle, setSelectedMuscle] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const exercisesPerPage = 9;
   const paginationRange = 5; // Show 5 page numbers at a time
@@ -23,6 +23,9 @@ const ExerciseHome = () => {
   useEffect(() => {
     const fetchExercises = async () => {
       try {
+        // Show the loading indicator
+        setIsLoading(true);
+
         const response = await axios.get(process.env.REACT_APP_GET_ALL_EXERCISE_API_URL, {
           headers: {
             'x-rapidapi-key': process.env.REACT_APP_RAPID_API_KEY,
@@ -35,8 +38,12 @@ const ExerciseHome = () => {
         let exerciseList = response.data.filter((v, i, a) => a.findIndex((v2) => v2.exercise_name === v.exercise_name) === i);
 
         setExercises(exerciseList);
+        // Hide the loading indicator
+        setIsLoading(false);
       } catch (error) {
         console.error('Error fetching exercises:', error);
+        // Hide the loading indicator in case of an error
+        setIsLoading(false);
       }
     };
     fetchExercises();
@@ -64,8 +71,8 @@ const ExerciseHome = () => {
     setCurrentPage(1); // Reset page to 1 whenever the search query or selected muscle changes
   }, [searchQuery, selectedMuscle, selectedCategory, exercises]);
 
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
+  const handleSearchChange = (event, newValue) => {
+    setSearchQuery(newValue);
   };
 
   const handleMuscleFilterChange = (event) => {
@@ -118,31 +125,44 @@ const ExerciseHome = () => {
         onCategoryFilterChange={handleCategoryFilterChange}
       />
 
-      <TextField
-        label="Search exercises"
-        variant="outlined"
+      {/* search bar */}
+      <Autocomplete
+        freeSolo
+        options={
+          filteredExercises.length > 0
+            ? filteredExercises.map((exercise) => exercise.exercise_name)
+            : exercises.map((exercise) => exercise.exercise_name)
+        }
         value={searchQuery}
         onChange={handleSearchChange}
-        fullWidth
-        sx={{ marginBottom: 5 }}
+        renderInput={(params) => <TextField {...params} label="Search exercises" variant="outlined" fullWidth sx={{ marginBottom: 5 }} />}
       />
 
-      {/* exercise list */}
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <ExerciseList exercises={currentExercises} />
+      {/* Circular Progress while loading list */}
+      {isLoading ? (
+        <Grid style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
+          <CircularProgress />
         </Grid>
+      ) : (
+        <>
+          {/* exercise list */}
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <ExerciseList exercises={currentExercises} />
+            </Grid>
 
-        {/* pagination controls */}
-        <Grid item xs={12}>
-          <ExercisePagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            pageNumbers={pageNumbers}
-            handlePageChange={setCurrentPage}
-          />
-        </Grid>
-      </Grid>
+            {/* pagination controls */}
+            <Grid item xs={12}>
+              <ExercisePagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                pageNumbers={pageNumbers}
+                handlePageChange={setCurrentPage}
+              />
+            </Grid>
+          </Grid>
+        </>
+      )}
     </Container>
   );
 };
