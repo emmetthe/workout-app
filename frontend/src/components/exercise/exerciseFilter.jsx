@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { Button, FormControl, Select, MenuItem } from '@mui/material';
 
-const ExerciseFilter = ({ muscles, categories, onMuscleFilterChange, onCategoryFilterChange }) => {
+const ExerciseFilter = ({ muscles, categories, onFilterChange }) => {
   const [showFilters, setShowFilters] = useState(false);
 
   const toggleFilters = () => {
     setShowFilters(!showFilters);
+  };
+
+  const clearFilters = () => {
+    onFilterChange(null, true, '');
   };
 
   return (
@@ -16,7 +20,7 @@ const ExerciseFilter = ({ muscles, categories, onMuscleFilterChange, onCategoryF
       {showFilters && (
         <>
           <FormControl style={{ minWidth: 200, marginLeft: 16 }}>
-            <Select value={muscles.selected} onChange={onMuscleFilterChange} displayEmpty>
+            <Select value={muscles.selected} onChange={(event) => onFilterChange(event, muscles.selected, 'muscle')} displayEmpty>
               <MenuItem value="">All Muscles</MenuItem>
               {muscles.all
                 .sort((a, b) => a.localeCompare(b))
@@ -29,7 +33,7 @@ const ExerciseFilter = ({ muscles, categories, onMuscleFilterChange, onCategoryF
           </FormControl>
 
           <FormControl style={{ minWidth: 200, marginLeft: 16 }}>
-            <Select value={categories.selected} onChange={onCategoryFilterChange} displayEmpty>
+            <Select value={categories.selected} onChange={(event) => onFilterChange(event, categories.selected, 'category')} displayEmpty>
               <MenuItem value="">All Categories</MenuItem>
               {categories.all
                 .sort((a, b) => a.localeCompare(b))
@@ -40,6 +44,9 @@ const ExerciseFilter = ({ muscles, categories, onMuscleFilterChange, onCategoryF
                 ))}
             </Select>
           </FormControl>
+          <Button variant="contained" onClick={clearFilters}>
+            Clear Filters
+          </Button>
         </>
       )}
     </div>

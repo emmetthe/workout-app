@@ -75,12 +75,20 @@ const ExerciseHome = () => {
     setSearchQuery(newValue);
   };
 
-  const handleMuscleFilterChange = (event) => {
-    setSelectedMuscle(event.target.value);
-  };
-
-  const handleCategoryFilterChange = (event) => {
-    setSelectedCategory(event.target.value);
+  const handleFilterChange = (event, val, filterType) => {
+    if (val === true) {
+      // Clear the filters
+      setSelectedMuscle('');
+      setSelectedCategory('');
+    } else {
+      // Set the selected filters according to the filter type
+      const newValue = event.target.value;
+      if (filterType === 'muscle') {
+        setSelectedMuscle(newValue);
+      } else if (filterType === 'category') {
+        setSelectedCategory(newValue);
+      }
+    }
   };
 
   // Pagination logic
@@ -93,6 +101,7 @@ const ExerciseHome = () => {
   const indexOfFirstExercise = indexOfLastExercise - exercisesPerPage;
   const currentExercises = filteredExercises.slice(indexOfFirstExercise, indexOfLastExercise);
 
+  // create unique list of muscle for filters
   const muscleList = Array.from(
     new Set(
       exercises
@@ -101,6 +110,7 @@ const ExerciseHome = () => {
         .flat()
     )
   );
+  // create unique list of categories for filters
   const categoryList = Array.from(
     new Set(
       exercises
@@ -112,6 +122,7 @@ const ExerciseHome = () => {
 
   return (
     <Container>
+      {/* filters */}
       <ExerciseFilter
         muscles={{
           all: muscleList,
@@ -121,8 +132,9 @@ const ExerciseHome = () => {
           all: categoryList,
           selected: selectedCategory
         }}
-        onMuscleFilterChange={handleMuscleFilterChange}
-        onCategoryFilterChange={handleCategoryFilterChange}
+        // onMuscleFilterChange={handleMuscleFilterChange}
+        // onCategoryFilterChange={handleCategoryFilterChange}
+        onFilterChange={handleFilterChange}
       />
 
       {/* search bar */}
@@ -138,7 +150,7 @@ const ExerciseHome = () => {
         renderInput={(params) => <TextField {...params} label="Search exercises" variant="outlined" fullWidth sx={{ marginBottom: 5 }} />}
       />
 
-      {/* Circular Progress while loading list */}
+      {/* Circular Progress while fetching API */}
       {isLoading ? (
         <Grid style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
           <CircularProgress />
