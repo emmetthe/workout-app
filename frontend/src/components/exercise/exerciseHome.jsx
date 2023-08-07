@@ -132,8 +132,6 @@ const ExerciseHome = () => {
           all: categoryList,
           selected: selectedCategory
         }}
-        // onMuscleFilterChange={handleMuscleFilterChange}
-        // onCategoryFilterChange={handleCategoryFilterChange}
         onFilterChange={handleFilterChange}
       />
 

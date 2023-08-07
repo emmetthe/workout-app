@@ -28,11 +28,17 @@ const ExercisePage = () => {
         <Grid item>
           {/* general information */}
           <Typography variant="h4">{exercise_name}</Typography>
-          <Typography variant="subtitle1">Difficulty: {Difficulty}</Typography>
+          {Difficulty ? (
+            <Typography variant="subtitle1">Difficulty: {Difficulty}</Typography>
+          ) : (
+            <Typography variant="subtitle1">Difficulty: N/A</Typography>
+          )}
           <Typography variant="subtitle1">Type: {Category}</Typography>
-          <Typography variant="subtitle1">
-            Muscles Targeted: {targetMuscles.map((muscle, i) => muscle + `${i !== targetMuscles.length - 1 ? ', ' : ''}`)}
-          </Typography>
+          {targetMuscles.length > 0 && (
+            <Typography variant="subtitle1">
+              Muscles Targeted: {targetMuscles.map((muscle, i) => muscle + `${i !== targetMuscles.length - 1 ? ', ' : ''}`)}
+            </Typography>
+          )}
 
           <Typography variant="h6">Instructions:</Typography>
           <ol>
