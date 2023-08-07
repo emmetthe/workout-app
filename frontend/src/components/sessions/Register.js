@@ -4,6 +4,8 @@ import { signUpAsync } from '../../slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import CSRFToken from '../CSRFToken';
 import { clearErrors } from '../../slices/errorSlice';
+import { TextField, Button, Container, Paper, Typography } from '@mui/material';
+import { Alert } from '@mui/material';
 
 const Register = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -22,7 +24,7 @@ const Register = () => {
 
   useEffect(() => {
     dispatch(clearErrors());
-  }, []);
+  }, [dispatch]);
 
   const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -41,66 +43,68 @@ const Register = () => {
   }
 
   return (
-    <div className="container mt-3">
-      <div className="container mt-5">
-        <h1>Register for an Account</h1>
-        <p>Create an account</p>
+    <Container component="main" maxWidth="xs">
+      <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
+        <Typography variant="h5" gutterBottom>
+          Create an account
+        </Typography>
 
         <form onSubmit={(e) => onSubmit(e)}>
           <CSRFToken />
-          <div className="form-group">
-            <div>{error ? error : null}</div>
+          <div>
+            <div>{error && <Alert severity="error">{error}</Alert>}</div>
 
-            <label className="form-label">Username: </label>
-            <input
-              className="form-control"
-              type="text"
+            <TextField
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              label="Username"
               name="username"
               onChange={(e) => onChange(e)}
               value={username}
               required
               autoComplete="false"
             />
-          </div>
 
-          <div className="form-group">
-            <label className="form-label mt-3">Password: </label>
-            <input
-              className="form-control"
-              type="password"
+            <TextField
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              label="Password"
               name="password"
+              type="password"
               onChange={(e) => onChange(e)}
               value={password}
               minLength="6"
               required
               autoComplete="false"
             />
-          </div>
 
-          <div className="form-group">
-            <label className="form-label mt-3">Confirm Password: </label>
-            <input
-              className="form-control"
-              type="password"
+            <TextField
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              label="Confirm Password"
               name="re_password"
+              type="password"
               onChange={(e) => onChange(e)}
               value={re_password}
               minLength="6"
               required
               autoComplete="false"
             />
-          </div>
 
-          <button type="submit" variant="secondary" disabled={!areAllFieldsFilled}>
-            Sign Up
-          </button>
+            <Button type="submit" variant="contained" color="primary" fullWidth disabled={!areAllFieldsFilled} sx={{mt: 1}}>
+              Sign Up
+            </Button>
+          </div>
         </form>
 
-        <p className="mt-3">
+        <Typography variant="body2" gutterBottom sx={{ marginTop: 2 }}>
           Already have an Account? <Link to="/login">Sign In</Link>
-        </p>
-      </div>
-    </div>
+        </Typography>
+      </Paper>
+    </Container>
   );
 };
 

@@ -4,6 +4,8 @@ import CSRFToken from '../CSRFToken';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginAsync } from '../../slices/authSlice';
 import { clearErrors } from '../../slices/errorSlice';
+import { Box, Button, Typography, TextField, Container, Grid } from '@mui/material';
+import { Alert } from '@mui/material';
 
 const Login = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -19,7 +21,7 @@ const Login = () => {
 
   useEffect(() => {
     dispatch(clearErrors());
-  }, []);
+  }, [dispatch]);
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -37,49 +39,65 @@ const Login = () => {
   }
 
   return (
-    <div className="container mt-5">
-      <h1>Sign In</h1>
-      <p>Sign into your account</p>
+    <Container maxWidth="xs">
+      <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Typography variant="h5" sx={{ mt: 2, mb: 1 }}>
+          Sign into your account
+        </Typography>
 
-      <div>{error ? error : null}</div>
+        <div>{error && <Alert severity="error">{error}</Alert>}</div>
 
-      <form onSubmit={(e) => onSubmit(e)} autoFocus>
-        <CSRFToken />
-        <div className="form-group">
-          <label className="form-label">Username: </label>
-          <input
-            className="form-control"
-            type="text"
-            name="username"
-            onChange={(e) => onChange(e)}
-            value={username}
-            required
-            autoComplete="true"
-          />
-        </div>
+        <Box component="form" onSubmit={onSubmit} autoFocus sx={{ mt: 2 }}>
+          <CSRFToken />
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Username"
+                name="username"
+                onChange={onChange}
+                value={username}
+                required
+                autoComplete="true"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                variant="outlined"
+                label="Password"
+                type="password"
+                name="password"
+                onChange={onChange}
+                value={password}
+                required
+                autoComplete="true"
+              />
+            </Grid>
+          </Grid>
 
-        <div className="form-group">
-          <label className="form-label mt-3">Password: </label>
-          <input
-            className="form-control"
-            type="password"
-            name="password"
-            onChange={(e) => onChange(e)}
-            value={password}
-            required
-            autoComplete="true"
-          />
-        </div>
-        <button type="submit">Login</button>
-        <button type="submit" onClick={() => dispatch(loginAsync('demo', '12345678'))}>
-          Demo
-        </button>
-      </form>
+          <Button fullWidth variant="contained" type="submit" sx={{ mt: 2 }}>
+            Login
+          </Button>
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(loginAsync('demo', '12345678'));
+            }}
+            sx={{ mt: 2 }}
+          >
+            Demo
+          </Button>
+        </Box>
 
-      <p className="mt-3">
-        Don't have an Account? <Link to="/register">Sign Up</Link>
-      </p>
-    </div>
+        <Typography variant="body2" sx={{ mt: 2 }}>
+          Don't have an Account? <Link to="/register">Sign Up</Link>
+        </Typography>
+      </Box>
+    </Container>
   );
 };
 

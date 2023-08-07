@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
-import { receiveErrors } from './errorSlice';
+import { receiveErrors, clearErrors } from './errorSlice';
 
 const initialState = {
   isAuthenticated: null,
@@ -35,8 +35,7 @@ export const UpdateProfileAsync = createAsyncThunk('auth/update_user', async (pr
     withCredentials: true,
     first_name: profile_object['firstName'],
     last_name: profile_object['lastName'],
-    phone: profile_object['phone'],
-    city: profile_object['city']
+    bodyWeight: profile_object['bodyWeight']
   });
 
   const config = {
@@ -97,6 +96,7 @@ export const loginAsync = (username, password) => async (dispatch) => {
     const res = await axios.post('/users/login/', body, config);
 
     if (res.data.success === 'User authenticated') {
+      dispatch(clearErrors());
       dispatch(login(res.data));
       dispatch(LoadUserAsync());
     } else {
@@ -156,7 +156,13 @@ export const signUpAsync = (username, password, re_password) => async (dispatch)
     const res = await axios.post('/users/signup/', body, config);
 
     if (res.data.success === 'User created successfully') {
+      dispatch(clearErrors());
       dispatch(signup(res.data));
+
+      // automatically sign in after registering
+      const loginData = await axios.post('/users/login/', { username, password }, config);
+      dispatch(login(loginData.data));
+      dispatch(LoadUserAsync());
     } else {
       dispatch(receiveErrors(res.data.error));
     }
@@ -214,16 +220,11 @@ const authSlice = createSlice({
     is_authenticated: (state, action) => {
       state.isAuthenticated = true;
     }
-    // hasError: (state, action) => {
-    //   state.isAuthenticated = false;
-    //   state.error = action.payload;
-    // }
   },
 
   extraReducers: {
     [LoadUserAsync.fulfilled]: (state, action) => {
       state.profile = action.payload.profile;
-      state.error = '';
       state.username = action.payload.username;
       // state.first_name = action.payload.profile.first_name;
       // state.last_name = action.payload.profile.last_name;
@@ -233,7 +234,6 @@ const authSlice = createSlice({
 
     [LoadUserAsync.rejected]: (state, action) => {
       state.profile = [];
-      state.error = action.error.message;
     },
 
     [UpdateProfileAsync.fulfilled]: (state, action) => {
@@ -243,19 +243,18 @@ const authSlice = createSlice({
       state.lastName = action.payload.profile.last_name;
       // state.phone = action.payload.profile.phone;
       // state.city = action.payload.profile.city;
-      state.error = '';
-    },
-
-    [UpdateProfileAsync.rejected]: (state, action) => {
-      state.error = action.error.message;
     }
+
+    // [UpdateProfileAsync.rejected]: (state, action) => {
+    // state.error = action.error.message;
+    // }
   }
 });
 
 /**
 dispatched inside components and other async functions
 */
-export const { login, logout, signup, deleteAccount, is_authenticated, hasError } = authSlice.actions;
+export const { login, logout, signup, deleteAccount, is_authenticated } = authSlice.actions;
 
 /**
  * reducer for user auth

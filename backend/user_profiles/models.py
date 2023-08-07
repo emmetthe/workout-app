@@ -6,9 +6,9 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=255, default='')
     last_name = models.CharField(max_length=255, default='')
-    position = models.CharField(max_length=255, default='')
-    phone = models.CharField(max_length=20, default='')
-    city = models.CharField(max_length=20, default='')
+    body_weight = models.CharField(max_length=20, default='')
+    body_wt_in_lbs = models.BooleanField(default=True)
+    lifting_wt_in_lbs = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -21,6 +21,3 @@ class UserProfile(models.Model):
         if self.last_name == "":
             self.last_name = f"{self.user}"
         super().save(*args, **kwargs)
-
-    def get_tasks_num(self):
-        return self.tasks.all().count()
