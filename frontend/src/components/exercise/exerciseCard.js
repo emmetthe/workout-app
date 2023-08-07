@@ -18,7 +18,7 @@ const styles = {
   },
   cardContent: {
     padding: 16,
-    '&:last-child': {
+    '&:lastChild': {
       paddingBottom: 16
     }
   }
