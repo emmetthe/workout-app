@@ -4,27 +4,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { UpdateProfileAsync } from '../../slices/authSlice';
 import ModalForm from '../modal/modal';
 import { showModal } from '../../slices/modalSlice';
-import Button from '@mui/material/Button';
+import { Button, Grid } from '@mui/material';
 import UpdateProfileForm from './updateProfileForm';
+import WorkoutProgram from '../workout-program/workoutProgram';
 
 const Dashboard = () => {
-  // const [formData, setFormData] = useState({
-  //   firstName: '',
-  //   lastName: '',
-  //   phone: '',
-  //   city: ''
-  // });
-  // const { firstName, lastName, phone, city } = formData;
-
   const dispatch = useDispatch();
   const errors = useSelector((state) => state.errors);
   const profile = useSelector((state) => state.auth.profile);
   const modalState = useSelector((state) => state.modal);
-
-  // const handleDeleteAccount = (e) => {
-  //   e.preventDefault();
-  //   dispatch(delAccountAsync());
-  // };
 
   const handleOpen = () => dispatch(showModal(true));
   const handleClose = () => dispatch(showModal(false));
@@ -33,9 +21,6 @@ const Dashboard = () => {
     e.preventDefault();
     handleClose();
     dispatch(UpdateProfileAsync(formData));
-    if (errors === '') {
-      console.log('Profile Updated Successfully');
-    }
   };
 
   return (
@@ -47,6 +32,11 @@ const Dashboard = () => {
       <Button variant="outlined" onClick={handleOpen}>
         Update Profile
       </Button>
+
+      {/* displaying user's workout programs */}
+      <Grid item>
+        <WorkoutProgram />
+      </Grid>
 
       <ModalForm
         componentForm={<UpdateProfileForm handleClose={handleClose} handleSubmit={handleSubmit} />}
