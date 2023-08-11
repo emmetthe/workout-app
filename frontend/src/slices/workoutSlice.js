@@ -10,11 +10,14 @@ const workoutSlice = createSlice({
     setWorkouts: (state, action) => {
       state.workouts = action.payload;
     },
+    addWorkout: (state, action) => {
+      state.workouts.push(action.payload);
+    },
     setSelectedWorkout: (state, action) => {
       state.selectedWorkout = action.payload;
     }
   }
 });
 
-export const { setWorkouts, setSelectedWorkout } = workoutSlice.actions;
+export const { setWorkouts, setSelectedWorkout, addWorkout } = workoutSlice.actions;
 export default workoutSlice.reducer;

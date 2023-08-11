@@ -1,30 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, Button, TextField, Typography, FormControlLabel, Checkbox } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createWorkout } from '../../slices/workoutThunk';
+import { clearErrors } from '../../slices/errorSlice';
+import { Alert } from '@mui/material';
 
-const WorkoutProgramForm = () => {
+const WorkoutProgramForm = ({ handleClose }) => {
   const [selectedExercises, setSelectedExercises] = useState([]);
   const dispatch = useDispatch();
   const [workoutName, setWorkoutName] = useState('');
   const [workoutDescription, setWorkoutDescription] = useState('');
   const [selectedDays, setSelectedDays] = useState([]);
+  const error = useSelector((state) => state.errors);
 
-  const resetForm = () => {
-    setWorkoutName('');
-    setWorkoutDescription('');
-    setSelectedExercises([]);
-    setSelectedDays([]);
+  useEffect(() => {
+    dispatch(clearErrors());
+  }, [dispatch]);
+
+  const data = {
+    name: workoutName,
+    description: workoutDescription,
+    exercises: selectedExercises,
+    days: selectedDays
+  };
+  const createProgram = async () => {
+    dispatch(createWorkout(data));
   };
 
-  const createProgram = () => {
-    const data = {
-      name: workoutName,
-      description: workoutDescription,
-      exercises: selectedExercises,
-      days: selectedDays
-    };
-    dispatch(createWorkout(data, resetForm));
+  const resetForm = () => {
+    setWorkoutDescription('');
+    setWorkoutName('');
+    setSelectedDays([]);
+    setSelectedExercises();
   };
 
   const handleDayChange = (day) => {
@@ -34,10 +41,17 @@ const WorkoutProgramForm = () => {
   };
 
   return (
-    <Grid container direction="column" alignItems="center" spacing={2}>
-      {/* possibly add search option to add exercises? */}
+    <Grid container direction="column" alignItems="center" spacing={2} style={{ padding: 20 }}>
+      {error && <Alert severity="error">{error}</Alert>}
 
-      <TextField label="Workout Name" variant="outlined" value={workoutName} onChange={(e) => setWorkoutName(e.target.value)} />
+      <TextField
+        label="Workout Name"
+        variant="outlined"
+        value={workoutName}
+        onChange={(e) => setWorkoutName(e.target.value)}
+        fullWidth
+        style={{ marginBottom: 10 }}
+      />
       <TextField
         label="Workout Description"
         variant="outlined"
@@ -45,40 +59,25 @@ const WorkoutProgramForm = () => {
         onChange={(e) => setWorkoutDescription(e.target.value)}
         multiline
         minRows={3}
+        fullWidth
+        style={{ marginBottom: 20 }}
       />
 
-      {/*Checkboxes for each day */}
-      <Typography>Days *</Typography>
-      <FormControlLabel
-        control={<Checkbox checked={selectedDays.includes('Monday')} onChange={() => handleDayChange('Monday')} />}
-        label="Monday"
-      />
-      <FormControlLabel
-        control={<Checkbox checked={selectedDays.includes('Tuesday')} onChange={() => handleDayChange('Tuesday')} />}
-        label="Tuesday"
-      />
-      <FormControlLabel
-        control={<Checkbox checked={selectedDays.includes('Wednesday')} onChange={() => handleDayChange('Wednesday')} />}
-        label="Wednesday"
-      />
-      <FormControlLabel
-        control={<Checkbox checked={selectedDays.includes('Thursday')} onChange={() => handleDayChange('Thursday')} />}
-        label="Thursday"
-      />
-      <FormControlLabel
-        control={<Checkbox checked={selectedDays.includes('Friday')} onChange={() => handleDayChange('Friday')} />}
-        label="Friday"
-      />
-      <FormControlLabel
-        control={<Checkbox checked={selectedDays.includes('Saturday')} onChange={() => handleDayChange('Saturday')} />}
-        label="Saturday"
-      />
-      <FormControlLabel
-        control={<Checkbox checked={selectedDays.includes('Sunday')} onChange={() => handleDayChange('Sunday')} />}
-        label="Sunday"
-      />
+      <Typography variant="subtitle1" style={{ marginBottom: 10 }}>
+        Days *
+      </Typography>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
+          <FormControlLabel
+            key={day}
+            control={<Checkbox checked={selectedDays.includes(day)} onChange={() => handleDayChange(day)} />}
+            label={day}
+            style={{ marginBottom: 5, width: '100%', display: 'block' }}
+          />
+        ))}
+      </div>
 
-      <Button variant="outlined" onClick={createProgram}>
+      <Button variant="outlined" onClick={createProgram} style={{ marginTop: 20 }}>
         Create workout
       </Button>
     </Grid>

@@ -21,13 +21,14 @@ const WorkoutProgram = () => {
 
   useEffect(() => {
     dispatch(fetchWorkouts());
-  }, [dispatch]);
+  }, [dispatch, modalOpen]);
+
 
   return (
     <Grid container direction="column" alignItems="center" spacing={2}>
       <Typography variant="h4">Workout Program</Typography>
 
-      <Button variant="contained" onClick={openModal}>
+      <Button variant="outlined" onClick={openModal}>
         Create New Program
       </Button>
       <ModalForm componentForm={<WorkoutProgramForm handleClose={closeModal} />} modalState={modalOpen} handleClose={closeModal} />

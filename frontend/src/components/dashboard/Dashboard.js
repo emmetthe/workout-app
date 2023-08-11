@@ -9,7 +9,6 @@ import WorkoutProgram from '../workout-program/workoutProgram';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const errors = useSelector((state) => state.errors);
   const profile = useSelector((state) => state.auth.profile);
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -31,7 +30,6 @@ const Dashboard = () => {
   return (
     <div>
       <h1>Profile Page</h1>
-      <h2>{errors ? `Trouble getting profile: ${errors}` : null}</h2>
       <h1>Welcome back, {profile.firstName}</h1>
 
       <Button variant="outlined" onClick={openModal}>
