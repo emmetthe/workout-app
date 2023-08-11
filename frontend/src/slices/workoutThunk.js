@@ -1,6 +1,5 @@
 import { setWorkouts, setSelectedWorkout } from './workoutSlice';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
 
 const API_BASE_URL = '/workout_program';
@@ -33,15 +32,23 @@ export const fetchSingleWorkout = (id) => async (dispatch) => {
 
 export const createWorkout = (workoutData, resetForm) => async (dispatch) => {
   try {
-    // const workouts = useSelector((state) => state.workouts.workoutPrograms);
     const body = JSON.stringify(workoutData);
     const response = await axios.post(`${API_BASE_URL}/create/`, body, config);
-    console.log(response);
-    dispatch(setWorkouts([response.data])); // Assuming response.data is the created workout
+    dispatch(setWorkouts([response.data]));
     resetForm(); // Reset the form inputs after successful creation
   } catch (error) {
     // Handle error
   }
 };
 
-// Similarly, create thunks for update and delete operations
+export const deleteWorkout = (id) => async (dispatch) => {
+  const body = JSON.stringify({
+    withCredentials: true
+  });
+  try {
+    await axios.delete(`${API_BASE_URL}/delete/${id}`, config, body);
+    console.log('account deleted');
+  } catch (error) {
+    // Handle error
+  }
+};

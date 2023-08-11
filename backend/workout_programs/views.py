@@ -65,11 +65,19 @@ class WorkoutProgramViewSet(APIView):
 
     def post(self, request):
         data = request.data.copy()
+        days_data = data.pop('days', [])
+
         data['user'] = request.user.id
         data['created'] = datetime.now()
         serializer = WorkoutProgramSerializer(data=data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        workout_program = serializer.save()
+
+        #handle days_data as a list of day names
+        for day_name in days_data:
+            day, created = DayOfWeek.objects.get_or_create(day_name=day_name)
+            workout_program.days.add(day)
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def put(self, request, pk):

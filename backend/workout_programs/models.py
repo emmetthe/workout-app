@@ -1,6 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class DayOfWeek(models.Model):
+    day_name = models.CharField(max_length=15)
+
+    def __str__(self):
+        return self.day_name
+
 class Exercise(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -12,7 +18,7 @@ class WorkoutProgram(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     description = models.TextField()
-    days = models.ManyToManyField('DayOfWeek', related_name='programs', blank=True)
+    days = models.ManyToManyField(DayOfWeek, related_name='workout_programs', blank=True)
 
     def __str__(self):
         return self.name
@@ -26,10 +32,4 @@ class ExerciseInProgram(models.Model):
 
     def __str__(self):
         return f"{self.exercise.name} in {self.program.name}"
-
-class DayOfWeek(models.Model):
-    day_name = models.CharField(max_length=15)
-
-    def __str__(self):
-        return self.day_name
 

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Grid, Typography, Button, TextField } from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { Grid, Typography } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchWorkouts, fetchSingleWorkout, createWorkout } from '../../slices/workoutThunk';
+import { fetchWorkouts } from '../../slices/workoutThunk';
 import WorkoutProgramForm from './workoutProgramForm';
+import { Link } from 'react-router-dom';
 
 const WorkoutProgram = () => {
   const { workouts } = useSelector((state) => state.workouts);
@@ -27,10 +28,10 @@ const WorkoutProgram = () => {
           <Typography variant="h6">Selected Exercises:</Typography>
           <ul>
             {workouts.map((workout, index) => (
-              <li key={index}>
-                <Typography variant="body1">{workout.name}</Typography>
-                <Typography variant="body1">{workout.description}</Typography>
-              </li>
+              <Link key={index} state={workout} to={{ pathname: `/workouts/${workout.id}` }}>
+                <Typography>{workout.name}</Typography>
+                <Typography>{workout.description}</Typography>
+              </Link>
             ))}
           </ul>
         </div>
