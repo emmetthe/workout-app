@@ -52,3 +52,16 @@ export const deleteWorkout = (id) => async (dispatch) => {
     // Handle error
   }
 };
+
+export const updateWorkout = (id) => async (dispatch) => {
+  const body = JSON.stringify({
+    withCredentials: true
+  });
+
+  try {
+    const response = await axios.put(`${API_BASE_URL}/update/${id}`, body, config);
+    dispatch(setWorkouts([response.data]));
+  } catch (error) {
+    // Handle error
+  }
+};

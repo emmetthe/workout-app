@@ -5,7 +5,6 @@ import logger from 'redux-logger';
 import errorReducer from '../slices/errorSlice';
 import storage from 'redux-persist/lib/storage';
 import { combineReducers } from 'redux';
-import modalReducer from '../slices/modalSlice';
 import workoutReducer from '../slices/workoutSlice';
 
 const persistConfig = {
@@ -15,7 +14,6 @@ const persistConfig = {
 const reducers = combineReducers({
   auth: authReducer,
   errors: errorReducer,
-  modal: modalReducer,
   workouts: workoutReducer
 });
 

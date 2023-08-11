@@ -1,13 +1,23 @@
-import React, { useEffect } from 'react';
-import { Grid, Typography } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { Grid, Typography, Button } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchWorkouts } from '../../slices/workoutThunk';
-import WorkoutProgramForm from './workoutProgramForm';
+import WorkoutProgramForm from './createProgramForm';
 import { Link } from 'react-router-dom';
+import ModalForm from '../modal/modal';
 
 const WorkoutProgram = () => {
   const { workouts } = useSelector((state) => state.workouts);
   const dispatch = useDispatch();
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
   useEffect(() => {
     dispatch(fetchWorkouts());
@@ -17,7 +27,10 @@ const WorkoutProgram = () => {
     <Grid container direction="column" alignItems="center" spacing={2}>
       <Typography variant="h4">Workout Program</Typography>
 
-      <WorkoutProgramForm />
+      <Button variant="contained" onClick={openModal}>
+        Create New Program
+      </Button>
+      <ModalForm componentForm={<WorkoutProgramForm handleClose={closeModal} />} modalState={modalOpen} handleClose={closeModal} />
 
       <Typography variant="h4">Your Current Workouts</Typography>
       {workouts.length === 0 ? (

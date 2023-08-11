@@ -1,9 +1,8 @@
 import React from 'react';
-// import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { UpdateProfileAsync } from '../../slices/authSlice';
 import ModalForm from '../modal/modal';
-import { showModal } from '../../slices/modalSlice';
 import { Button, Grid } from '@mui/material';
 import UpdateProfileForm from './updateProfileForm';
 import WorkoutProgram from '../workout-program/workoutProgram';
@@ -12,14 +11,20 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const errors = useSelector((state) => state.errors);
   const profile = useSelector((state) => state.auth.profile);
-  const modalState = useSelector((state) => state.modal);
 
-  const handleOpen = () => dispatch(showModal(true));
-  const handleClose = () => dispatch(showModal(false));
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
   const handleSubmit = (e, formData) => {
     e.preventDefault();
-    handleClose();
+    closeModal();
     dispatch(UpdateProfileAsync(formData));
   };
 
@@ -29,7 +34,7 @@ const Dashboard = () => {
       <h2>{errors ? `Trouble getting profile: ${errors}` : null}</h2>
       <h1>Welcome back, {profile.firstName}</h1>
 
-      <Button variant="outlined" onClick={handleOpen}>
+      <Button variant="outlined" onClick={openModal}>
         Update Profile
       </Button>
 
@@ -39,9 +44,9 @@ const Dashboard = () => {
       </Grid>
 
       <ModalForm
-        componentForm={<UpdateProfileForm handleClose={handleClose} handleSubmit={handleSubmit} />}
-        modalState={modalState}
-        handleClose={handleClose}
+        componentForm={<UpdateProfileForm handleClose={closeModal} handleSubmit={handleSubmit} />}
+        modalState={modalOpen}
+        handleClose={closeModal}
       />
     </div>
   );
