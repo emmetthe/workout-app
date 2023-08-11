@@ -1,38 +1,35 @@
-import React, { useState } from 'react';
-import { Grid, Typography, Button } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { Grid, Typography, Button, TextField } from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchWorkouts, fetchSingleWorkout, createWorkout } from '../../slices/workoutThunk';
+import WorkoutProgramForm from './workoutProgramForm';
 
 const WorkoutProgram = () => {
-  const [selectedExercises, setSelectedExercises] = useState([]);
+  const { workouts } = useSelector((state) => state.workouts);
+  const dispatch = useDispatch();
 
-  // const addExerciseToProgram = (exercise) => {
-  //   console.log('exercise added');
-  // setSelectedExercises((prevExercises) => [...prevExercises, exercise]);
-  // };
-
-  const handleRemoveExercise = (exerciseIndex) => {
-    console.log('removed exercise from program');
-    // removeExerciseFromProgram(exerciseIndex);
-  };
+  useEffect(() => {
+    dispatch(fetchWorkouts());
+  }, [dispatch]);
 
   return (
     <Grid container direction="column" alignItems="center" spacing={2}>
       <Typography variant="h4">Workout Program</Typography>
-      {selectedExercises.length === 0 ? (
+
+      <WorkoutProgramForm />
+
+      <Typography variant="h4">Your Current Workouts</Typography>
+      {workouts.length === 0 ? (
         <Typography variant="subtitle1">No exercises added to the program yet.</Typography>
       ) : (
         // display workout program
         <div>
           <Typography variant="h6">Selected Exercises:</Typography>
           <ul>
-            {selectedExercises.map((exercise, index) => (
+            {workouts.map((workout, index) => (
               <li key={index}>
-                <Typography variant="body1">
-                  {exercise.exercise_name} - Sets: {exercise.sets}, Reps: {exercise.reps}
-                </Typography>
-
-                <Button variant="outlined" color="secondary" onClick={() => handleRemoveExercise(index)}>
-                  Remove
-                </Button>
+                <Typography variant="body1">{workout.name}</Typography>
+                <Typography variant="body1">{workout.description}</Typography>
               </li>
             ))}
           </ul>
