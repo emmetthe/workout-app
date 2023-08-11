@@ -68,7 +68,13 @@ class WorkoutProgramViewSet(APIView):
         days_data = data.pop('days', [])
 
         data['user'] = request.user.id
-        data['created'] = datetime.now()
+        # data['created'] = datetime.now()
+
+         # Check if a workout program with the same name already exists for the user
+        existing_program = WorkoutProgram.objects.filter(user=request.user, name=data['name']).first()
+        if existing_program:
+            return Response({"error": "You currently have another program with the same name"})
+
         serializer = WorkoutProgramSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         workout_program = serializer.save()
@@ -78,23 +84,26 @@ class WorkoutProgramViewSet(APIView):
             day, created = DayOfWeek.objects.get_or_create(day_name=day_name)
             workout_program.days.add(day)
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({"success": "Workout program created successfully."}, status=status.HTTP_201_CREATED)
 
     def put(self, request, pk):
-        instance = WorkoutProgram.objects.get(pk=pk)
-        if instance.user != request.user:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-        
-        data = request.data.copy()
-        data['updated'] = datetime.now()
-        serializer = WorkoutProgramSerializer(instance, data=data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+        try:
+            instance = WorkoutProgram.objects.get(pk=pk)
+            if instance.user != request.user:
+                return Response({"error": "Workout program not found with associated user."}, status=status.HTTP_403_FORBIDDEN)
+
+            data = request.data.copy()
+            data['updated'] = datetime.now()
+            serializer = WorkoutProgramSerializer(instance, data=data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response({"success": "Workout program updated successfully."})
+        except:
+                return Response({'error': 'Something went wrong when updating account'})
 
     def delete(self, request, pk):
         instance = WorkoutProgram.objects.get(pk=pk)
         if instance.user != request.user:
-            return Response(status=status.HTTP_403_FORBIDDEN)
+            return Response({"error": "Workout program not found"}, status=status.HTTP_403_FORBIDDEN)
         instance.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"success": "Workout program deleted successfully."},status=status.HTTP_204_NO_CONTENT)

@@ -17,8 +17,10 @@ class Exercise(models.Model):
 class WorkoutProgram(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(default='', blank=True)
     days = models.ManyToManyField(DayOfWeek, related_name='workout_programs', blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
