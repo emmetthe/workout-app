@@ -3,9 +3,25 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { UpdateProfileAsync } from '../../slices/authSlice';
 import ModalForm from '../modal/modal';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, Typography } from '@mui/material';
 import UpdateProfileForm from './updateProfileForm';
 import WorkoutProgram from '../workout-program/workoutProgram';
+
+const styles = {
+  container: {
+    padding: '20px'
+  },
+  header: {
+    marginBottom: '20px'
+  },
+  welcome: {
+    fontSize: '24px',
+    marginBottom: '20px'
+  },
+  button: {
+    marginBottom: '20px'
+  }
+};
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -28,11 +44,15 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
-      <h1>Profile Page</h1>
-      <h1>Welcome back, {profile.firstName}</h1>
+    <Grid container direction="column" alignItems="center" style={styles.container}>
+      <Typography variant="h4" style={styles.header}>
+        Profile Page
+      </Typography>
+      <Typography variant="h1" style={styles.welcome}>
+        Welcome back, {profile.firstName}
+      </Typography>
 
-      <Button variant="outlined" onClick={openModal}>
+      <Button variant="outlined" onClick={openModal} style={styles.button}>
         Update Profile
       </Button>
 
@@ -46,7 +66,7 @@ const Dashboard = () => {
         modalState={modalOpen}
         handleClose={closeModal}
       />
-    </div>
+    </Grid>
   );
 };
 
