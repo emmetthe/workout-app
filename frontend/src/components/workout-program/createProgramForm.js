@@ -12,7 +12,6 @@ const WorkoutProgramForm = ({ handleClose }) => {
   const [workoutDescription, setWorkoutDescription] = useState('');
   const [selectedDays, setSelectedDays] = useState([]);
   const error = useSelector((state) => state.errors);
-  const { workouts } = useSelector((state) => state.workouts);
 
   useEffect(() => {
     dispatch(clearErrors());

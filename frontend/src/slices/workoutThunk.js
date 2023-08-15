@@ -55,7 +55,6 @@ export const deleteWorkout = (id) => async (dispatch) => {
   });
   try {
     await axios.delete(`${API_BASE_URL}/delete/${id}`, config, body);
-    console.log('account deleted');
   } catch (error) {
     dispatch(receiveErrors(error.message));
   }

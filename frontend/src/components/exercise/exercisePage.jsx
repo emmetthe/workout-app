@@ -8,6 +8,7 @@ const ExercisePage = () => {
   const { videoURL, steps, target, exercise_name, Category, Difficulty } = exercise;
   const { Primary, Secondary } = target;
   const targetMuscles = [...(Primary || []), ...(Secondary || [])];
+  console.log(exercise);
 
   // create refs object to store video refs
   const videoRefs = useRef({});

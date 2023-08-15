@@ -27,7 +27,7 @@ const ExerciseHome = () => {
       try {
         // Show the loading indicator
         setIsLoading(true);
-        const response = await axios.get('/static/workout-data.csv');
+        const response = await axios.get('/static/workout-data1.csv');
         const parsedData = Papa.parse(response.data, { header: true }).data;
 
         // remove double quotes wrapping nested arrays and objects
@@ -152,7 +152,7 @@ const ExerciseHome = () => {
         renderInput={(params) => <TextField {...params} label="Search exercises" variant="outlined" fullWidth sx={{ marginBottom: 5 }} />}
       />
 
-      {/* Circular Progress while fetching API */}
+      {/* Circular Progress while fetching exercise data */}
       {isLoading ? (
         <Grid style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
           <CircularProgress />
