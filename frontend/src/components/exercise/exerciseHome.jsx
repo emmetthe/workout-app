@@ -29,13 +29,13 @@ const ExerciseHome = () => {
         setIsLoading(true);
         const response = await axios.get('/static/workout-data.csv');
         const parsedData = Papa.parse(response.data, { header: true }).data;
-        
+
         // remove double quotes wrapping nested arrays and objects
         const convertedOutput = parsedData.map((data) => convertToObject(data));
-        console.log(convertedOutput[0]);
 
         // Filter out entries with undefined exercise_name
         const exerciseObjects = convertedOutput.filter((exercise) => exercise.exercise_name);
+        // .map((exercise) => ({ ...exercise, target: [...(exercise.target.Primary || []), ...(exercise.target.Secondary || [])] }));
 
         // Sort exercises alphabetically by name
         exerciseObjects.sort((a, b) => a.exercise_name.localeCompare(b.exercise_name));
@@ -65,7 +65,7 @@ const ExerciseHome = () => {
     }
 
     if (selectedMuscle) {
-      filtered = filtered.filter((exercise) => exercise.target && exercise.target.includes(selectedMuscle));
+      filtered = filtered.filter((exercise) => exercise.target.Primary && exercise.target.Primary.includes(selectedMuscle));
     }
 
     if (selectedCategory) {
