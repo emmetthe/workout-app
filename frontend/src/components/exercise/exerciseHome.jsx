@@ -35,7 +35,6 @@ const ExerciseHome = () => {
 
         // Filter out entries with undefined exercise_name
         const exerciseObjects = convertedOutput.filter((exercise) => exercise.exercise_name);
-        // .map((exercise) => ({ ...exercise, target: [...(exercise.target.Primary || []), ...(exercise.target.Secondary || [])] }));
 
         // Sort exercises alphabetically by name
         exerciseObjects.sort((a, b) => a.exercise_name.localeCompare(b.exercise_name));

@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 const styles = {
   exerciseCard: {
     textDecoration: 'none',
-    color: 'inherit'
+    color: 'inherit',
+    width: '100%'
   },
   card: {
     border: '1px solid #ccc',
@@ -14,7 +15,11 @@ const styles = {
     '&:hover': {
       transform: 'scale(1.03)',
       boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)'
-    }
+    },
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    height: '100%'
   },
   cardContent: {
     padding: 16,
@@ -35,11 +40,7 @@ const ExerciseCard = ({ exercise }) => {
         <CardContent style={styles.cardContent}>
           <Typography variant="h6">{exercise_name}</Typography>
           <Typography variant="subtitle1">Type: {Category}</Typography>
-          {targetMuscles.length > 0 ? (
-            <Typography variant="subtitle1">Muscles Targeted: {targetMuscles.join(', ')}</Typography>
-          ) : (
-            <Typography variant="subtitle1">Muscles Targeted: N/A </Typography>
-          )}
+          <Typography variant="subtitle1">Muscles Targeted: {targetMuscles.length > 0 ? targetMuscles.join(', ') : 'N/A'}</Typography>
         </CardContent>
       </Card>
     </Link>
