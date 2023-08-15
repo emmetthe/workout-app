@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, Button, TextField, Typography, FormControlLabel, Checkbox } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { createWorkout } from '../../slices/workoutThunk';
+import { createWorkout, fetchWorkouts } from '../../slices/workoutThunk';
 import { clearErrors } from '../../slices/errorSlice';
 import { Alert } from '@mui/material';
 
@@ -12,6 +12,7 @@ const WorkoutProgramForm = ({ handleClose }) => {
   const [workoutDescription, setWorkoutDescription] = useState('');
   const [selectedDays, setSelectedDays] = useState([]);
   const error = useSelector((state) => state.errors);
+  const { workouts } = useSelector((state) => state.workouts);
 
   useEffect(() => {
     dispatch(clearErrors());
@@ -23,15 +24,16 @@ const WorkoutProgramForm = ({ handleClose }) => {
     exercises: selectedExercises,
     days: selectedDays
   };
+
   const createProgram = async () => {
-    dispatch(createWorkout(data));
+    dispatch(createWorkout(data, resetForm, handleClose));
   };
 
   const resetForm = () => {
     setWorkoutDescription('');
     setWorkoutName('');
     setSelectedDays([]);
-    setSelectedExercises();
+    setSelectedExercises([]);
   };
 
   const handleDayChange = (day) => {

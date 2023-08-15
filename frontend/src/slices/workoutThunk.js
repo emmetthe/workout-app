@@ -31,14 +31,16 @@ export const fetchSingleWorkout = (id) => async (dispatch) => {
   }
 };
 
-export const createWorkout = (workoutData) => async (dispatch) => {
+export const createWorkout = (workoutData, resetForm, handleClose) => async (dispatch) => {
   try {
     const body = JSON.stringify(workoutData);
     const response = await axios.post(`${API_BASE_URL}/create/`, body, config);
     dispatch(clearErrors());
 
-    if (response.data === 'success') {
+    if (response.data.success) {
       dispatch(addWorkout(response.data));
+      resetForm();
+      handleClose();
     } else {
       dispatch(receiveErrors(response.data.error));
     }

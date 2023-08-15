@@ -23,7 +23,6 @@ const WorkoutProgram = () => {
     dispatch(fetchWorkouts());
   }, [dispatch, modalOpen]);
 
-
   return (
     <Grid container direction="column" alignItems="center" spacing={2}>
       <Typography variant="h4">Workout Program</Typography>

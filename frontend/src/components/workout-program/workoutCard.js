@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { deleteWorkout, updateWorkout } from '../../slices/workoutThunk';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Typography, Paper } from '@material-ui/core';
 
 const cardStyle = {
@@ -27,8 +27,18 @@ const buttonContainerStyle = {
 const WorkoutCard = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const workout = location.state;
   const { id, name, description, days } = workout;
+
+  const handleDelete = async () => {
+    try {
+      dispatch(deleteWorkout(id));
+      navigate('/dashboard'); // Redirect to dashboard page after deleting
+    } catch (error) {
+      console.error('Error deleting workout:', error);
+    }
+  };
 
   return (
     <Paper style={cardStyle} elevation={3}>
@@ -53,7 +63,7 @@ const WorkoutCard = () => {
         <Button variant="outlined" color="primary" onClick={() => dispatch(updateWorkout(id))}>
           Update Workout
         </Button>
-        <Button variant="outlined" color="secondary" onClick={() => dispatch(deleteWorkout(id))}>
+        <Button variant="outlined" color="secondary" onClick={handleDelete}>
           Delete Workout
         </Button>
       </div>
