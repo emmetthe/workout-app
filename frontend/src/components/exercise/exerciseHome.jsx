@@ -5,6 +5,8 @@ import ExerciseFilter from './exerciseFilter';
 import ExercisePagination from './exercisePagination';
 import ExerciseList from './exerciseList';
 import Autocomplete from '@mui/material/Autocomplete';
+import Papa from 'papaparse';
+import { convertToObject } from '../../utils/convertToObject';
 
 const ExerciseHome = () => {
   // State variables
@@ -25,20 +27,23 @@ const ExerciseHome = () => {
       try {
         // Show the loading indicator
         setIsLoading(true);
+        const response = await axios.get('/static/workout-data.csv');
+        const parsedData = Papa.parse(response.data, { header: true }).data;
+        
+        // remove double quotes wrapping nested arrays and objects
+        const convertedOutput = parsedData.map((data) => convertToObject(data));
+        console.log(convertedOutput[0]);
 
-        const response = await axios.get(process.env.REACT_APP_GET_ALL_EXERCISE_API_URL, {
-          headers: {
-            'x-rapidapi-key': process.env.REACT_APP_RAPID_API_KEY,
-            'x-rapidapi-host': process.env.REACT_APP_RAPID_API_HOST
-          }
-        });
+        // Filter out entries with undefined exercise_name
+        const exerciseObjects = convertedOutput.filter((exercise) => exercise.exercise_name);
+
         // Sort exercises alphabetically by name
-        response.data.sort((a, b) => a.exercise_name.localeCompare(b.exercise_name));
-        // remove duplicate exercises
-        let exerciseList = response.data.filter((v, i, a) => a.findIndex((v2) => v2.exercise_name === v.exercise_name) === i);
+        exerciseObjects.sort((a, b) => a.exercise_name.localeCompare(b.exercise_name));
 
-        setExercises(exerciseList);
-        // Hide the loading indicator
+        // Remove duplicate exercises
+        const uniqueExerciseList = exerciseObjects.filter((v, i, a) => a.findIndex((v2) => v2.exercise_name === v.exercise_name) === i);
+
+        setExercises(uniqueExerciseList);
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching exercises:', error);
@@ -60,7 +65,7 @@ const ExerciseHome = () => {
     }
 
     if (selectedMuscle) {
-      filtered = filtered.filter((exercise) => exercise.target.Primary && exercise.target.Primary.includes(selectedMuscle));
+      filtered = filtered.filter((exercise) => exercise.target && exercise.target.includes(selectedMuscle));
     }
 
     if (selectedCategory) {
