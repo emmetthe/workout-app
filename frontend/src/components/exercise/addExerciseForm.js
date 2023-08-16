@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Button, TextField } from '@mui/material';
+import { Grid, Button, TextField, InputAdornment } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
@@ -66,6 +66,9 @@ const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedPr
             variant="outlined"
             fullWidth
             margin="normal"
+            InputProps={{
+              endAdornment: <InputAdornment position="end">{'lbs'}</InputAdornment>
+            }}
           />
           <Button variant="contained" color="primary" onClick={handleAddExercise}>
             Add Exercise
