@@ -25,7 +25,7 @@ const ExerciseHome = () => {
   useEffect(() => {
     const fetchExercises = async () => {
       try {
-        // Show the loading indicator
+        // Show the loading indicator while fetching data
         setIsLoading(true);
         const response = await axios.get('/static/workout-data1.csv');
         const parsedData = Papa.parse(response.data, { header: true }).data;

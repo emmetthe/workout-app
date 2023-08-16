@@ -29,7 +29,7 @@ const WorkoutCard = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const workout = location.state;
-  const { id, name, description, days } = workout;
+  const { id, name, description, days, exercises } = workout;
 
   const handleDelete = async () => {
     try {
@@ -48,6 +48,16 @@ const WorkoutCard = () => {
       <Typography variant="body1" align="center" gutterBottom>
         {description}
       </Typography>
+
+      <Typography variant="body1" align="center" gutterBottom>
+        exercises:
+      </Typography>
+      {exercises.map((exercise, idx) => (
+        <Typography variant="body1" key={idx} align="center" gutterBottom>
+          {exercise.name}
+        </Typography>
+      ))}
+
       <Typography variant="h6" align="center" gutterBottom>
         Days:
       </Typography>

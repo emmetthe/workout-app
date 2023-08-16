@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, Button, TextField, Typography, FormControlLabel, Checkbox } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { createWorkout, fetchWorkouts } from '../../slices/workoutThunk';
+import { createWorkout } from '../../slices/workoutThunk';
 import { clearErrors } from '../../slices/errorSlice';
 import { Alert } from '@mui/material';
 

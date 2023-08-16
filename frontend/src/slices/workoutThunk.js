@@ -54,20 +54,18 @@ export const deleteWorkout = (id) => async (dispatch) => {
     withCredentials: true
   });
   try {
-    await axios.delete(`${API_BASE_URL}/delete/${id}`, config, body);
+    await axios.delete(`${API_BASE_URL}/delete/${id}/`, config, body);
   } catch (error) {
     dispatch(receiveErrors(error.message));
   }
 };
 
-export const updateWorkout = (id) => async (dispatch) => {
-  const body = JSON.stringify({
-    withCredentials: true
-  });
+export const updateWorkout = (workoutData, programId) => async (dispatch) => {
+  const body = JSON.stringify(workoutData);
   dispatch(clearErrors());
 
   try {
-    const response = await axios.put(`${API_BASE_URL}/update/${id}`, body, config);
+    const response = await axios.put(`${API_BASE_URL}/update/${programId}/`, body, config);
     dispatch(setWorkouts([response.data]));
   } catch (error) {
     dispatch(receiveErrors(error.message));

@@ -11,7 +11,7 @@ const workoutSlice = createSlice({
       state.workouts = action.payload;
     },
     addWorkout: (state, action) => {
-      state.workouts.push(action.payload);
+      state.workouts = [...state.workouts, action.payload];
     },
     setSelectedWorkout: (state, action) => {
       state.selectedWorkout = action.payload;

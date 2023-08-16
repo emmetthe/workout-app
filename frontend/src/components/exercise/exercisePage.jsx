@@ -1,14 +1,22 @@
 import React, { useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Button, Grid, Typography } from '@material-ui/core';
+import { updateWorkout } from '../../slices/workoutThunk';
+import AddExerciseForm from './addExerciseForm';
+import ModalForm from '../modal/modal';
+import { useDispatch, useSelector } from 'react-redux';
 
 const ExercisePage = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
+  const workouts = useSelector((state) => state.workouts);
+  const workoutList = workouts.workouts;
   const exercise = location.state;
   const { videoURL, steps, target, exercise_name, Category, Difficulty } = exercise;
   const { Primary, Secondary } = target;
   const targetMuscles = [...(Primary || []), ...(Secondary || [])];
-  console.log(exercise);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState(null);
 
   // create refs object to store video refs
   const videoRefs = useRef({});
@@ -28,13 +36,59 @@ const ExercisePage = () => {
     }));
   };
 
+  const handleAddToProgram = (exerciseData, programId) => {
+    // Fetch the workout program by programId from the Redux store
+    const selectedWorkout = workoutList.find((workout) => workout.id === programId);
+
+    // Add the exerciseData to the selected workout's exercises array
+    const updatedWorkout = {
+      ...selectedWorkout,
+      exercises: [...selectedWorkout.exercises, exerciseData]
+    };
+
+    // Dispatch an action to update the workout program in the Redux store
+    dispatch(updateWorkout(updatedWorkout, programId));
+    setSelectedProgram(null);
+    // Close the modal after adding the exercise
+    closeModal();
+  };
+
+  const openModal = () => {
+    setSelectedProgram(null); // Reset selected program when opening modal
+    setModalOpen(true);
+  };
+
+  const selectProgram = (program) => {
+    setSelectedProgram(program);
+  };
+
+  const closeModal = () => {
+    setSelectedProgram(null);
+    setModalOpen(false);
+  };
+
   return (
     <Grid container direction="column" alignItems="center" spacing={2}>
       <Grid item>
-        <Button variant="contained" color="primary">
+        <Button variant="contained" color="primary" onClick={openModal}>
           Add to Workout Program
         </Button>
       </Grid>
+
+      <ModalForm
+        componentForm={
+          <AddExerciseForm
+            handleClose={closeModal}
+            handleAddToProgram={handleAddToProgram}
+            exercise={exercise}
+            selectedProgram={selectedProgram}
+            selectProgram={selectProgram}
+            setSelectedProgram={setSelectedProgram}
+          />
+        }
+        modalState={modalOpen}
+        handleClose={closeModal}
+      />
 
       <Grid item>
         {/* general information */}
