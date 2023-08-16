@@ -56,6 +56,7 @@ const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedPr
         // Display exercise form when a program is selected
         <>
           <Button onClick={handleGoBack}>Back</Button>
+          <Typography variant='h3'>{selectedProgram.name}</Typography>
           <Typography>Enter Reps, Sets, and Weight:</Typography>
           <TextField label="Reps" value={reps} onChange={(e) => setReps(e.target.value)} variant="outlined" fullWidth margin="normal" />
           <TextField label="Sets" value={sets} onChange={(e) => setSets(e.target.value)} variant="outlined" fullWidth margin="normal" />
