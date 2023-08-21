@@ -35,7 +35,6 @@ const UpdateProgramForm = ({ initialName, initialDescription, onUpdate }) => {
         value={updatedDescription}
         onChange={(e) => setUpdatedDescription(e.target.value)}
         multiline
-        rows={4}
         style={{ marginBottom: '16px' }}
       />
       <Button variant="outlined" color="primary" onClick={handleUpdate}>
