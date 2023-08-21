@@ -109,7 +109,7 @@ class WorkoutProgramViewSet(APIView):
                 sets = exercise_data.get('sets')
                 reps = exercise_data.get('reps')
                 weight = exercise_data.get('weight')
-
+                print(exercise_data)
                 # Check if the exercise with the given ID already exists, or create it
                 exercise, created = Exercise.objects.get_or_create(id=exercise_id, defaults={'name': f"{exercise_name}",'category': f"{category}", 'target': f"{target.Primary}"})
 
