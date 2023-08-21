@@ -63,9 +63,10 @@ export const deleteWorkout = (id) => async (dispatch) => {
 export const updateWorkout = (workoutData, programId) => async (dispatch) => {
   const body = JSON.stringify(workoutData);
   dispatch(clearErrors());
-
+  console.log('body: ', body);
   try {
     const response = await axios.put(`${API_BASE_URL}/update/${programId}/`, body, config);
+    console.log('response: ', response);
     dispatch(setWorkouts([response.data]));
   } catch (error) {
     dispatch(receiveErrors(error.message));

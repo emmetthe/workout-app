@@ -54,7 +54,7 @@ const WorkoutCard = () => {
       </Typography>
       {exercises.map((exercise, idx) => (
         <Typography variant="body1" key={idx} align="center" gutterBottom>
-          {exercise.name}
+          {exercise.exercise.name}
         </Typography>
       ))}
 
