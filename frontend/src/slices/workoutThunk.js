@@ -1,4 +1,4 @@
-import { setWorkouts, setSelectedWorkout, addWorkout } from './workoutSlice';
+import { setWorkouts, setSelectedWorkout, addWorkout, updateWorkouts, resetWorkouts } from './workoutSlice';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { clearErrors, receiveErrors } from './errorSlice';
@@ -63,11 +63,9 @@ export const deleteWorkout = (id) => async (dispatch) => {
 export const updateWorkout = (workoutData, programId) => async (dispatch) => {
   const body = JSON.stringify(workoutData);
   dispatch(clearErrors());
-  console.log('body: ', workoutData);
   try {
     const response = await axios.put(`${API_BASE_URL}/update/${programId}/`, body, config);
-    console.log('response: ', response);
-    dispatch(setWorkouts([response.data]));
+    dispatch(updateWorkouts(response.data));
   } catch (error) {
     dispatch(receiveErrors(error.message));
   }
