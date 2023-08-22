@@ -4,13 +4,11 @@ import { Button, Grid, Typography } from '@material-ui/core';
 import { updateWorkout } from '../../slices/workoutThunk';
 import AddExerciseForm from './addExerciseForm';
 import ModalForm from '../modal/modal';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 const ExercisePage = () => {
   const location = useLocation();
   const dispatch = useDispatch();
-  const workouts = useSelector((state) => state.workouts);
-  const workoutList = workouts.workouts;
   const exercise = location.state;
   const { videoURL, steps, target, exercise_name, Category, Difficulty } = exercise;
   const { Primary, Secondary } = target;
@@ -37,17 +35,8 @@ const ExercisePage = () => {
   };
 
   const handleAddToProgram = (exerciseData, programId) => {
-    // Fetch the workout program by programId from the Redux store
-    const selectedWorkout = workoutList.find((workout) => workout.id === programId);
-
-    // Add the exerciseData to the selected workout's exercises array
-    const updatedWorkout = {
-      ...selectedWorkout,
-      exercises: [...selectedWorkout.exercises, exerciseData]
-    };
-
     // Dispatch an action to update the workout program in the Redux store
-    dispatch(updateWorkout(updatedWorkout, programId));
+    dispatch(updateWorkout(exerciseData, programId));
     setSelectedProgram(null);
     // Close the modal after adding the exercise
     closeModal();

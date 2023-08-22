@@ -93,7 +93,7 @@ class WorkoutProgramViewSet(APIView):
                 return Response({"error": "Workout program not found with associated user."}, status=status.HTTP_403_FORBIDDEN)
 
             data = request.data.copy()
-            exercises_data = data.pop('exercises', [])  # Extract exercises data
+            # exercises_data = data.pop('exercises', [])  # Extract exercises data
 
             # Update the fields you want to update in the instance
             instance.name = data.get('name', instance.name)
@@ -101,31 +101,30 @@ class WorkoutProgramViewSet(APIView):
             instance.updated = datetime.now()
             instance.save()
 
-            for exercise_data in exercises_data:
-                exercise_id = exercise_data.get('id')
-                exercise_name = exercise_data.get('name')
-                category = exercise_data.get('category')
-                target = exercise_data.get('target')
-                sets = exercise_data.get('sets')
-                reps = exercise_data.get('reps')
-                weight = exercise_data.get('weight')
-                print(exercise_data)
-                # Check if the exercise with the given ID already exists, or create it
-                exercise, created = Exercise.objects.get_or_create(id=exercise_id, defaults={'name': f"{exercise_name}",'category': f"{category}", 'target': f"{target.Primary}"})
+            exercise_id = data['id']
+            exercise_name = data['exercise_name']
+            category = data['category']
+            target = data['target']
+            sets = data['sets']
+            reps = data['reps']
+            weight = data['weight']
+    
+            # Check if the exercise with the given ID already exists, or create it
+            exercise, created = Exercise.objects.get_or_create(id=exercise_id, defaults={'name': f"{exercise_name}",'category': f"{category}", 'target': f"{target}"})
 
-                # Create or update ExerciseInProgram instance
-                exercise_in_program, _ = ExerciseInProgram.objects.get_or_create(
-                    exercise=exercise,
-                    program=instance,
-                    defaults={'sets': sets, 'reps': reps, 'weight': weight}
-                )
+            # Create or update ExerciseInProgram instance
+            exercise_in_program, _ = ExerciseInProgram.objects.get_or_create(
+                exercise=exercise,
+                program=instance,
+                defaults={'sets': sets, 'reps': reps, 'weight': weight}
+            )
 
-                if not created:
-                    # Update the existing exercise if it already exists
-                    exercise_in_program.sets = sets
-                    exercise_in_program.reps = reps
-                    exercise_in_program.weight = weight
-                    exercise_in_program.save()
+            if not created:
+                # Update the existing exercise if it already exists
+                exercise_in_program.sets = sets
+                exercise_in_program.reps = reps
+                exercise_in_program.weight = weight
+                exercise_in_program.save()
 
             serializer = WorkoutProgramSerializer(instance)
             return Response(serializer.data)

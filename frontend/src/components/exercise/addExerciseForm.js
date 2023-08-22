@@ -84,7 +84,9 @@ const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedPr
       sets: sets,
       weight: weight,
       programId: selectedProgram.id,
-      programName: selectedProgram.name
+      programName: selectedProgram.name,
+      target: exercise.target.Primary,
+      category: exercise.Category
       // Add more fields as needed
     };
     handleAddToProgram(exerciseData, selectedProgram.id);
