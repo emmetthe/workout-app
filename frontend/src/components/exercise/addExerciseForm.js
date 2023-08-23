@@ -70,7 +70,7 @@ const styles = {
 };
 
 const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedProgram, selectProgram, setSelectedProgram }) => {
-  const workouts = useSelector((state) => state.workouts);
+  const workouts = useSelector((state) => state.programs);
   const workoutList = workouts.workouts;
   const [reps, setReps] = useState('');
   const [sets, setSets] = useState('');

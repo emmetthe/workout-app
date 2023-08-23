@@ -36,7 +36,7 @@ const styles = {
 };
 
 const WorkoutProgram = () => {
-  const { workouts } = useSelector((state) => state.workouts);
+  const { workouts } = useSelector((state) => state.programs);
   const dispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
 

@@ -108,7 +108,6 @@ class WorkoutProgramViewSet(APIView):
             sets = data['sets']
             reps = data['reps']
             weight = data['weight']
-            
             if exercises_data:
                 # If exercise is being edited in program 
                 exercise_id = exercises_data['id']

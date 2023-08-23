@@ -14,7 +14,7 @@ const persistConfig = {
 const reducers = combineReducers({
   auth: authReducer,
   errors: errorReducer,
-  workouts: workoutReducer
+  programs: workoutReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

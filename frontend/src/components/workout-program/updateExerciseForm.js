@@ -7,8 +7,6 @@ const UpdateExerciseForm = ({ exercise, onUpdate, onCancel }) => {
   const [updatedSets, setUpdatedSets] = useState(exercise.sets);
   const [updatedWeight, setUpdatedWeight] = useState(exercise.weight);
   const { exerciseName } = exercise;
-  
-  // console.log(exercise);
 
   const handleUpdate = () => {
     onUpdate({

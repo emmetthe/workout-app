@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteWorkout, updateWorkout } from '../../slices/workoutThunk';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Typography, Paper, Grid, IconButton, List, ListItem, ListItemText } from '@material-ui/core';
@@ -43,10 +43,14 @@ const WorkoutCard = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
-  const workout = location.state;
+  const currentState = location.state;
+  // Update redux store after successfully making updates to individual exercises
+  const workout = useSelector((state) => state.programs.workouts.find((exercise) => exercise.id === currentState.id));
   const { id, name, description, days, exercises } = workout;
   const [isEditing, setIsEditing] = useState(false);
   const [editingExerciseIndex, setEditingExerciseIndex] = useState(-1);
+
+  useEffect(() => {}, []);
 
   const handleDelete = async () => {
     try {
@@ -60,7 +64,9 @@ const WorkoutCard = () => {
   const handleUpdate = (updatedData) => {
     try {
       dispatch(updateWorkout(updatedData, id));
-      setIsEditing(false); // Close the form after updating
+      // Close the form after updating
+      setIsEditing(false);
+      setEditingExerciseIndex(-1);
     } catch (error) {
       console.error('Error updating workout:', error);
     }
