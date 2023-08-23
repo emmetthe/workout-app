@@ -85,7 +85,7 @@ class WorkoutProgramViewSet(APIView):
             workout_program.days.add(day)
 
         return Response({"success": "Workout program created successfully."}, status=status.HTTP_201_CREATED)
-
+    
     def put(self, request, pk):
         try:
             instance = WorkoutProgram.objects.get(pk=pk)
@@ -93,7 +93,8 @@ class WorkoutProgramViewSet(APIView):
                 return Response({"error": "Workout program not found with associated user."}, status=status.HTTP_403_FORBIDDEN)
 
             data = request.data.copy()
-            exercises_data = data.pop('exercise', [])  # Extract exercises data
+            # Extract exercises data, empty if exercise has not been created yet
+            exercises_data = data.pop('exercise', []) 
 
             # Update the fields you want to update in the instance
             instance.name = data.get('name', instance.name)

@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const CSRFToken = () => {
-  const [csrftoken, setcsrftoken] = useState("");
+  const [csrftoken, setcsrftoken] = useState('');
 
   const getCookie = (name) => {
     let cookieValue = null;
-    if (document.cookie && document.cookie !== "") {
-      let cookies = document.cookie.split(";");
+    if (document.cookie && document.cookie !== '') {
+      let cookies = document.cookie.split(';');
       for (let i = 0; i < cookies.length; i++) {
         let cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === name + "=") {
+        if (cookie.substring(0, name.length + 1) === name + '=') {
           cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
           break;
         }
@@ -25,9 +25,8 @@ const CSRFToken = () => {
         await axios.get(`/users/csrf_cookie`);
       } catch (err) {}
     };
-
     fetchData();
-    setcsrftoken(getCookie("csrftoken"));
+    setcsrftoken(getCookie('csrftoken'));
   }, []);
 
   return <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />;

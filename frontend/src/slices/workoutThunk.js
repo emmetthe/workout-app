@@ -5,14 +5,6 @@ import { clearErrors, receiveErrors } from './errorSlice';
 
 const API_BASE_URL = '/workout_program';
 
-const config = {
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-    'X-CSRFToken': Cookies.get('csrftoken')
-  }
-};
-
 export const fetchWorkouts = () => async (dispatch) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/workouts/`);
@@ -32,8 +24,16 @@ export const fetchSingleWorkout = (id) => async (dispatch) => {
 };
 
 export const createWorkout = (workoutData, resetForm, handleClose) => async (dispatch) => {
+  const config = {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-CSRFToken': Cookies.get('csrftoken')
+    }
+  };
+  const body = JSON.stringify(workoutData);
+
   try {
-    const body = JSON.stringify(workoutData);
     const response = await axios.post(`${API_BASE_URL}/create/`, body, config);
     dispatch(clearErrors());
 
@@ -50,9 +50,17 @@ export const createWorkout = (workoutData, resetForm, handleClose) => async (dis
 };
 
 export const deleteWorkout = (id) => async (dispatch) => {
+  const config = {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-CSRFToken': Cookies.get('csrftoken')
+    }
+  };
   const body = JSON.stringify({
     withCredentials: true
   });
+
   try {
     await axios.delete(`${API_BASE_URL}/delete/${id}/`, config, body);
   } catch (error) {
@@ -61,7 +69,15 @@ export const deleteWorkout = (id) => async (dispatch) => {
 };
 
 export const updateWorkout = (workoutData, programId) => async (dispatch) => {
+  const config = {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-CSRFToken': Cookies.get('csrftoken')
+    }
+  };
   const body = JSON.stringify(workoutData);
+
   dispatch(clearErrors());
   try {
     const response = await axios.put(`${API_BASE_URL}/update/${programId}/`, body, config);
