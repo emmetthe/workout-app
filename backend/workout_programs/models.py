@@ -8,7 +8,7 @@ class DayOfWeek(models.Model):
         return self.day_name
 
 class Exercise(models.Model):
-    name = models.CharField(max_length=100)
+    exercise_name = models.CharField(max_length=100)
     category = models.CharField(max_length=100, default='', blank=True)
     target = models.CharField(max_length=100, default='', blank=True)
 

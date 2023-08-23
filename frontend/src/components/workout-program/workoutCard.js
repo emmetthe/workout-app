@@ -59,11 +59,7 @@ const WorkoutCard = () => {
 
   const handleUpdate = (updatedData) => {
     try {
-      const updatedWorkout = {
-        ...workout,
-        ...updatedData
-      };
-      dispatch(updateWorkout(updatedWorkout, id));
+      dispatch(updateWorkout(updatedData, id));
       setIsEditing(false); // Close the form after updating
     } catch (error) {
       console.error('Error updating workout:', error);
@@ -83,14 +79,9 @@ const WorkoutCard = () => {
 
           <Typography style={titleStyle}>Exercises</Typography>
           <List>
-            {/* {exercises.map((exercise, idx) => (
-              <ListItem key={idx}>
-                <ListItemText primary={exercise.exercise.name} />
-              </ListItem>
-            ))} */}
             {exercises.map((exercise, idx) => (
               <ListItem key={idx}>
-                <ListItemText primary={exercise.exercise.name} />
+                <ListItemText primary={exercise.exercise.exerciseName} />
                 <IconButton onClick={() => setEditingExerciseIndex(idx)}>
                   <EditIcon />
                 </IconButton>

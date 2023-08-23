@@ -1,4 +1,4 @@
-import { setWorkouts, setSelectedWorkout, addWorkout, updateWorkouts, resetWorkouts } from './workoutSlice';
+import { setWorkouts, setSelectedWorkout, addWorkout, updateWorkouts } from './workoutSlice';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { clearErrors, receiveErrors } from './errorSlice';

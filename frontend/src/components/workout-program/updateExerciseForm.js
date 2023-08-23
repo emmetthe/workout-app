@@ -1,16 +1,22 @@
 import { Button, TextField } from '@material-ui/core';
+import { InputAdornment } from '@mui/material';
 import { useState } from 'react';
 
 const UpdateExerciseForm = ({ exercise, onUpdate, onCancel }) => {
   const [updatedReps, setUpdatedReps] = useState(exercise.reps);
   const [updatedSets, setUpdatedSets] = useState(exercise.sets);
   const [updatedWeight, setUpdatedWeight] = useState(exercise.weight);
+  const { exerciseName } = exercise;
+  
+  // console.log(exercise);
 
   const handleUpdate = () => {
     onUpdate({
+      ...exercise,
+      exerciseName,
       reps: updatedReps,
-      sets: updatedSets,
-      weight: updatedWeight
+      sets: parseInt(updatedSets),
+      weight: parseInt(updatedWeight)
     });
   };
 
@@ -35,6 +41,9 @@ const UpdateExerciseForm = ({ exercise, onUpdate, onCancel }) => {
         variant="outlined"
         value={updatedWeight}
         onChange={(e) => setUpdatedWeight(e.target.value)}
+        InputProps={{
+          endAdornment: <InputAdornment position="end">lbs</InputAdornment>
+        }}
         style={{ marginBottom: '16px' }}
       />
       <Button variant="outlined" color="primary" onClick={handleUpdate}>

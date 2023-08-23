@@ -93,7 +93,7 @@ class WorkoutProgramViewSet(APIView):
                 return Response({"error": "Workout program not found with associated user."}, status=status.HTTP_403_FORBIDDEN)
 
             data = request.data.copy()
-            # exercises_data = data.pop('exercises', [])  # Extract exercises data
+            exercises_data = data.pop('exercise', [])  # Extract exercises data
 
             # Update the fields you want to update in the instance
             instance.name = data.get('name', instance.name)
@@ -101,16 +101,28 @@ class WorkoutProgramViewSet(APIView):
             instance.updated = datetime.now()
             instance.save()
 
-            exercise_id = data['id']
-            exercise_name = data['exercise_name']
-            category = data['category']
-            target = data['target']
+            exercise_id = None
+            exercise_name = None
+            category = None
+            target = None
             sets = data['sets']
             reps = data['reps']
             weight = data['weight']
+            
+            if exercises_data:
+                # If exercise is being edited in program 
+                exercise_id = exercises_data['id']
+                exercise_name = exercises_data['exercise_name']
+                category = exercises_data['category']
+                target = exercises_data['target']
+            else:
+                exercise_id = data['id']
+                exercise_name = data['exercise_name']
+                category = data['category']
+                target = data['target']
     
             # Check if the exercise with the given ID already exists, or create it
-            exercise, created = Exercise.objects.get_or_create(id=exercise_id, defaults={'name': f"{exercise_name}",'category': f"{category}", 'target': f"{target}"})
+            exercise, created = Exercise.objects.get_or_create(id=exercise_id, defaults={'exercise_name': f"{exercise_name}",'category': f"{category}", 'target': f"{target}"})
 
             # Create or update ExerciseInProgram instance
             exercise_in_program, _ = ExerciseInProgram.objects.get_or_create(
