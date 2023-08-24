@@ -51,9 +51,9 @@ const WorkoutCard = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingExerciseIndex, setEditingExerciseIndex] = useState(-1);
 
-  const handleDelete = async (exerciseId) => {
+  const handleDelete = async (exerciseId, delExercise) => {
     try {
-      if (exerciseId) {
+      if (delExercise) {
         dispatch(removeExercise(id, exerciseId));
       } else {
         dispatch(deleteWorkout(id));
@@ -103,7 +103,7 @@ const WorkoutCard = () => {
                   </IconButton>
                 )}
 
-                <Button variant="outlined" color="secondary" onClick={() => handleDelete(exercise.id)}>
+                <Button variant="outlined" color="secondary" onClick={() => handleDelete(exercise.id, true)}>
                   <DeleteIcon />
                 </Button>
               </ListItem>
