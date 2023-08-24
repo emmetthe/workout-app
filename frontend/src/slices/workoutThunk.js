@@ -86,3 +86,20 @@ export const updateWorkout = (workoutData, programId) => async (dispatch) => {
     dispatch(receiveErrors(error.message));
   }
 };
+
+export const removeExercise = (programId, ExerciseInProgramId) => async (dispatch) => {
+  const config = {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-CSRFToken': Cookies.get('csrftoken')
+    }
+  };
+
+  try {
+    await axios.delete(`${API_BASE_URL}/delete_exercise/${programId}/${ExerciseInProgramId}/`, config);
+    dispatch(fetchWorkouts());
+  } catch (error) {
+    dispatch(receiveErrors(error.message));
+  }
+};

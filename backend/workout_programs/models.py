@@ -13,7 +13,7 @@ class Exercise(models.Model):
     target = models.CharField(max_length=100, default='', blank=True)
 
     def __str__(self):
-        return self.name
+        return self.exercise_name
 
 class WorkoutProgram(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -34,5 +34,5 @@ class ExerciseInProgram(models.Model):
     weight = models.PositiveIntegerField()
 
     def __str__(self):
-        return f"{self.exercise.name} in {self.program.name}"
+        return f"{self.exercise.exercise_name} in {self.program.name}"
 

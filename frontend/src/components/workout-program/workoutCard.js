@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteWorkout, updateWorkout } from '../../slices/workoutThunk';
+import { deleteWorkout, removeExercise, updateWorkout } from '../../slices/workoutThunk';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Typography, Paper, Grid, IconButton, List, ListItem, ListItemText } from '@material-ui/core';
 import UpdateProgramForm from './updateProgramForm';
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import UpdateExerciseForm from './updateExerciseForm';
 
 const cardStyle = {
@@ -50,12 +51,14 @@ const WorkoutCard = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingExerciseIndex, setEditingExerciseIndex] = useState(-1);
 
-  useEffect(() => {}, []);
-
-  const handleDelete = async () => {
+  const handleDelete = async (exerciseId) => {
     try {
-      dispatch(deleteWorkout(id));
-      navigate('/dashboard'); // Redirect to dashboard page after deleting
+      if (exerciseId) {
+        dispatch(removeExercise(id, exerciseId));
+      } else {
+        dispatch(deleteWorkout(id));
+        navigate('/dashboard'); // Redirect to dashboard page after deleting
+      }
     } catch (error) {
       console.error('Error deleting workout:', error);
     }
@@ -88,16 +91,21 @@ const WorkoutCard = () => {
             {exercises.map((exercise, idx) => (
               <ListItem key={idx}>
                 <ListItemText primary={exercise.exercise.exerciseName} />
-                <IconButton onClick={() => setEditingExerciseIndex(idx)}>
-                  <EditIcon />
-                </IconButton>
-                {editingExerciseIndex === idx && (
+                {editingExerciseIndex === idx ? (
                   <UpdateExerciseForm
                     exercise={exercise}
                     onUpdate={(updatedData) => handleUpdate(updatedData, idx)}
                     onCancel={() => setEditingExerciseIndex(-1)}
                   />
+                ) : (
+                  <IconButton onClick={() => setEditingExerciseIndex(idx)}>
+                    <EditIcon />
+                  </IconButton>
                 )}
+
+                <Button variant="outlined" color="secondary" onClick={() => handleDelete(exercise.id)}>
+                  <DeleteIcon />
+                </Button>
               </ListItem>
             ))}
           </List>

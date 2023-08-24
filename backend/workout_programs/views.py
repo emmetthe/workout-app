@@ -4,6 +4,7 @@ from rest_framework import status
 from .models import Exercise, WorkoutProgram, ExerciseInProgram, DayOfWeek
 from .serializers import ExerciseSerializer, WorkoutProgramSerializer, ExerciseInProgramSerializer, DayOfWeekSerializer
 from datetime import datetime
+from django.shortcuts import get_object_or_404
 
 class ExerciseViewSet(APIView):
     """API endpoints for managing exercises."""
@@ -46,6 +47,24 @@ class ExerciseInProgramViewSet(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+ 
+    def delete(self, request, program_id, ExerciseInProgram_id):
+        try:
+            exercise_in_program = ExerciseInProgram.objects.get(
+                program_id=program_id,
+                id=ExerciseInProgram_id
+            )
+            if exercise_in_program.program.user != request.user:
+                return Response({"error": "You do not have permission to delete this exercise"}, status=status.HTTP_403_FORBIDDEN)
+
+            exercise_in_program.delete()
+            return Response({"success": "Exercise successfully removed from program."}, status=status.HTTP_204_NO_CONTENT)
+
+        except ExerciseInProgram.DoesNotExist:
+            return Response({'error': 'Exercise not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': 'Something went wrong when deleting the exercise', 'details': str(e)})
 
 class WorkoutProgramViewSet(APIView):
     """API endpoints for managing workout programs."""
