@@ -52,6 +52,7 @@ const WorkoutCard = () => {
   const [editingExerciseIndex, setEditingExerciseIndex] = useState(-1);
 
   const handleDelete = async (exerciseId, delExercise) => {
+    // exerciseId === ExerciseInProgramView id
     try {
       if (delExercise) {
         dispatch(removeExercise(id, exerciseId));
