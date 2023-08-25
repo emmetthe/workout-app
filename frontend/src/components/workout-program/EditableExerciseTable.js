@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Input } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Input } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
+
 
 const EditableExerciseTable = ({ exercises, onUpdateExercise, onDeleteExercise }) => {
   const [editingIndices, setEditingIndices] = useState([]);
@@ -47,7 +48,7 @@ const EditableExerciseTable = ({ exercises, onUpdateExercise, onDeleteExercise }
   };
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer>
       <Table>
         <TableHead>
           <TableRow>

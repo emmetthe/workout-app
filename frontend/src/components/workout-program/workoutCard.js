@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteWorkout, removeExercise, updateWorkout } from '../../slices/workoutThunk';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, Typography, Paper, Grid, IconButton, List, ListItem, ListItemText } from '@material-ui/core';
+import { Button, Typography, Grid, IconButton, List, ListItem, ListItemText } from '@material-ui/core';
 import UpdateProgramForm from './updateProgramForm';
 import EditIcon from '@material-ui/icons/Edit';
 import EditableExerciseTable from './EditableExerciseTable';
@@ -11,9 +11,6 @@ const cardStyle = {
   padding: '16px',
   marginBottom: '16px',
   width: '100%',
-  backgroundColor: '#f5f5f5',
-  borderRadius: '8px',
-  boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)'
 };
 
 const headerStyle = {
@@ -74,7 +71,7 @@ const WorkoutCard = () => {
   };
 
   return (
-    <Paper style={cardStyle} elevation={3}>
+    <Grid style={cardStyle} elevation={3}>
       <Grid container direction="column" alignItems="center" spacing={2}>
         <Grid item style={headerStyle}>
           <Typography variant="h5">{name}</Typography>
@@ -85,11 +82,15 @@ const WorkoutCard = () => {
           <Typography style={descriptionStyle}>{description}</Typography>
 
           <Typography style={titleStyle}>Exercises</Typography>
-          <EditableExerciseTable
-            exercises={exercises}
-            onUpdateExercise={(updatedData, index) => handleUpdate(updatedData, index)}
-            onDeleteExercise={(exerciseId, delExercise) => handleDelete(exerciseId, delExercise)}
-          />
+          {exercises.length > 0 ? (
+            <EditableExerciseTable
+              exercises={exercises}
+              onUpdateExercise={(updatedData, index) => handleUpdate(updatedData, index)}
+              onDeleteExercise={(exerciseId, delExercise) => handleDelete(exerciseId, delExercise)}
+            />
+          ) : (
+            <Typography>No exercises found</Typography>
+          )}
 
           <Typography style={titleStyle}>Days</Typography>
           <List>
@@ -115,7 +116,7 @@ const WorkoutCard = () => {
           {isEditing && <UpdateProgramForm initialName={name} initialDescription={description} onUpdate={handleUpdate} />}
         </Grid>
       </Grid>
-    </Paper>
+    </Grid>
   );
 };
 

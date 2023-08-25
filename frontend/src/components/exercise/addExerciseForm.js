@@ -9,9 +9,10 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles({
   closeButton: {
     position: 'absolute',
-    right: '5px',
-    top: '5px',
-    backgroundColor: '#F5F5F5',
+    right: '2px',
+    top: '2px',
+    padding: '7px',
+    // backgroundColor: '#F5F5F5',
     color: 'gray',
     '&:hover': {
       backgroundColor: '#EDEDED'
@@ -31,7 +32,7 @@ const styles = {
     marginLeft: '5px',
     position: 'absolute',
     left: '5px',
-    top: '7px'
+    top: '10px'
   },
   title: {
     fontSize: '24px',
