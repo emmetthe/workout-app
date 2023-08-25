@@ -8,10 +8,10 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
   tableInput: {
-    width: '25px',
+    width: '55px',
     '& input': {
-      textAlign: 'center',
-    },
+      textAlign: 'center'
+    }
   }
 });
 
