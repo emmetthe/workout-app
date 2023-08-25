@@ -4,9 +4,19 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
+import { makeStyles } from '@material-ui/core/styles';
 
+const useStyles = makeStyles({
+  tableInput: {
+    width: '25px',
+    '& input': {
+      textAlign: 'center',
+    },
+  }
+});
 
 const EditableExerciseTable = ({ exercises, onUpdateExercise, onDeleteExercise }) => {
+  const classes = useStyles();
   const [editingIndices, setEditingIndices] = useState([]);
   const [editedExercises, setEditedExercises] = useState({});
 
@@ -63,41 +73,67 @@ const EditableExerciseTable = ({ exercises, onUpdateExercise, onDeleteExercise }
           {exercises.map((exercise, idx) => (
             <TableRow key={idx}>
               <TableCell>{exercise.exercise.exerciseName}</TableCell>
-              {editingIndices.includes(idx) ? (
-                <>
-                  <TableCell align="center">
-                    <Input value={editedExercises[idx]?.reps || ''} onChange={(e) => handleInputChange(idx, 'reps', e.target.value)} />
-                  </TableCell>
-                  <TableCell align="center">
-                    <Input value={editedExercises[idx]?.sets || ''} onChange={(e) => handleInputChange(idx, 'sets', e.target.value)} />
-                  </TableCell>
-                  <TableCell align="center">
-                    <Input value={editedExercises[idx]?.weight || ''} onChange={(e) => handleInputChange(idx, 'weight', e.target.value)} />
-                  </TableCell>
-                  <TableCell align="center">
+
+              <TableCell align="center">
+                {editingIndices.includes(idx) ? (
+                  <Input
+                    type="number"
+                    className={classes.tableInput}
+                    value={editedExercises[idx]?.reps || ''}
+                    onChange={(e) => handleInputChange(idx, 'reps', e.target.value)}
+                  />
+                ) : (
+                  exercise?.reps || ''
+                )}
+              </TableCell>
+
+              <TableCell align="center">
+                {editingIndices.includes(idx) ? (
+                  <Input
+                    type="number"
+                    className={classes.tableInput}
+                    value={editedExercises[idx]?.sets || ''}
+                    onChange={(e) => handleInputChange(idx, 'sets', e.target.value)}
+                  />
+                ) : (
+                  exercise?.sets || ''
+                )}
+              </TableCell>
+
+              <TableCell align="center">
+                {editingIndices.includes(idx) ? (
+                  <Input
+                    type="number"
+                    className={classes.tableInput}
+                    value={editedExercises[idx]?.weight || ''}
+                    onChange={(e) => handleInputChange(idx, 'weight', e.target.value)}
+                  />
+                ) : (
+                  exercise?.weight || ''
+                )}
+              </TableCell>
+
+              <TableCell align="center">
+                {editingIndices.includes(idx) ? (
+                  <>
                     <IconButton onClick={() => handleSaveClick(idx)}>
                       <SaveIcon />
                     </IconButton>
                     <IconButton onClick={() => handleCancelClick(idx)}>
                       <CancelIcon />
                     </IconButton>
-                  </TableCell>
-                </>
-              ) : (
-                <>
-                  <TableCell align="center">{exercise?.reps || ''}</TableCell>
-                  <TableCell align="center">{exercise?.sets || ''}</TableCell>
-                  <TableCell align="center">{exercise?.weight || ''}</TableCell>
-                  <TableCell align="center">
+                  </>
+                ) : (
+                  <>
                     <IconButton onClick={() => handleEditClick(idx)}>
                       <EditIcon />
                     </IconButton>
                     <IconButton onClick={() => onDeleteExercise(exercise.id, true)}>
                       <DeleteIcon />
                     </IconButton>
-                  </TableCell>
-                </>
-              )}
+                  </>
+                )}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

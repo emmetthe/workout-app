@@ -12,7 +12,6 @@ const useStyles = makeStyles({
     right: '2px',
     top: '2px',
     padding: '7px',
-    // backgroundColor: '#F5F5F5',
     color: 'gray',
     '&:hover': {
       backgroundColor: '#EDEDED'
@@ -21,13 +20,6 @@ const useStyles = makeStyles({
 });
 
 const styles = {
-  // closeButton: {
-  //   position: 'absolute',
-  //   right: '5px',
-  //   top: '5px',
-  //   backgroundColor: '#F5F5F5',
-  //   color: 'gray'
-  // },
   backButton: {
     marginLeft: '5px',
     position: 'absolute',
