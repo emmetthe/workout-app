@@ -5,8 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Typography, Paper, Grid, IconButton, List, ListItem, ListItemText } from '@material-ui/core';
 import UpdateProgramForm from './updateProgramForm';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import UpdateExerciseForm from './updateExerciseForm';
+import EditableExerciseTable from './EditableExerciseTable';
 
 const cardStyle = {
   padding: '16px',
@@ -49,7 +48,6 @@ const WorkoutCard = () => {
   const workout = useSelector((state) => state.programs.workouts.find((exercise) => exercise.id === currentState.id));
   const { id, name, description, days, exercises } = workout;
   const [isEditing, setIsEditing] = useState(false);
-  const [editingExerciseIndex, setEditingExerciseIndex] = useState(-1);
 
   const handleDelete = async (exerciseId, delExercise) => {
     // exerciseId === ExerciseInProgramView id
@@ -70,7 +68,6 @@ const WorkoutCard = () => {
       dispatch(updateWorkout(updatedData, id));
       // Close the form after updating
       setIsEditing(false);
-      setEditingExerciseIndex(-1);
     } catch (error) {
       console.error('Error updating workout:', error);
     }
@@ -88,28 +85,11 @@ const WorkoutCard = () => {
           <Typography style={descriptionStyle}>{description}</Typography>
 
           <Typography style={titleStyle}>Exercises</Typography>
-          <List>
-            {exercises.map((exercise, idx) => (
-              <ListItem key={idx}>
-                <ListItemText primary={exercise.exercise.exerciseName} />
-                {editingExerciseIndex === idx ? (
-                  <UpdateExerciseForm
-                    exercise={exercise}
-                    onUpdate={(updatedData) => handleUpdate(updatedData, idx)}
-                    onCancel={() => setEditingExerciseIndex(-1)}
-                  />
-                ) : (
-                  <IconButton onClick={() => setEditingExerciseIndex(idx)}>
-                    <EditIcon />
-                  </IconButton>
-                )}
-
-                <Button variant="outlined" color="secondary" onClick={() => handleDelete(exercise.id, true)}>
-                  <DeleteIcon />
-                </Button>
-              </ListItem>
-            ))}
-          </List>
+          <EditableExerciseTable
+            exercises={exercises}
+            onUpdateExercise={(updatedData, index) => handleUpdate(updatedData, index)}
+            onDeleteExercise={(exerciseId, delExercise) => handleDelete(exerciseId, delExercise)}
+          />
 
           <Typography style={titleStyle}>Days</Typography>
           <List>

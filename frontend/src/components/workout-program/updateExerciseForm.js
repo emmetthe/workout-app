@@ -1,6 +1,22 @@
 import { Button, TextField } from '@material-ui/core';
-import { InputAdornment } from '@mui/material';
+import { Grid, InputAdornment } from '@mui/material';
 import { useState } from 'react';
+
+const styles = {
+  container: {
+    padding: '16px'
+  },
+  textField: {
+    marginBottom: '16px'
+  },
+  textFieldWithAdornment: {
+    marginBottom: '16px',
+    // minWidth: '65%'
+  },
+  button: {
+    marginBottom: '10px'
+  }
+};
 
 const UpdateExerciseForm = ({ exercise, onUpdate, onCancel }) => {
   const [updatedReps, setUpdatedReps] = useState(exercise.reps);
@@ -19,20 +35,20 @@ const UpdateExerciseForm = ({ exercise, onUpdate, onCancel }) => {
   };
 
   return (
-    <div>
+    <Grid alignItems="center" style={styles.container}>
       <TextField
         label="Reps"
         variant="outlined"
         value={updatedReps}
         onChange={(e) => setUpdatedReps(e.target.value)}
-        style={{ marginBottom: '16px' }}
+        style={styles.textField}
       />
       <TextField
         label="Sets"
         variant="outlined"
         value={updatedSets}
         onChange={(e) => setUpdatedSets(e.target.value)}
-        style={{ marginBottom: '16px' }}
+        style={styles.textField}
       />
       <TextField
         label="Weight"
@@ -40,17 +56,17 @@ const UpdateExerciseForm = ({ exercise, onUpdate, onCancel }) => {
         value={updatedWeight}
         onChange={(e) => setUpdatedWeight(e.target.value)}
         InputProps={{
-          endAdornment: <InputAdornment position="end">lbs</InputAdornment>
+          endAdornment: <InputAdornment position="start">lbs</InputAdornment>
         }}
-        style={{ marginBottom: '16px' }}
+        style={styles.textFieldWithAdornment}
       />
-      <Button variant="outlined" color="primary" onClick={handleUpdate}>
+      <Button variant="outlined" color="primary" style={styles.button} onClick={handleUpdate}>
         Update Exercise
       </Button>
-      <Button variant="outlined" color="secondary" onClick={onCancel}>
+      <Button variant="outlined" color="secondary" style={styles.button} onClick={onCancel}>
         Cancel
       </Button>
-    </div>
+    </Grid>
   );
 };
 

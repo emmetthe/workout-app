@@ -99,7 +99,6 @@ const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedPr
   return (
     <Grid>
       <IconButton
-        // style={styles.closeButton}
         className={classes.closeButton}
         variant="contained"
         onClick={handleClose}
