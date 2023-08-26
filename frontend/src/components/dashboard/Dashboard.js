@@ -6,7 +6,6 @@ import ModalForm from '../modal/modal';
 import { Button, Grid, Typography } from '@mui/material';
 import UpdateProfileForm from './updateProfileForm';
 import WorkoutProgram from '../workout-program/workoutProgram';
-import CSRFToken from '../CSRFToken';
 
 const styles = {
   container: {
