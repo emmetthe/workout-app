@@ -70,7 +70,7 @@ class WorkoutProgramViewSet(APIView):
     """API endpoints for managing workout programs."""
 
     def get(self, request):
-        queryset = WorkoutProgram.objects.filter(user=request.user)
+        queryset = WorkoutProgram.objects.filter(user=request.user).order_by('id')
         serializer = WorkoutProgramSerializer(queryset, many=True)
         return Response(serializer.data)
 
