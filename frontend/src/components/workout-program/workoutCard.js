@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteWorkout, removeExercise, updateWorkout } from '../../slices/workoutThunk';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, Typography, Grid, IconButton, List, ListItem, ListItemText } from '@material-ui/core';
+import { Button, Typography, Grid, List, ListItem, ListItemText } from '@material-ui/core';
 import UpdateProgramForm from './updateProgramForm';
-import EditIcon from '@material-ui/icons/Edit';
 import EditableExerciseTable from './EditableExerciseTable';
 
 const cardStyle = {
@@ -102,9 +101,9 @@ const WorkoutCard = () => {
         </Grid>
 
         <Grid item style={{ marginTop: '16px', display: 'flex', justifyContent: 'flex-end' }}>
-          <IconButton onClick={() => setIsEditing(true)}>
-            <EditIcon />
-          </IconButton>
+          <Button variant="outlined" color="primary" onClick={() => setIsEditing(true)}>
+            Update details
+          </Button>
           <Button variant="outlined" color="secondary" onClick={handleDelete}>
             Delete Workout
           </Button>

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Button, TextField, Typography, FormControlLabel, Checkbox } from '@material-ui/core';
+import { Grid, Button, TextField, Typography, FormControlLabel } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { createWorkout } from '../../slices/workoutThunk';
 import { clearErrors } from '../../slices/errorSlice';
 import { Alert, IconButton } from '@mui/material';
 import CloseIcon from '@material-ui/icons/Close';
+import Checkbox from '@mui/material/Checkbox';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -18,6 +19,16 @@ const useStyles = makeStyles({
     '&:hover': {
       backgroundColor: '#EDEDED'
     }
+  },
+  centeredContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: 20,
+    textAlign: 'center'
+  },
+  centeredLabel: {
+    marginRight: '20%'
   }
 });
 
@@ -64,7 +75,8 @@ const WorkoutProgramForm = ({ handleClose }) => {
         <CloseIcon />
       </IconButton>
 
-      <Grid container direction="column" alignItems="center" spacing={2} style={{ padding: 20 }}>
+      {/* <Grid container direction="column" alignItems="center" spacing={2} style={{ padding: 20 }}> */}
+      <Grid container direction="column" className={classes.centeredContainer}>
         {error && <Alert severity="error">{error}</Alert>}
 
         <TextField
@@ -87,18 +99,20 @@ const WorkoutProgramForm = ({ handleClose }) => {
         />
 
         <Typography variant="subtitle1" style={{ marginBottom: 10 }}>
-          Days *
+          Days
         </Typography>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+
+        <Grid container direction="column">
           {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
             <FormControlLabel
               key={day}
               control={<Checkbox checked={selectedDays.includes(day)} onChange={() => handleDayChange(day)} />}
               label={day}
-              style={{ marginBottom: 5, width: '100%', display: 'block' }}
+              labelPlacement="start"
+              className={classes.centeredLabel}
             />
           ))}
-        </div>
+        </Grid>
 
         <Button variant="outlined" onClick={createProgram} style={{ marginTop: 20 }}>
           Create workout

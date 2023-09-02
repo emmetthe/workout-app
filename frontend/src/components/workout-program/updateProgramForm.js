@@ -101,6 +101,10 @@ const UpdateProgramForm = ({ workout, onUpdate }) => {
       <Button variant="outlined" color="primary" onClick={handleUpdate}>
         Update Program
       </Button>
+      
+      <Button variant="outlined" color="secondary">
+        Cancel
+      </Button>
     </Grid>
   );
 };
