@@ -10,7 +10,7 @@ import EditableExerciseTable from './EditableExerciseTable';
 const cardStyle = {
   padding: '16px',
   marginBottom: '16px',
-  width: '100%',
+  width: '100%'
 };
 
 const headerStyle = {
@@ -60,9 +60,9 @@ const WorkoutCard = () => {
     }
   };
 
-  const handleUpdate = (updatedData) => {
+  const handleUpdate = (updatedData, updatingExercise) => {
     try {
-      dispatch(updateWorkout(updatedData, id));
+      dispatch(updateWorkout(updatedData, id, updatingExercise));
       // Close the form after updating
       setIsEditing(false);
     } catch (error) {
@@ -80,18 +80,6 @@ const WorkoutCard = () => {
         <Grid item style={infoSectionStyle}>
           <Typography style={titleStyle}>Description</Typography>
           <Typography style={descriptionStyle}>{description}</Typography>
-
-          <Typography style={titleStyle}>Exercises</Typography>
-          {exercises.length > 0 ? (
-            <EditableExerciseTable
-              exercises={exercises}
-              onUpdateExercise={(updatedData, index) => handleUpdate(updatedData, index)}
-              onDeleteExercise={(exerciseId, delExercise) => handleDelete(exerciseId, delExercise)}
-            />
-          ) : (
-            <Typography>No exercises found</Typography>
-          )}
-
           <Typography style={titleStyle}>Days</Typography>
           <List>
             {days.map((day, idx) => (
@@ -100,6 +88,17 @@ const WorkoutCard = () => {
               </ListItem>
             ))}
           </List>
+
+          <Typography style={titleStyle}>Exercises</Typography>
+          {exercises.length > 0 ? (
+            <EditableExerciseTable
+              exercises={exercises}
+              onUpdateExercise={(updatedData) => handleUpdate(updatedData, true)}
+              onDeleteExercise={(exerciseId, delExercise) => handleDelete(exerciseId, delExercise)}
+            />
+          ) : (
+            <Typography>No exercises found</Typography>
+          )}
         </Grid>
 
         <Grid item style={{ marginTop: '16px', display: 'flex', justifyContent: 'flex-end' }}>
@@ -113,7 +112,7 @@ const WorkoutCard = () => {
 
         <Grid item>
           {/* Update form */}
-          {isEditing && <UpdateProgramForm initialName={name} initialDescription={description} onUpdate={handleUpdate} />}
+          {isEditing && <UpdateProgramForm workout={workout} onUpdate={handleUpdate} />}
         </Grid>
       </Grid>
     </Grid>

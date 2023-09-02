@@ -112,12 +112,46 @@ class WorkoutProgramViewSet(APIView):
                 return Response({"error": "Workout program not found with associated user."}, status=status.HTTP_403_FORBIDDEN)
 
             data = request.data.copy()
-            # Extract exercises data, empty if exercise has not been created yet
-            exercises_data = data.pop('exercise', []) 
-
             # Update the fields you want to update in the instance
             instance.name = data.get('name', instance.name)
             instance.description = data.get('description', instance.description)
+
+            # Extract the "days" field as a list of day objects
+            days_data = data.get('days', [])
+
+            # Extract the day from the day name and create a list of days 
+            days = [DayOfWeek.objects.get(day_name=day) for day in days_data]
+            # Set the "days" field with the updated days
+            instance.days.set(days)
+            instance.updated = datetime.now()
+            instance.save()
+
+            serializer = WorkoutProgramSerializer(instance)
+            return Response(serializer.data)
+        except WorkoutProgram.DoesNotExist:
+            return Response({'error': 'Workout program not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': 'Something went wrong when updating the workout program', 'details': str(e)})
+
+
+    def delete(self, request, pk):
+        instance = WorkoutProgram.objects.get(pk=pk)
+        if instance.user != request.user:
+            return Response({"error": "Workout program not found"}, status=status.HTTP_403_FORBIDDEN)
+        instance.delete()
+        return Response({"success": "Workout program deleted successfully."},status=status.HTTP_204_NO_CONTENT)
+
+class WorkoutProgramExerciseViewSet(APIView):
+    """API endpoints for managing exercises inside workout programs."""
+    def put(self, request, pk):
+        try:
+            instance = WorkoutProgram.objects.get(pk=pk)
+            if instance.user != request.user:
+                return Response({"error": "Workout program not found with associated user."}, status=status.HTTP_403_FORBIDDEN)
+
+            data = request.data.copy()
+            # Extract exercises data, empty if exercise has not been created yet
+            exercises_data = data.pop('exercise', []) 
             instance.updated = datetime.now()
             instance.save()
 
@@ -128,6 +162,7 @@ class WorkoutProgramViewSet(APIView):
             sets = data['sets']
             reps = data['reps']
             weight = data['weight']
+
             if exercises_data:
                 # If exercise is being edited in program 
                 exercise_id = exercises_data['id']
@@ -163,11 +198,3 @@ class WorkoutProgramViewSet(APIView):
             return Response({'error': 'Workout program not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': 'Something went wrong when updating the workout program', 'details': str(e)})
-
-
-    def delete(self, request, pk):
-        instance = WorkoutProgram.objects.get(pk=pk)
-        if instance.user != request.user:
-            return Response({"error": "Workout program not found"}, status=status.HTTP_403_FORBIDDEN)
-        instance.delete()
-        return Response({"success": "Workout program deleted successfully."},status=status.HTTP_204_NO_CONTENT)

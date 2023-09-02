@@ -68,7 +68,7 @@ export const deleteWorkout = (id) => async (dispatch) => {
   }
 };
 
-export const updateWorkout = (workoutData, programId) => async (dispatch) => {
+export const updateWorkout = (workoutData, programId, updatingExercise) => async (dispatch) => {
   const config = {
     headers: {
       Accept: 'application/json',
@@ -79,7 +79,13 @@ export const updateWorkout = (workoutData, programId) => async (dispatch) => {
   const body = JSON.stringify(workoutData);
   dispatch(clearErrors());
   try {
-    const response = await axios.put(`${API_BASE_URL}/update/${programId}/`, body, config);
+    let response;
+    if (updatingExercise === true) {
+      response = await axios.put(`${API_BASE_URL}/update-exercise/${programId}/`, body, config);
+    } else {
+      response = await axios.put(`${API_BASE_URL}/update/${programId}/`, body, config);
+    }
+
     dispatch(updateWorkouts(response.data));
   } catch (error) {
     dispatch(receiveErrors(error.message));

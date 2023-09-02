@@ -36,7 +36,7 @@ const ExercisePage = () => {
 
   const handleAddToProgram = (exerciseData, programId) => {
     // Dispatch an action to update the workout program in the Redux store
-    dispatch(updateWorkout(exerciseData, programId));
+    dispatch(updateWorkout(exerciseData, programId, true));
     setSelectedProgram(null);
     // Close the modal after adding the exercise
     closeModal();

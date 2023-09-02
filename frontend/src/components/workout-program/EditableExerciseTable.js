@@ -29,7 +29,7 @@ const EditableExerciseTable = ({ exercises, onUpdateExercise, onDeleteExercise }
   };
 
   const handleSaveClick = (index) => {
-    onUpdateExercise(editedExercises[index], index);
+    onUpdateExercise(editedExercises[index]);
     setEditingIndices((prevIndices) => prevIndices.filter((i) => i !== index));
     setEditedExercises((prevExercises) => {
       const updatedExercises = { ...prevExercises };
