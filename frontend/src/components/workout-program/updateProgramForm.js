@@ -1,19 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Grid, FormGroup, FormControlLabel } from '@material-ui/core';
+import { TextField, Button, Grid, FormGroup, FormControlLabel, Typography, makeStyles } from '@material-ui/core';
 import Checkbox from '@mui/material/Checkbox';
 
-const formContainerStyle = {
-  marginTop: '16px',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  width: '100%'
-};
+const useStyles = makeStyles((theme) => ({
+  formContainer: {
+    marginTop: theme.spacing(2),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    [theme.breakpoints.up('sm')]: {
+      maxWidth: '400px',
+      margin: '0 auto'
+    }
+  },
+  inputField: {
+    width: '100%',
+    marginBottom: theme.spacing(2)
+  },
+  button: {
+    width: '50%',
+    marginTop: theme.spacing(2)
+  }
+}));
 
-const UpdateProgramForm = ({ workout, onUpdate }) => {
+const UpdateProgramForm = ({ workout, onUpdate, showUpdateForm }) => {
   const { name, description, days } = workout;
   const [updatedName, setUpdatedName] = useState(name);
   const [updatedDescription, setUpdatedDescription] = useState(description);
+  const classes = useStyles();
 
   // Create a state variable for selected days
   const [selectedDays, setSelectedDays] = useState([]);
@@ -43,13 +57,13 @@ const UpdateProgramForm = ({ workout, onUpdate }) => {
   };
 
   return (
-    <Grid style={formContainerStyle}>
+    <Grid container className={classes.formContainer}>
       <TextField
         label="Program Name"
         variant="outlined"
         value={updatedName}
         onChange={(e) => setUpdatedName(e.target.value)}
-        style={{ marginBottom: '16px' }}
+        className={classes.inputField}
       />
       <TextField
         label="Description"
@@ -57,8 +71,10 @@ const UpdateProgramForm = ({ workout, onUpdate }) => {
         value={updatedDescription}
         onChange={(e) => setUpdatedDescription(e.target.value)}
         multiline
-        style={{ marginBottom: '16px' }}
+        className={classes.inputField}
       />
+
+      <Typography>Days:</Typography>
 
       <FormGroup>
         <FormControlLabel
@@ -98,11 +114,11 @@ const UpdateProgramForm = ({ workout, onUpdate }) => {
         />
       </FormGroup>
 
-      <Button variant="outlined" color="primary" onClick={handleUpdate}>
+      <Button variant="outlined" color="primary" className={classes.button} onClick={handleUpdate}>
         Update Program
       </Button>
-      
-      <Button variant="outlined" color="secondary">
+
+      <Button variant="outlined" color="secondary" className={classes.button} onClick={showUpdateForm}>
         Cancel
       </Button>
     </Grid>

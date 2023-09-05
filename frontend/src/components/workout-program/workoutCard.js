@@ -35,6 +35,17 @@ const descriptionStyle = {
   marginBottom: '12px'
 };
 
+const buttonStyles = {
+  marginTop: '16px',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-around'
+};
+
+const updateButtonStyle = {
+  marginBottom: '15px'
+};
+
 const WorkoutCard = () => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -44,6 +55,7 @@ const WorkoutCard = () => {
   const workout = useSelector((state) => state.programs.workouts.find((exercise) => exercise.id === currentState.id));
   const { id, name, description, days, exercises } = workout;
   const [isEditing, setIsEditing] = useState(false);
+  const [showUpdateForm, setShowUpdateForm] = useState(false);
 
   const handleDelete = async (exerciseId, delExercise) => {
     // exerciseId === ExerciseInProgramView id
@@ -59,6 +71,10 @@ const WorkoutCard = () => {
     }
   };
 
+  const handleUpdateForm = () => {
+    setShowUpdateForm(false);
+  };
+
   const handleUpdate = (updatedData, updatingExercise) => {
     try {
       dispatch(updateWorkout(updatedData, id, updatingExercise));
@@ -71,49 +87,51 @@ const WorkoutCard = () => {
 
   return (
     <Grid style={cardStyle} elevation={3}>
-      <Grid container direction="column" alignItems="center" spacing={2}>
-        <Grid item style={headerStyle}>
-          <Typography variant="h5">{name}</Typography>
-        </Grid>
-
-        <Grid item style={infoSectionStyle}>
-          <Typography style={titleStyle}>Description</Typography>
-          <Typography style={descriptionStyle}>{description}</Typography>
-          <Typography style={titleStyle}>Days</Typography>
-          <List>
-            {days.map((day, idx) => (
-              <ListItem key={idx}>
-                <ListItemText primary={day.dayName} />
-              </ListItem>
-            ))}
-          </List>
-
-          <Typography style={titleStyle}>Exercises</Typography>
-          {exercises.length > 0 ? (
-            <EditableExerciseTable
-              exercises={exercises}
-              onUpdateExercise={(updatedData) => handleUpdate(updatedData, true)}
-              onDeleteExercise={(exerciseId, delExercise) => handleDelete(exerciseId, delExercise)}
-            />
-          ) : (
-            <Typography>No exercises found</Typography>
-          )}
-        </Grid>
-
-        <Grid item style={{ marginTop: '16px', display: 'flex', justifyContent: 'flex-end' }}>
-          <Button variant="outlined" color="primary" onClick={() => setIsEditing(true)}>
-            Update details
-          </Button>
-          <Button variant="outlined" color="secondary" onClick={handleDelete}>
-            Delete Workout
-          </Button>
-        </Grid>
-
+      {/* Update form */}
+      {showUpdateForm ? (
         <Grid item>
-          {/* Update form */}
-          {isEditing && <UpdateProgramForm workout={workout} onUpdate={handleUpdate} />}
+          <UpdateProgramForm workout={workout} onUpdate={handleUpdate} showUpdateForm={handleUpdateForm} />
         </Grid>
-      </Grid>
+      ) : (
+        <Grid container direction="column" alignItems="center" spacing={2}>
+          <Grid item style={headerStyle}>
+            <Typography variant="h5">{name}</Typography>
+          </Grid>
+
+          <Grid item style={infoSectionStyle}>
+            <Typography style={titleStyle}>Description</Typography>
+            <Typography style={descriptionStyle}>{description}</Typography>
+            <Typography style={titleStyle}>Days</Typography>
+            <List>
+              {days.map((day, idx) => (
+                <ListItem key={idx}>
+                  <ListItemText primary={day.dayName} />
+                </ListItem>
+              ))}
+            </List>
+
+            <Typography style={titleStyle}>Exercises</Typography>
+            {exercises.length > 0 ? (
+              <EditableExerciseTable
+                exercises={exercises}
+                onUpdateExercise={(updatedData) => handleUpdate(updatedData, true)}
+                onDeleteExercise={(exerciseId, delExercise) => handleDelete(exerciseId, delExercise)}
+              />
+            ) : (
+              <Typography>No exercises found</Typography>
+            )}
+          </Grid>
+
+          <Grid item style={buttonStyles}>
+            <Button variant="outlined" color="primary" style={updateButtonStyle} onClick={() => setShowUpdateForm(true)}>
+              Update details
+            </Button>
+            <Button variant="outlined" color="secondary" onClick={handleDelete}>
+              Delete Workout
+            </Button>
+          </Grid>
+        </Grid>
+      )}
     </Grid>
   );
 };
