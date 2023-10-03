@@ -6,6 +6,15 @@ class DayOfWeek(models.Model):
 
     def __str__(self):
         return self.day_name
+    
+class SetInExercise(models.Model):
+    set_number = models.PositiveIntegerField()
+    reps = models.PositiveIntegerField()
+    weight = models.PositiveIntegerField()
+    exercise_id = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"Set {self.set_number}-exercise id:{self.exercise_id}"
 
 class Exercise(models.Model):
     exercise_name = models.CharField(max_length=100)
@@ -29,9 +38,7 @@ class WorkoutProgram(models.Model):
 class ExerciseInProgram(models.Model):
     exercise = models.ForeignKey(Exercise, on_delete=models.CASCADE)
     program = models.ForeignKey(WorkoutProgram, related_name='exercises', on_delete=models.CASCADE)
-    sets = models.PositiveIntegerField()
-    reps = models.PositiveIntegerField()
-    weight = models.PositiveIntegerField()
+    sets = models.ManyToManyField(SetInExercise)
 
     def __str__(self):
         return f"{self.exercise.exercise_name} in {self.program.name}"

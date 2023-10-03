@@ -88,16 +88,7 @@ const EditableExerciseTable = ({ exercises, onUpdateExercise, onDeleteExercise }
               </TableCell>
 
               <TableCell align="center">
-                {editingIndices.includes(idx) ? (
-                  <Input
-                    type="number"
-                    className={classes.tableInput}
-                    value={editedExercises[idx]?.sets || ''}
-                    onChange={(e) => handleInputChange(idx, 'sets', e.target.value)}
-                  />
-                ) : (
-                  exercise?.sets || ''
-                )}
+                {exercise.sets.length}
               </TableCell>
 
               <TableCell align="center">

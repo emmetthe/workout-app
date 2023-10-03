@@ -1,5 +1,10 @@
 from rest_framework import serializers
-from .models import Exercise, WorkoutProgram, ExerciseInProgram, DayOfWeek
+from .models import Exercise, WorkoutProgram, ExerciseInProgram, DayOfWeek, SetInExercise
+
+class SetInExerciseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SetInExercise
+        fields = '__all__'
 
 class ExerciseSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,6 +18,7 @@ class DayOfWeekSerializer(serializers.ModelSerializer):
 
 class ExerciseInProgramSerializer(serializers.ModelSerializer):
     exercise = ExerciseSerializer()
+    sets = SetInExerciseSerializer(many=True, read_only=True)
 
     class Meta:
         model = ExerciseInProgram

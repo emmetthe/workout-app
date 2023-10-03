@@ -1,8 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Exercise, WorkoutProgram, ExerciseInProgram, DayOfWeek
-from .serializers import ExerciseSerializer, WorkoutProgramSerializer, ExerciseInProgramSerializer, DayOfWeekSerializer
+from .models import Exercise, WorkoutProgram, ExerciseInProgram, DayOfWeek, SetInExercise
+from .serializers import ExerciseSerializer, WorkoutProgramSerializer, ExerciseInProgramSerializer, DayOfWeekSerializer, SetInExerciseSerializer
 from datetime import datetime
 from django.shortcuts import get_object_or_404
 
@@ -150,47 +150,68 @@ class WorkoutProgramExerciseViewSet(APIView):
                 return Response({"error": "Workout program not found with associated user."}, status=status.HTTP_403_FORBIDDEN)
 
             data = request.data.copy()
-            # Extract exercises data, empty if exercise has not been created yet
-            exercises_data = data.pop('exercise', []) 
-            instance.updated = datetime.now()
-            instance.save()
-
+            exercises_data = data.get('exercise', None)
+            sets_data = data.get('sets', [])
             exercise_id = None
+            program_id = None
             exercise_name = None
             category = None
             target = None
-            sets = data['sets']
-            reps = data['reps']
-            weight = data['weight']
 
+            # Handle Exercise data
             if exercises_data:
                 # If exercise is being edited in program 
                 exercise_id = exercises_data['id']
                 exercise_name = exercises_data['exercise_name']
                 category = exercises_data['category']
                 target = exercises_data['target']
+                program_id = exercises_data['program_id']
             else:
                 exercise_id = data['id']
                 exercise_name = data['exercise_name']
                 category = data['category']
                 target = data['target']
-    
-            # Check if the exercise with the given ID already exists, or create it
+                program_id = data['program_id']
+
             exercise, created = Exercise.objects.get_or_create(id=exercise_id, defaults={'exercise_name': f"{exercise_name}",'category': f"{category}", 'target': f"{target}"})
+            program = WorkoutProgram.objects.get(id=program_id)
+            sets_list = []
+            # Handle Sets data
+            for set_data in sets_data:
+                set_id = set_data.get('id', None)
+                set_number = set_data.get('sets', None)
+                reps = set_data.get('reps', None)
+                weight = set_data.get('weight', None)
+                if set_id is not None:
+                    set_instance = SetInExercise.objects.get(id=set_id, exercise_id=exercise_id)
+                    if set_number is not None:
+                        set_instance.set_number = set_number
+                    if reps is not None:
+                        set_instance.reps = reps
+                    if weight is not None:
+                        set_instance.weight = weight
+                    set_instance.save()
+                else:
+                # after creating first set object, need to append current set + future sets to an array
+                # currently setting 'sets' to be equal to an instance rather than appending to an array
+                    set_instance = SetInExercise.objects.create(
+                        # exercise_in_program=exercise_in_program,
+                        set_number=set_number,
+                        reps=reps,
+                        weight=weight,
+                        exercise_id=exercise_id
+                    )
+                    sets_list.append(set_instance)
 
-            # Create or update ExerciseInProgram instance
-            exercise_in_program, _ = ExerciseInProgram.objects.get_or_create(
+            exercise_in_program, created = ExerciseInProgram.objects.get_or_create(
                 exercise=exercise,
-                program=instance,
-                defaults={'sets': sets, 'reps': reps, 'weight': weight}
+                program=program
             )
+            for set_instance in sets_list:
+                exercise_in_program.sets.add(set_instance)
 
-            if not created:
-                # Update the existing exercise if it already exists
-                exercise_in_program.sets = sets
-                exercise_in_program.reps = reps
-                exercise_in_program.weight = weight
-                exercise_in_program.save()
+            instance.updated = datetime.now()
+            instance.save()
 
             serializer = WorkoutProgramSerializer(instance)
             return Response(serializer.data)
