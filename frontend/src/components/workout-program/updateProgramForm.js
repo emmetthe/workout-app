@@ -54,6 +54,7 @@ const UpdateProgramForm = ({ workout, onUpdate, showUpdateForm }) => {
       description: updatedDescription,
       days: selectedDays
     });
+    showUpdateForm()
   };
 
   return (

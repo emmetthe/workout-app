@@ -1,32 +1,33 @@
 import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, Input } from '@material-ui/core';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
-import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
+// import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles({
-  tableInput: {
-    width: '55px',
-    '& input': {
-      textAlign: 'center'
-    }
-  }
-});
+// const useStyles = makeStyles({
+//   tableInput: {
+//     width: '55px',
+//     '& input': {
+//       textAlign: 'center'
+//     }
+//   }
+// });
 
 const EditableExerciseTable = ({ exercises, onUpdateExercise, onDeleteExercise }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const [editingIndices, setEditingIndices] = useState([]);
   const [editedExercises, setEditedExercises] = useState({});
 
-  const handleEditClick = (index) => {
-    setEditingIndices((prevIndices) => [...prevIndices, index]);
-    setEditedExercises((prevExercises) => ({
-      ...prevExercises,
-      [index]: exercises[index]
-    }));
-  };
+  // const handleEditClick = (index) => {
+  //   setEditingIndices((prevIndices) => [...prevIndices, index]);
+  //   setEditedExercises((prevExercises) => ({
+  //     ...prevExercises,
+  //     [index]: exercises[index]
+  //   }));
+  // };
 
   const handleSaveClick = (index) => {
     onUpdateExercise(editedExercises[index]);
@@ -47,15 +48,15 @@ const EditableExerciseTable = ({ exercises, onUpdateExercise, onDeleteExercise }
     });
   };
 
-  const handleInputChange = (index, field, value) => {
-    setEditedExercises((prevExercises) => ({
-      ...prevExercises,
-      [index]: {
-        ...prevExercises[index],
-        [field]: value
-      }
-    }));
-  };
+  // const handleInputChange = (index, field, value) => {
+  //   setEditedExercises((prevExercises) => ({
+  //     ...prevExercises,
+  //     [index]: {
+  //       ...prevExercises[index],
+  //       [field]: value
+  //     }
+  //   }));
+  // };
 
   return (
     <TableContainer>
@@ -63,9 +64,6 @@ const EditableExerciseTable = ({ exercises, onUpdateExercise, onDeleteExercise }
         <TableHead>
           <TableRow>
             <TableCell>Exercise Name</TableCell>
-            <TableCell align="center">Reps</TableCell>
-            <TableCell align="center">Sets</TableCell>
-            <TableCell align="center">Weight (lbs)</TableCell>
           </TableRow>
         </TableHead>
 
@@ -73,36 +71,6 @@ const EditableExerciseTable = ({ exercises, onUpdateExercise, onDeleteExercise }
           {exercises.map((exercise, idx) => (
             <TableRow key={idx}>
               <TableCell>{exercise.exercise.exerciseName}</TableCell>
-
-              <TableCell align="center">
-                {editingIndices.includes(idx) ? (
-                  <Input
-                    type="number"
-                    className={classes.tableInput}
-                    value={editedExercises[idx]?.reps || ''}
-                    onChange={(e) => handleInputChange(idx, 'reps', e.target.value)}
-                  />
-                ) : (
-                  exercise?.reps || ''
-                )}
-              </TableCell>
-
-              <TableCell align="center">
-                {exercise.sets.length}
-              </TableCell>
-
-              <TableCell align="center">
-                {editingIndices.includes(idx) ? (
-                  <Input
-                    type="number"
-                    className={classes.tableInput}
-                    value={editedExercises[idx]?.weight || ''}
-                    onChange={(e) => handleInputChange(idx, 'weight', e.target.value)}
-                  />
-                ) : (
-                  exercise?.weight || ''
-                )}
-              </TableCell>
 
               <TableCell align="center">
                 {editingIndices.includes(idx) ? (
@@ -116,9 +84,12 @@ const EditableExerciseTable = ({ exercises, onUpdateExercise, onDeleteExercise }
                   </>
                 ) : (
                   <>
-                    <IconButton onClick={() => handleEditClick(idx)}>
-                      <EditIcon />
-                    </IconButton>
+                    <Link to={`/workouts/edit/${exercise.id}`} state={{ exercise }}>
+                      <IconButton>
+                        <EditIcon />
+                      </IconButton>
+                    </Link>
+
                     <IconButton onClick={() => onDeleteExercise(exercise.id, true)}>
                       <DeleteIcon />
                     </IconButton>
