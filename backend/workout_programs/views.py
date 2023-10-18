@@ -157,7 +157,6 @@ class WorkoutProgramExerciseViewSet(APIView):
             exercise_name = None
             category = None
             target = None
-
             # Handle Exercise data
             if exercises_data:
                 # If exercise is being edited in program 
@@ -165,7 +164,7 @@ class WorkoutProgramExerciseViewSet(APIView):
                 exercise_name = exercises_data['exercise_name']
                 category = exercises_data['category']
                 target = exercises_data['target']
-                program_id = exercises_data['program_id']
+                program_id = data['program']
             else:
                 exercise_id = data['id']
                 exercise_name = data['exercise_name']

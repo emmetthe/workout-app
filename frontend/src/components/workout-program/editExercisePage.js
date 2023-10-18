@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { TextField, Button, Grid, Typography, Container } from '@material-ui/core';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { updateWorkout } from '../../slices/workoutThunk';
 
 const EditExercisePage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { exercise } = location.state;
+  const { program } = exercise;
   const [editedSets, setEditedSets] = useState([...exercise.sets]);
 
   const handleInputChange = (index, field, value) => {
@@ -14,8 +18,13 @@ const EditExercisePage = () => {
     setEditedSets(updatedSets);
   };
 
-  const handleSaveClick = () => {
-    // onUpdateSets(editedSets);
+  const handleUpdateClick = () => {
+    const newExerciseData = { ...exercise, sets: editedSets };
+    try {
+      dispatch(updateWorkout(newExerciseData, program, true));
+    } catch (error) {
+      console.error('Error updating workout:', error);
+    }
   };
 
   const handleCancelClick = () => {
@@ -24,9 +33,12 @@ const EditExercisePage = () => {
 
   const styles = {
     buttonStyling: {
-      marginTop: '20px',
+      marginTop: '20px'
       // display: 'flex',
       // justifyContent: 'center'
+    },
+    exerciseTitle: {
+      marginBottom: '20px'
     },
     buttonWidth: {
       width: '120px',
@@ -52,7 +64,9 @@ const EditExercisePage = () => {
         Edit Sets
       </Typography>
 
-      <Typography variant="h5">{exercise.exercise.exerciseName}</Typography>
+      <Typography variant="h5" style={styles.exerciseTitle}>
+        {exercise.exercise.exerciseName}
+      </Typography>
 
       <Grid container spacing={2}>
         <Grid item xs={2}>
@@ -75,33 +89,29 @@ const EditExercisePage = () => {
       {editedSets.map((set, index) => (
         <Grid container spacing={2} key={index}>
           <Grid item xs={2} style={styles.setNumStyling}>
-            <Typography variant="body1">
-              {index + 1}
-            </Typography>
+            <Typography variant="body1">{index + 1}</Typography>
           </Grid>
           <Grid item xs={5}>
             <TextField
-              type="number"
               variant="outlined"
               fullWidth
               value={set.reps}
-              onChange={(e) => handleInputChange(index, 'reps', e.target.value)}
+              onChange={(e) => handleInputChange(index, 'reps', Number(e.target.value))}
             />
           </Grid>
           <Grid item xs={5}>
             <TextField
-              type="number"
               variant="outlined"
               fullWidth
               value={set.weight}
-              onChange={(e) => handleInputChange(index, 'weight', e.target.value)}
+              onChange={(e) => handleInputChange(index, 'weight', Number(e.target.value))}
             />
           </Grid>
         </Grid>
       ))}
 
       <Container style={styles.buttonStyling}>
-        <Button variant="contained" color="primary" style={styles.buttonWidth} onClick={handleSaveClick}>
+        <Button variant="contained" color="primary" style={styles.buttonWidth} onClick={handleUpdateClick}>
           Update
         </Button>
         <Button variant="contained" color="default" style={styles.buttonWidth} onClick={handleCancelClick}>

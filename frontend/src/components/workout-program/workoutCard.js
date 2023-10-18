@@ -54,7 +54,6 @@ const WorkoutCard = () => {
   // Update redux store after successfully making updates to individual exercises
   const workout = useSelector((state) => state.programs.workouts.find((exercise) => exercise.id === currentState.id));
   const { id, name, description, days, exercises } = workout;
-  const [isEditing, setIsEditing] = useState(false);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
 
   const handleDelete = async (exerciseId, delExercise) => {
@@ -78,8 +77,6 @@ const WorkoutCard = () => {
   const handleUpdate = (updatedData, updatingExercise) => {
     try {
       dispatch(updateWorkout(updatedData, id, updatingExercise));
-      // Close the form after updating
-      setIsEditing(false);
     } catch (error) {
       console.error('Error updating workout:', error);
     }

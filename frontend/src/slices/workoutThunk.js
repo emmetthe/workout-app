@@ -85,7 +85,6 @@ export const updateWorkout = (workoutData, programId, updatingExercise) => async
     } else {
       response = await axios.put(`${API_BASE_URL}/update/${programId}/`, body, config);
     }
-
     dispatch(updateWorkouts(response.data));
   } catch (error) {
     dispatch(receiveErrors(error.message));
