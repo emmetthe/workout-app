@@ -3,6 +3,7 @@ import { TextField, Button, Grid, Typography, Container } from '@material-ui/cor
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { updateWorkout } from '../../slices/workoutThunk';
+import { openSnackbar } from '../../slices/snackbarSlice';
 
 const EditExercisePage = () => {
   const location = useLocation();
@@ -20,11 +21,16 @@ const EditExercisePage = () => {
 
   const handleUpdateClick = () => {
     const newExerciseData = { ...exercise, sets: editedSets };
-    try {
-      dispatch(updateWorkout(newExerciseData, program, true));
-    } catch (error) {
-      console.error('Error updating workout:', error);
-    }
+
+    dispatch(updateWorkout(newExerciseData, program, true))
+      .then(() => {
+        dispatch(openSnackbar({ message: 'Exercise updated successfully', severity: 'success' }));
+        navigate(-1); // Navigate back to the previous page after dispatch is successful
+      })
+      .catch((error) => {
+        console.error('Error updating workout:', error);
+        dispatch(openSnackbar({ message: 'Error updating exercise', severity: 'error' }));
+      });
   };
 
   const handleCancelClick = () => {
@@ -34,8 +40,6 @@ const EditExercisePage = () => {
   const styles = {
     buttonStyling: {
       marginTop: '20px'
-      // display: 'flex',
-      // justifyContent: 'center'
     },
     exerciseTitle: {
       marginBottom: '20px'

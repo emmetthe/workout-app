@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Typography, Grid, List, ListItem, ListItemText } from '@material-ui/core';
 import UpdateProgramForm from './updateProgramForm';
 import EditableExerciseTable from './EditableExerciseTable';
+import CustomSnackbar from '../snackbar/snackbar';
 
 const cardStyle = {
   padding: '16px',
@@ -55,6 +56,11 @@ const WorkoutCard = () => {
   const workout = useSelector((state) => state.programs.workouts.find((exercise) => exercise.id === currentState.id));
   const { id, name, description, days, exercises } = workout;
   const [showUpdateForm, setShowUpdateForm] = useState(false);
+
+  // Use Redux store to manage snackbar state
+  const snackbarOpen = useSelector((state) => state.snackbar.open);
+  const snackbarMessage = useSelector((state) => state.snackbar.message);
+  const snackbarSeverity = useSelector((state) => state.snackbar.severity);
 
   const handleDelete = async (exerciseId, delExercise) => {
     // exerciseId === ExerciseInProgramView id
@@ -129,6 +135,7 @@ const WorkoutCard = () => {
           </Grid>
         </Grid>
       )}
+      <CustomSnackbar open={snackbarOpen} message={snackbarMessage} severity={snackbarSeverity} />
     </Grid>
   );
 };
