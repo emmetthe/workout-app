@@ -12,6 +12,7 @@ const EditExercisePage = () => {
   const { exercise } = location.state;
   const { program } = exercise;
   const [editedSets, setEditedSets] = useState([...exercise.sets]);
+  const [error, setError] = useState('');
 
   const handleInputChange = (index, field, value) => {
     const updatedSets = [...editedSets];
@@ -20,21 +21,41 @@ const EditExercisePage = () => {
   };
 
   const handleUpdateClick = () => {
-    const newExerciseData = { ...exercise, sets: editedSets };
+    if (validateFields()) {
+      const newExerciseData = { ...exercise, sets: editedSets };
 
-    dispatch(updateWorkout(newExerciseData, program, true))
-      .then(() => {
-        dispatch(openSnackbar({ message: 'Exercise updated successfully', severity: 'success' }));
-        navigate(-1); // Navigate back to the previous page after dispatch is successful
-      })
-      .catch((error) => {
-        console.error('Error updating workout:', error);
-        dispatch(openSnackbar({ message: 'Error updating exercise', severity: 'error' }));
-      });
+      dispatch(updateWorkout(newExerciseData, program, true))
+        .then(() => {
+          dispatch(openSnackbar({ message: 'Exercise updated successfully', severity: 'success' }));
+          navigate(-1); // Navigate back to the previous page after dispatch is successful
+        })
+        .catch((error) => {
+          console.error('Error updating workout:', error);
+          dispatch(openSnackbar({ message: 'Error updating exercise', severity: 'error' }));
+        });
+    } else {
+      setError('Please fill out all Reps and Weight fields');
+    }
   };
 
   const handleCancelClick = () => {
     navigate(-1); // Navigate back to the previous page
+  };
+
+  const handleAddSetClick = () => {
+    // Create a new empty set and add it to the list of edited sets
+    const newSet = {
+      setNumber: exercise.sets.length + 1,
+      reps: '',
+      weight: '',
+      exerciseId: exercise.exercise.id
+    };
+    setEditedSets([...editedSets, newSet]);
+  };
+
+  const validateFields = () => {
+    // Check if all sets have both reps and weight filled out
+    return editedSets.every((set) => set.reps !== '' && set.weight !== '');
   };
 
   const styles = {
@@ -71,6 +92,12 @@ const EditExercisePage = () => {
       <Typography variant="h5" style={styles.exerciseTitle}>
         {exercise.exercise.exerciseName}
       </Typography>
+
+      {error && (
+        <Typography variant="body2" color="error" gutterBottom>
+          {error}
+        </Typography>
+      )}
 
       <Grid container spacing={2}>
         <Grid item xs={2}>
@@ -120,6 +147,9 @@ const EditExercisePage = () => {
         </Button>
         <Button variant="contained" color="default" style={styles.buttonWidth} onClick={handleCancelClick}>
           Cancel
+        </Button>
+        <Button variant="contained" color="primary" style={styles.buttonWidth} onClick={handleAddSetClick}>
+          Add Set
         </Button>
       </Container>
     </Container>

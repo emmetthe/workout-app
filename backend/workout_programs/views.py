@@ -178,7 +178,7 @@ class WorkoutProgramExerciseViewSet(APIView):
             # Handle Sets data
             for set_data in sets_data:
                 set_id = set_data.get('id', None)
-                set_number = set_data.get('sets', None)
+                set_number = set_data.get('set_number', None)
                 reps = set_data.get('reps', None)
                 weight = set_data.get('weight', None)
                 if set_id is not None:

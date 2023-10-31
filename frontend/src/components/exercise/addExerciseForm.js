@@ -124,7 +124,7 @@ const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedPr
     // Create a new set object and add it to the exerciseSets state
     const newSet = {
       reps: Number(reps),
-      sets: exerciseSets.length + 1,
+      set_number: exerciseSets.length + 1,
       weight: Number(weight)
     };
     setExerciseSets([...exerciseSets, newSet]);
