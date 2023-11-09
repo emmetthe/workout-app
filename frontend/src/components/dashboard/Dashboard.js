@@ -52,7 +52,7 @@ const Dashboard = () => {
         Welcome back, {profile.firstName}
       </Typography>
 
-      <Button variant="outlined" onClick={openModal} style={styles.button}>
+      <Button variant="contained" onClick={openModal} style={styles.button}>
         Update Profile
       </Button>
 

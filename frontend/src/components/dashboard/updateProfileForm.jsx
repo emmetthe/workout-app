@@ -89,7 +89,7 @@ const UpdateProfileForm = ({ handleSubmit, handleClose }) => {
           />
         </Box>
 
-        <Button variant="outlined" type="submit" onClick={(e) => handleSubmit(e, formData)}>
+        <Button variant="contained" type="submit" onClick={(e) => handleSubmit(e, formData)}>
           Update
         </Button>
       </Box>

@@ -44,7 +44,9 @@ const buttonStyles = {
 };
 
 const updateButtonStyle = {
-  marginBottom: '15px'
+  marginBottom: '15px',
+  backgroundColor: '#1976d2',
+  color: 'white'
 };
 
 const WorkoutCard = () => {
@@ -126,10 +128,10 @@ const WorkoutCard = () => {
           </Grid>
 
           <Grid item style={buttonStyles}>
-            <Button variant="outlined" color="primary" style={updateButtonStyle} onClick={() => setShowUpdateForm(true)}>
+            <Button variant="contained" style={updateButtonStyle} onClick={() => setShowUpdateForm(true)}>
               Update details
             </Button>
-            <Button variant="outlined" color="secondary" onClick={handleDelete}>
+            <Button variant="contained" color="secondary" onClick={handleDelete}>
               Delete Workout
             </Button>
           </Grid>

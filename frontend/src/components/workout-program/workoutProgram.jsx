@@ -58,7 +58,7 @@ const WorkoutProgram = () => {
         Workout Program
       </Typography>
 
-      <Button variant="outlined" onClick={openModal} style={styles.addButton}>
+      <Button variant="contained" onClick={openModal} style={styles.addButton}>
         Create New Program
       </Button>
       <ModalForm componentForm={<WorkoutProgramForm handleClose={closeModal} />} modalState={modalOpen} handleClose={closeModal} />

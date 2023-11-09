@@ -29,7 +29,8 @@ const useStyles = makeStyles({
   },
   centeredLabel: {
     marginRight: '20%'
-  }
+  },
+  createButton: { marginTop: 20, backgroundColor: '#1976d2', color: 'white' }
 });
 
 const WorkoutProgramForm = ({ handleClose }) => {
@@ -75,7 +76,6 @@ const WorkoutProgramForm = ({ handleClose }) => {
         <CloseIcon />
       </IconButton>
 
-      {/* <Grid container direction="column" alignItems="center" spacing={2} style={{ padding: 20 }}> */}
       <Grid container direction="column" className={classes.centeredContainer}>
         {error && <Alert severity="error">{error}</Alert>}
 
@@ -114,7 +114,7 @@ const WorkoutProgramForm = ({ handleClose }) => {
           ))}
         </Grid>
 
-        <Button variant="outlined" onClick={createProgram} style={{ marginTop: 20 }}>
+        <Button variant="contained" onClick={createProgram} className={classes.createButton}>
           Create workout
         </Button>
       </Grid>

@@ -20,6 +20,12 @@ const useStyles = makeStyles((theme) => ({
   button: {
     width: '50%',
     marginTop: theme.spacing(2)
+  },
+  updateButton: {
+    width: '50%',
+    marginTop: theme.spacing(2),
+    backgroundColor: '#1976d2',
+    color: 'white'
   }
 }));
 
@@ -54,7 +60,7 @@ const UpdateProgramForm = ({ workout, onUpdate, showUpdateForm }) => {
       description: updatedDescription,
       days: selectedDays
     });
-    showUpdateForm()
+    showUpdateForm();
   };
 
   return (
@@ -115,11 +121,11 @@ const UpdateProgramForm = ({ workout, onUpdate, showUpdateForm }) => {
         />
       </FormGroup>
 
-      <Button variant="outlined" color="primary" className={classes.button} onClick={handleUpdate}>
+      <Button variant="contained" className={classes.updateButton} onClick={handleUpdate}>
         Update Program
       </Button>
 
-      <Button variant="outlined" color="secondary" className={classes.button} onClick={showUpdateForm}>
+      <Button variant="contained" color="secondary" className={classes.button} onClick={showUpdateForm}>
         Cancel
       </Button>
     </Grid>

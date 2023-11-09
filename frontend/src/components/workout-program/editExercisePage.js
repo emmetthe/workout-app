@@ -59,39 +59,55 @@ const EditExercisePage = () => {
   };
 
   const styles = {
+    headerStyling: {
+      borderBottom: '1px solid #ccc'
+    },
+    titleStyling: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '20px'
+    },
     buttonStyling: {
       marginTop: '20px'
     },
-    exerciseTitle: {
-      marginBottom: '20px'
-    },
     buttonWidth: {
-      width: '120px',
+      width: '100px',
+      height: '40px',
       margin: '5px'
     },
-
     labelStyling: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center'
     },
-
     setNumStyling: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center'
+    },
+    updateButton: {
+      backgroundColor: '#1976d2',
+      color: 'white',
+      width: '100px',
+      height: '40px',
+      margin: '5px'
     }
   };
 
   return (
     <Container maxWidth="sm">
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom style={styles.headerStyling}>
         Edit Sets
       </Typography>
 
-      <Typography variant="h5" style={styles.exerciseTitle}>
-        {exercise.exercise.exerciseName}
-      </Typography>
+      <Grid style={styles.titleStyling}>
+        <Typography variant="h5">{exercise.exercise.exerciseName}</Typography>
+
+        <Button variant="contained" color="primary" style={styles.buttonWidth} onClick={handleAddSetClick}>
+          Add Set
+        </Button>
+      </Grid>
 
       {error && (
         <Typography variant="body2" color="error" gutterBottom>
@@ -142,14 +158,11 @@ const EditExercisePage = () => {
       ))}
 
       <Container style={styles.buttonStyling}>
-        <Button variant="contained" color="primary" style={styles.buttonWidth} onClick={handleUpdateClick}>
+        <Button variant="contained" style={styles.updateButton} onClick={handleUpdateClick}>
           Update
         </Button>
-        <Button variant="contained" color="default" style={styles.buttonWidth} onClick={handleCancelClick}>
+        <Button variant="contained" color="secondary" style={styles.buttonWidth} onClick={handleCancelClick}>
           Cancel
-        </Button>
-        <Button variant="contained" color="primary" style={styles.buttonWidth} onClick={handleAddSetClick}>
-          Add Set
         </Button>
       </Container>
     </Container>
