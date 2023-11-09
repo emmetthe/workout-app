@@ -25,7 +25,10 @@ const useStyles = makeStyles((theme) => ({
     width: '50%',
     marginTop: theme.spacing(2),
     backgroundColor: '#1976d2',
-    color: 'white'
+    color: 'white',
+    '&:hover': {
+      backgroundColor: '#1565c0'
+    }
   }
 }));
 

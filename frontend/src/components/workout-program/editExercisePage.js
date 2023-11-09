@@ -5,6 +5,58 @@ import { useDispatch } from 'react-redux';
 import { updateWorkout } from '../../slices/workoutThunk';
 import { openSnackbar } from '../../slices/snackbarSlice';
 
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+  updateButton: {
+    backgroundColor: '#1976d2',
+    color: 'white',
+    width: '100px',
+    height: '40px',
+    margin: '5px',
+    '&:hover': {
+      backgroundColor: '#1565c0'
+    }
+  }
+});
+
+const styles = {
+  headerStyling: {
+    borderBottom: '1px solid #ccc'
+  },
+  titleStyling: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '20px'
+  },
+  buttonStyling: {
+    marginTop: '20px'
+  },
+  buttonWidth: {
+    width: '100px',
+    height: '40px',
+    margin: '5px'
+  },
+  labelStyling: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  setNumStyling: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  updateButton: {
+    backgroundColor: '#1976d2',
+    color: 'white',
+    width: '100px',
+    height: '40px',
+    margin: '5px'
+  }
+};
+
 const EditExercisePage = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -13,6 +65,8 @@ const EditExercisePage = () => {
   const { program } = exercise;
   const [editedSets, setEditedSets] = useState([...exercise.sets]);
   const [error, setError] = useState('');
+
+  const classes = useStyles();
 
   const handleInputChange = (index, field, value) => {
     const updatedSets = [...editedSets];
@@ -56,43 +110,6 @@ const EditExercisePage = () => {
   const validateFields = () => {
     // Check if all sets have both reps and weight filled out
     return editedSets.every((set) => set.reps !== '' && set.weight !== '');
-  };
-
-  const styles = {
-    headerStyling: {
-      borderBottom: '1px solid #ccc'
-    },
-    titleStyling: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: '20px'
-    },
-    buttonStyling: {
-      marginTop: '20px'
-    },
-    buttonWidth: {
-      width: '100px',
-      height: '40px',
-      margin: '5px'
-    },
-    labelStyling: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    setNumStyling: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    updateButton: {
-      backgroundColor: '#1976d2',
-      color: 'white',
-      width: '100px',
-      height: '40px',
-      margin: '5px'
-    }
   };
 
   return (
@@ -158,7 +175,7 @@ const EditExercisePage = () => {
       ))}
 
       <Container style={styles.buttonStyling}>
-        <Button variant="contained" style={styles.updateButton} onClick={handleUpdateClick}>
+        <Button variant="contained" className={classes.updateButton} onClick={handleUpdateClick}>
           Update
         </Button>
         <Button variant="contained" color="secondary" style={styles.buttonWidth} onClick={handleCancelClick}>

@@ -30,7 +30,14 @@ const useStyles = makeStyles({
   centeredLabel: {
     marginRight: '20%'
   },
-  createButton: { marginTop: 20, backgroundColor: '#1976d2', color: 'white' }
+  createButton: {
+    marginTop: 20,
+    backgroundColor: '#1976d2',
+    color: 'white',
+    '&:hover': {
+      backgroundColor: '#1565c0'
+    }
+  }
 });
 
 const WorkoutProgramForm = ({ handleClose }) => {

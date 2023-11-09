@@ -7,46 +7,50 @@ import UpdateProgramForm from './updateProgramForm';
 import EditableExerciseTable from './EditableExerciseTable';
 import CustomSnackbar from '../snackbar/snackbar';
 
-const cardStyle = {
-  padding: '16px',
-  marginBottom: '16px',
-  width: '100%'
-};
+import { makeStyles } from '@material-ui/core/styles';
 
-const headerStyle = {
-  textAlign: 'center',
-  marginBottom: '20px',
-  borderBottom: '1px solid #ccc',
-  paddingBottom: '10px'
-};
+const useStyles = makeStyles({
+  updateButtonStyle: {
+    marginBottom: '15px',
+    backgroundColor: '#1976d2',
+    color: 'white',
+    '&:hover': {
+      backgroundColor: '#1565c0'
+    }
+  }
+});
 
-const infoSectionStyle = {
-  marginBottom: '20px'
-};
-
-const titleStyle = {
-  fontSize: '24px',
-  fontWeight: 'bold',
-  marginBottom: '8px'
-};
-
-const descriptionStyle = {
-  fontSize: '16px',
-  color: '#666',
-  marginBottom: '12px'
-};
-
-const buttonStyles = {
-  marginTop: '16px',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-around'
-};
-
-const updateButtonStyle = {
-  marginBottom: '15px',
-  backgroundColor: '#1976d2',
-  color: 'white'
+const styles = {
+  cardStyle: {
+    padding: '16px',
+    marginBottom: '16px',
+    width: '100%'
+  },
+  headerStyle: {
+    textAlign: 'center',
+    marginBottom: '20px',
+    borderBottom: '1px solid #ccc',
+    paddingBottom: '10px'
+  },
+  infoSectionStyle: {
+    marginBottom: '20px'
+  },
+  titleStyle: {
+    fontSize: '24px',
+    fontWeight: 'bold',
+    marginBottom: '8px'
+  },
+  descriptionStyle: {
+    fontSize: '16px',
+    color: '#666',
+    marginBottom: '12px'
+  },
+  buttonStyles: {
+    marginTop: '16px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-around'
+  },
 };
 
 const WorkoutCard = () => {
@@ -58,6 +62,8 @@ const WorkoutCard = () => {
   const workout = useSelector((state) => state.programs.workouts.find((exercise) => exercise.id === currentState.id));
   const { id, name, description, days, exercises } = workout;
   const [showUpdateForm, setShowUpdateForm] = useState(false);
+
+  const classes = useStyles();
 
   // Use Redux store to manage snackbar state
   const snackbarOpen = useSelector((state) => state.snackbar.open);
@@ -91,7 +97,7 @@ const WorkoutCard = () => {
   };
 
   return (
-    <Grid style={cardStyle} elevation={3}>
+    <Grid style={styles.cardStyle} elevation={3}>
       {/* Update form */}
       {showUpdateForm ? (
         <Grid item>
@@ -99,14 +105,14 @@ const WorkoutCard = () => {
         </Grid>
       ) : (
         <Grid container direction="column" alignItems="center" spacing={2}>
-          <Grid item style={headerStyle}>
+          <Grid item style={styles.headerStyle}>
             <Typography variant="h5">{name}</Typography>
           </Grid>
 
-          <Grid item style={infoSectionStyle}>
-            <Typography style={titleStyle}>Description</Typography>
-            <Typography style={descriptionStyle}>{description}</Typography>
-            <Typography style={titleStyle}>Days</Typography>
+          <Grid item style={styles.infoSectionStyle}>
+            <Typography style={styles.titleStyle}>Description</Typography>
+            <Typography style={styles.descriptionStyle}>{description}</Typography>
+            <Typography style={styles.titleStyle}>Days</Typography>
             <List>
               {days.map((day, idx) => (
                 <ListItem key={idx}>
@@ -115,7 +121,7 @@ const WorkoutCard = () => {
               ))}
             </List>
 
-            <Typography style={titleStyle}>Exercises</Typography>
+            <Typography style={styles.titleStyle}>Exercises</Typography>
             {exercises.length > 0 ? (
               <EditableExerciseTable
                 exercises={exercises}
@@ -127,8 +133,8 @@ const WorkoutCard = () => {
             )}
           </Grid>
 
-          <Grid item style={buttonStyles}>
-            <Button variant="contained" style={updateButtonStyle} onClick={() => setShowUpdateForm(true)}>
+          <Grid item style={styles.buttonStyles}>
+            <Button variant="contained" className={classes.updateButtonStyle} onClick={() => setShowUpdateForm(true)}>
               Update details
             </Button>
             <Button variant="contained" color="secondary" onClick={handleDelete}>
