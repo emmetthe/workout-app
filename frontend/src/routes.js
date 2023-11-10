@@ -5,7 +5,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import PrivateRoute from './hocs/PrivateRoute';
 import ExerciseHome from './components/exercise/exerciseHome';
 import ExercisePage from './components/exercise/exercisePage';
-import WorkoutCard from './components/workout-program/workoutCard';
+import ProgramPage from './components/workout-program/ProgramPage';
 import EditExercisePage from './components/workout-program/editExercisePage';
 
 const routes = [
@@ -25,7 +25,7 @@ const routes = [
     path: `/workouts/:id`,
     element: (
       <PrivateRoute>
-        <WorkoutCard />
+        <ProgramPage />
       </PrivateRoute>
     )
   },

@@ -59,7 +59,7 @@ const styles = {
   }
 };
 
-const WorkoutCard = () => {
+const ProgramPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
@@ -161,4 +161,4 @@ const WorkoutCard = () => {
   );
 };
 
-export default WorkoutCard;
+export default ProgramPage;
