@@ -128,7 +128,7 @@ const UpdateProgramForm = ({ workout, onUpdate, showUpdateForm }) => {
         Update Program
       </Button>
 
-      <Button variant="contained" color="secondary" className={classes.button} onClick={showUpdateForm}>
+      <Button variant="contained" className={classes.button} onClick={showUpdateForm}>
         Cancel
       </Button>
     </Grid>

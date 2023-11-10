@@ -6,6 +6,8 @@ import { Button, Typography, Grid, List, ListItem, ListItemText } from '@materia
 import UpdateProgramForm from './updateProgramForm';
 import EditableExerciseTable from './EditableExerciseTable';
 import CustomSnackbar from '../snackbar/snackbar';
+import { IconButton } from '@material-ui/core';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -51,6 +53,10 @@ const styles = {
     flexDirection: 'column',
     justifyContent: 'space-around'
   },
+  backButton: {
+    position: 'absolute',
+    left: '75px',
+  }
 };
 
 const WorkoutCard = () => {
@@ -84,6 +90,10 @@ const WorkoutCard = () => {
     }
   };
 
+  const handleBackButton = () => {
+    navigate('/dashboard');
+  };
+
   const handleUpdateForm = () => {
     setShowUpdateForm(false);
   };
@@ -105,6 +115,9 @@ const WorkoutCard = () => {
         </Grid>
       ) : (
         <Grid container direction="column" alignItems="center" spacing={2}>
+          <IconButton style={styles.backButton} onClick={() => handleBackButton()}>
+            <ArrowBackIcon />
+          </IconButton>
           <Grid item style={styles.headerStyle}>
             <Typography variant="h5">{name}</Typography>
           </Grid>
