@@ -226,10 +226,6 @@ const authSlice = createSlice({
     [LoadUserAsync.fulfilled]: (state, action) => {
       state.profile = action.payload.profile;
       state.username = action.payload.username;
-      // state.first_name = action.payload.profile.first_name;
-      // state.last_name = action.payload.profile.last_name;
-      // state.phone = action.payload.profile.phone;
-      // state.city = action.payload.profile.city;
     },
 
     [LoadUserAsync.rejected]: (state, action) => {
@@ -241,13 +237,7 @@ const authSlice = createSlice({
       state.username = action.payload.username;
       state.firstName = action.payload.profile.first_name;
       state.lastName = action.payload.profile.last_name;
-      // state.phone = action.payload.profile.phone;
-      // state.city = action.payload.profile.city;
     }
-
-    // [UpdateProfileAsync.rejected]: (state, action) => {
-    // state.error = action.error.message;
-    // }
   }
 });
 

@@ -5,13 +5,30 @@ import Dashboard from './components/dashboard/Dashboard';
 import PrivateRoute from './hocs/PrivateRoute';
 import ExerciseHome from './components/exercise/exerciseHome';
 import ExercisePage from './components/exercise/exercisePage';
+import ProgramPage from './components/workout-program/ProgramPage';
+import EditExercisePage from './components/workout-program/editExercisePage';
 
 const routes = [
   { path: '/', element: <Home /> },
   { path: '/login', element: <Login /> },
   { path: '/register', element: <Register /> },
   { path: '/exercises', element: <ExerciseHome /> },
-  { path: `/exercise/:exerciseName`, element: <ExercisePage /> },
+  {
+    path: `/exercise/:exerciseName`,
+    element: <ExercisePage />
+  },
+  {
+    path: `/workouts/edit/:exerciseId`,
+    element: <EditExercisePage />
+  },
+  {
+    path: `/workouts/:id`,
+    element: (
+      <PrivateRoute>
+        <ProgramPage />
+      </PrivateRoute>
+    )
+  },
   {
     path: '/dashboard',
     element: (

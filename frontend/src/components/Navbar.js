@@ -16,7 +16,7 @@ const Navbar = () => {
   const navLinkStyle = {
     color: 'white',
     textDecoration: 'none',
-    marginRight: '16px',
+    marginRight: '16px'
   };
 
   const buttonGroupStyle = {
@@ -25,11 +25,19 @@ const Navbar = () => {
     alignItems: 'center'
   };
 
+  const listStyle = {
+    listStyleType: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    padding: '0',
+    margin: '0'
+  };
+
   return (
     <AppBar position="static" sx={{ marginBottom: '50px' }}>
       <Toolbar>
         <nav>
-          <ul style={{ listStyleType: 'none', display: 'flex', alignItems: 'center' }}>
+          <ul style={listStyle}>
             <li>
               <NavLink style={{ ...navLinkStyle }} exact to="/">
                 Home
