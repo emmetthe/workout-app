@@ -178,7 +178,7 @@ const EditExercisePage = () => {
         <Button variant="contained" className={classes.updateButton} onClick={handleUpdateClick}>
           Update
         </Button>
-        <Button variant="contained" color="secondary" style={styles.buttonWidth} onClick={handleCancelClick}>
+        <Button variant="contained" style={styles.buttonWidth} onClick={handleCancelClick}>
           Cancel
         </Button>
       </Container>
