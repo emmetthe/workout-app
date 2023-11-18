@@ -81,18 +81,31 @@ WSGI_APPLICATION = 'workout_backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': str(os.getenv('DB_NAME')),
-        'USER': str(os.getenv('DB_USER')),
-        'PASSWORD': str(os.getenv('DB_PASS')),
-        'HOST': str(os.getenv('DB_HOST')),
-        'PORT': '',
+db = {}
+if str(os.getenv('PYTHON_ENV')) == 'development':
+    db = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': str(os.getenv('DB_NAME')),
+            'USER': str(os.getenv('DB_USER')),
+            'PASSWORD': str(os.getenv('DB_PASS')),
+            'HOST': str(os.getenv('DB_HOST')),
+            'PORT': str(os.getenv('DB_PORT')),
+        }
     }
-}
+else:
+    db = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': str(os.getenv('PROD_DB_NAME')),
+            'USER': str(os.getenv('PROD_DB_USER')),
+            'PASSWORD': str(os.getenv('PROD_DB_PASS')),
+            'HOST': str(os.getenv('PROD_DB_HOST')),
+            'PORT': str(os.getenv('PROD_DB_PORT')),
+        }
+    }
 
+DATABASES = db
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

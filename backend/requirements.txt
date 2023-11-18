@@ -1,0 +1,11 @@
+backports.statistics==0.1.0
+Cython==3.0.5
+Django==3.2.18
+djangorestframework==3.14.0
+dl==0.1.0
+ipaddr==2.2.0
+numpy==1.26.2
+ordereddict==1.1
+python-dotenv==1.0.0
+urllib3==1.22
+wincertstore==0.2.1
