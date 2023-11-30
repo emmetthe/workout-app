@@ -11,7 +11,6 @@ const Login = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const error = useSelector((state) => state.errors);
   const dispatch = useDispatch();
-  const to = window.localStorage.getItem('to');
 
   const [formData, setFormData] = useState({
     username: '',
@@ -32,9 +31,7 @@ const Login = () => {
     dispatch(loginAsync(username, password));
   };
 
-  if (isAuthenticated && to) {
-    return <Navigate to={to} />;
-  } else if (isAuthenticated) {
+  if (isAuthenticated) {
     return <Navigate to="/dashboard" />;
   }
 
@@ -45,7 +42,7 @@ const Login = () => {
           Sign into your account
         </Typography>
 
-        <div>{error && <Alert severity="error">{error}</Alert>}</div>
+        {error && <Alert severity="error">{error}</Alert>}
 
         <Box component="form" onSubmit={onSubmit} autoFocus sx={{ mt: 2 }}>
           <CSRFToken />

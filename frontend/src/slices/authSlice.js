@@ -128,7 +128,6 @@ export const logoutAsync = () => async (dispatch) => {
   try {
     const res = await axios.post('/users/logout/', body, config);
     dispatch(logout(res.data));
-    window.localStorage.removeItem('to');
   } catch (err) {
     dispatch(receiveErrors(err.message));
   }
