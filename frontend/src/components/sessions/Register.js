@@ -9,7 +9,7 @@ import { Alert } from '@mui/material';
 
 const Register = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const error = useSelector((state) => state.errors);
+  const error = useSelector((state) => state.errors) || [];
   const dispatch = useDispatch();
   localStorage.removeItem('to');
 
@@ -52,7 +52,7 @@ const Register = () => {
         <form onSubmit={(e) => onSubmit(e)}>
           <CSRFToken />
           <div>
-            <div>{error && <Alert severity="error">{error}</Alert>}</div>
+            <div>{error.length > 0 && <Alert severity="error">{error}</Alert>}</div>
 
             <TextField
               variant="outlined"

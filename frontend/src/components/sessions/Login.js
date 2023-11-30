@@ -9,7 +9,7 @@ import { Alert } from '@mui/material';
 
 const Login = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const error = useSelector((state) => state.errors);
+  const error = useSelector((state) => state.errors) || [];
   const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
@@ -34,7 +34,7 @@ const Login = () => {
   if (isAuthenticated) {
     return <Navigate to="/dashboard" />;
   }
-
+console.log(error)
   return (
     <Container maxWidth="xs">
       <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -42,7 +42,7 @@ const Login = () => {
           Sign into your account
         </Typography>
 
-        {error && <Alert severity="error">{error}</Alert>}
+        {error.length > 0 && <Alert severity="error">{error}</Alert>}
 
         <Box component="form" onSubmit={onSubmit} autoFocus sx={{ mt: 2 }}>
           <CSRFToken />
