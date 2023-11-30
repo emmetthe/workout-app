@@ -45,7 +45,7 @@ const Login = () => {
           Sign into your account
         </Typography>
 
-        <div>{error && <Alert severity="error">{error}</Alert>}</div>
+        {/* <div>{error && <Alert severity="error">{error}</Alert>}</div> */}
 
         <Box component="form" onSubmit={onSubmit} autoFocus sx={{ mt: 2 }}>
           <CSRFToken />
