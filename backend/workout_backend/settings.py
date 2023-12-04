@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = str(os.getenv('DEBUG'))
 
 ALLOWED_HOSTS = ['*']
 
@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'users',
     'user_profiles',
-    'workout_programs'
+    'workout_programs',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -58,8 +59,10 @@ MIDDLEWARE = [
     'djangorestframework_camel_case.middleware.CamelCaseMiddleWare',
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
-
+CORS_ORIGIN_ALLOW_ALL = True   
 ROOT_URLCONF = 'workout_backend.urls'
 
 TEMPLATES = [
