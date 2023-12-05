@@ -34,7 +34,7 @@ const Login = () => {
   if (isAuthenticated) {
     return <Navigate to="/dashboard" />;
   }
-console.log(error)
+
   return (
     <Container maxWidth="xs">
       <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

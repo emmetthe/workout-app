@@ -10,4 +10,5 @@ urlpatterns = [
     path('is_authenticated/', views.CheckAuthenticatedView.as_view(),
          name="check-authentication-view"),
     path('csrf_cookie/', views.GetCSRFToken.as_view(), name="csrf-view"),
+    path('', views.GetCSRFToken.as_view(), name="csrf-view"),
 ]

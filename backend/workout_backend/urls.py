@@ -19,6 +19,7 @@ from django.conf import settings
 from django.views.static import serve
 
 urlpatterns = [
+    path('', include('users.urls')),
     path('users/', include('users.urls')),
     path('profile/', include('user_profiles.urls')),
     path('workout_program/', include('workout_programs.urls')),
