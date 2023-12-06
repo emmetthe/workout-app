@@ -29,7 +29,7 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = str(os.getenv('DEBUG'))
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'https://workout-app-fe.onrender.com']
 
 
 # Application definition
@@ -49,6 +49,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,8 +61,6 @@ MIDDLEWARE = [
     'djangorestframework_camel_case.middleware.CamelCaseMiddleWare',
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
 ]
 CORS_ORIGIN_ALLOW_ALL = True   
 CSRF_TRUSTED_ORIGINS = [
@@ -73,8 +73,6 @@ CORS_ALLOWED_ORIGINS = [
     'https://workout-be.onrender.com'
     # Add any other allowed origins as needed
 ]
-CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'
-CSRF_COOKIE_DOMAIN = 'https://workout-app-fe.onrender.com'
 
 ROOT_URLCONF = 'workout_backend.urls'
 
