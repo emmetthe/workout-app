@@ -68,7 +68,7 @@ CSRF_TRUSTED_ORIGINS = [
     # Add any other trusted origins as needed
 ]
 CORS_ALLOWED_ORIGINS = [
-    'workout-app-fe.onrender.com',
+    'https://workout-app-fe.onrender.com',
      # Add any other allowed origins as needed
 ]
 
