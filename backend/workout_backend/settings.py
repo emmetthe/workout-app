@@ -64,11 +64,11 @@ MIDDLEWARE = [
 ]
 CORS_ORIGIN_ALLOW_ALL = True   
 CSRF_TRUSTED_ORIGINS = [
-    'https://*.onrender.com',
+    'workout-app-fe.onrender.com',
     # Add any other trusted origins as needed
 ]
 CORS_ALLOWED_ORIGINS = [
-    'https://*.onrender.com',
+    'workout-app-fe.onrender.com',
      # Add any other allowed origins as needed
 ]
 
