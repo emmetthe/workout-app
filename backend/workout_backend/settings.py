@@ -67,10 +67,6 @@ CSRF_TRUSTED_ORIGINS = [
     'workout-app-fe.onrender.com',
     # Add any other trusted origins as needed
 ]
-CORS_ALLOWED_ORIGINS = [
-    'https://workout-app-fe.onrender.com',
-     # Add any other allowed origins as needed
-]
 
 ROOT_URLCONF = 'workout_backend.urls'
 
