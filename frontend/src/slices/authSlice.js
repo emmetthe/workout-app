@@ -90,7 +90,7 @@ export const loginAsync = (username, password) => async (dispatch) => {
       'X-CSRFToken': Cookies.get('csrftoken')
     }
   };
-
+  console.log(Cookies.get('csrftoken'))
   const body = JSON.stringify({ username, password });
   try {
     const res = await axios.post('/users/login/', body, config);
