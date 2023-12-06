@@ -68,8 +68,11 @@ CSRF_TRUSTED_ORIGINS = [
     'workout-app-fe.onrender.com',
     # Add any other trusted origins as needed
 ]
+CSRF_USE_SESSIONS = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_SAMESITE = None
-CSRF_COOKIE_DOMAIN = None 
+SESSION_COOKIE_SAMESITE = None
 
 ROOT_URLCONF = 'workout_backend.urls'
 
