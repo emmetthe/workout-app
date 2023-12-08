@@ -27,8 +27,4 @@ urlpatterns = [
     path('workout_program/', include('workout_programs.urls')),
     path('admin/', admin.site.urls),
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
-    re_path(r'^.*$', TemplateView.as_view(template_name='frontend/build/index.html')),
 ]
-
-# Add the following line to serve static files during development
-urlpatterns += staticfiles_urlpatterns()
