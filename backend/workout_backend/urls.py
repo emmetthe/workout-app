@@ -21,10 +21,10 @@ from django.views.generic import TemplateView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
-    path('', include('users.urls')),
     path('users/', include('users.urls')),
     path('profile/', include('user_profiles.urls')),
     path('workout_program/', include('workout_programs.urls')),
     path('admin/', admin.site.urls),
-    re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
+    # re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
+    re_path(r'^static/(?P<path>.*)$', TemplateView.as_view(template_name="index.html", content_type="text/html"))
 ]
