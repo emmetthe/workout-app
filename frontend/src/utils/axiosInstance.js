@@ -2,7 +2,9 @@ import axios from 'axios';
 import {jwtDecode} from 'jwt-decode';
 
 // Create an Axios instance with a request interceptor
-const axiosInstance = axios.create();
+const axiosInstance = axios.create({
+  baseURL: `${process.env.REACT_APP_API_URL}`,
+});
 
 axiosInstance.interceptors.request.use(
   async (config) => {
