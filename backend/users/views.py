@@ -7,9 +7,10 @@ from rest_framework.response import Response
 from django.utils.decorators import method_decorator
 from django.contrib import auth
 from .serializers import UserSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class LoginView(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -34,10 +35,16 @@ class LoginView(APIView):
             return Response({'error': 'Something went wrong when logging in'})
 
 
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class LogoutView(APIView):
     def post(self, request, format=None):
         try:
+            refresh_token = request.data.get('refresh')  # Get the refresh token from the request data
+
+            if refresh_token:
+                # Blacklist the refresh token
+                refresh_token_instance = RefreshToken(refresh_token)
+                refresh_token_instance.blacklist()
             auth.logout(request)
             return Response({'success': 'Successfully logged out'})
         except:
@@ -58,7 +65,7 @@ class CheckAuthenticatedView(APIView):
             return Response({'isAuthenticated': 'error'})
 
 
-@method_decorator(csrf_protect, name='dispatch')
+# @method_decorator(csrf_protect, name='dispatch')
 class SignUpView(APIView):
     """
     using postman inside headers you need to add
@@ -105,15 +112,6 @@ class SignUpView(APIView):
                 return Response({'error': "Passwords do not match"})
         except:
             return Response({'error': 'Something went wrong when registering account'})
-
-
-@method_decorator(ensure_csrf_cookie, name='dispatch')
-class GetCSRFToken(APIView):
-    permission_classes = (permissions.AllowAny, )
-
-    def get(self, request, format=None):
-        return Response({'success': 'CSRF cookie set'})
-
 
 class DeleteAccountView(APIView):
     def delete(self, request, format=None):

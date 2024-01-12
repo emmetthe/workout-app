@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, Link } from 'react-router-dom';
-import CSRFToken from '../CSRFToken';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginAsync } from '../../slices/authSlice';
 import { clearErrors } from '../../slices/errorSlice';
@@ -45,7 +44,6 @@ const Login = () => {
         {error.length > 0 && <Alert severity="error">{error}</Alert>}
 
         <Box component="form" onSubmit={onSubmit} autoFocus sx={{ mt: 2 }}>
-          <CSRFToken />
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
