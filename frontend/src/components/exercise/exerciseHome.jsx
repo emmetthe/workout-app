@@ -27,7 +27,7 @@ const ExerciseHome = () => {
       try {
         // Show the loading indicator while fetching data
         setIsLoading(true);
-        const response = await axiosInstance.get(`${process.env.REACT_APP_API_URL}/static/workout-data1.csv`);
+        const response = await axiosInstance.get(`/static/workout-data1.csv`);
         const parsedData = Papa.parse(response.data, { header: true }).data;
 
         // remove double quotes wrapping nested arrays and objects
