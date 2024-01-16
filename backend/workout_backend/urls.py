@@ -21,10 +21,10 @@ from django.views.generic import TemplateView
 from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView)
 
 urlpatterns = [
-    path('users/', include('users.urls')),
-    path('profile/', include('user_profiles.urls')),
-    path('workout_program/', include('workout_programs.urls')),
-    path('admin/', admin.site.urls),
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/users/', include('users.urls')),
+    path('api/profile/', include('user_profiles.urls')),
+    path('api/workout_program/', include('workout_programs.urls')),
+    path('api/admin/', admin.site.urls),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
