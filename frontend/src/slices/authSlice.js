@@ -68,9 +68,9 @@ export const checkAuthenticatedAsync = () => async (dispatch) => {
  */
 export const loginAsync = (username, password) => async (dispatch) => {
   try {
-    const res = await axios.post(`${process.env.REACT_APP_API_URL}/users/login/`, { username, password });
+    const res = await axiosInstance.post(`/users/login/`, { username, password });
     if (res.data.success === 'User authenticated') {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/token/`, { username, password });
+      const res = await axiosInstance.post(`/token/`, { username, password });
       const { access, refresh } = res.data;
 
       localStorage.setItem('token', access);
