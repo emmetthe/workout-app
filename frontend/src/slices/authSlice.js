@@ -19,7 +19,7 @@ const initialState = {
  * @returns user data
  */
 export const LoadUserAsync = createAsyncThunk('auth/load_user', async () => {
-  return axiosInstance.get(`${process.env.REACT_APP_API_URL}/profile/user`).then((response) => {
+  return axiosInstance.get(`/profile/user`).then((response) => {
     return response.data;
   });
 });
@@ -37,7 +37,7 @@ export const UpdateProfileAsync = createAsyncThunk('auth/update_user', async (pr
     bodyWeight: profile_object['bodyWeight']
   };
 
-  return axiosInstance.put(`${process.env.REACT_APP_API_URL}/profile/update/`, body).then((response) => response.data);
+  return axiosInstance.put(`/profile/update/`, body).then((response) => response.data);
 });
 
 /**
@@ -46,7 +46,7 @@ export const UpdateProfileAsync = createAsyncThunk('auth/update_user', async (pr
  */
 export const checkAuthenticatedAsync = () => async (dispatch) => {
   try {
-    const res = await axiosInstance.get(`${process.env.REACT_APP_API_URL}/users/is_authenticated`);
+    const res = await axiosInstance.get(`/users/is_authenticated`);
     if (res.data.error || res.data.isAuthenticated === 'error') {
       dispatch(is_authenticated(false));
     } else if (res.data.isAuthenticated === 'success') {
@@ -98,7 +98,7 @@ export const logoutAsync = () => async (dispatch) => {
   try {
     const refreshToken = localStorage.getItem('refresh_token');
 
-    await axiosInstance.post(`${process.env.REACT_APP_API_URL}/users/logout/`, { refresh: refreshToken });
+    await axiosInstance.post(`/users/logout/`, { refresh: refreshToken });
     dispatch(logout());
     localStorage.removeItem('refresh_token')
     localStorage.removeItem('token')
@@ -118,7 +118,7 @@ export const signUpAsync = (username, password, re_password) => async (dispatch)
   const body = { username, password, re_password };
 
   try {
-    const res = await axios.post(`${process.env.REACT_APP_API_URL}/users/signup/`, body);
+    const res = await axiosInstance.post(`/users/signup/`, body);
 
     if (res.data.success === 'User created successfully') {
       dispatch(clearErrors());
@@ -141,7 +141,7 @@ export const signUpAsync = (username, password, re_password) => async (dispatch)
  */
 export const delAccountAsync = () => async (dispatch) => {
   try {
-    await axiosInstance.delete(`${process.env.REACT_APP_API_URL}/accounts/delete/`);
+    await axiosInstance.delete(`/accounts/delete/`);
     dispatch(deleteAccount());
   } catch (err) {
     dispatch(receiveErrors(err.message));
