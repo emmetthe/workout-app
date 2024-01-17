@@ -19,9 +19,13 @@ const initialState = {
  * @returns user data
  */
 export const LoadUserAsync = createAsyncThunk('auth/load_user', async () => {
-  return axiosInstance.get(`/profile/user`).then((response) => {
+  try {
+    const response = await axiosInstance.get(`/profile/user`);
     return response.data;
-  });
+  } catch (error) {
+    console.error('LoadUserAsync error:', error);
+    throw error;
+  }
 });
 
 /**
@@ -37,7 +41,13 @@ export const UpdateProfileAsync = createAsyncThunk('auth/update_user', async (pr
     bodyWeight: profile_object['bodyWeight']
   };
 
-  return axiosInstance.put(`/profile/update/`, body).then((response) => response.data);
+  try {
+    const response = await axiosInstance.put(`/profile/update/`, body);
+    return response.data;
+  } catch (error) {
+    console.error('Update Profile error:', error);
+    throw error;
+  }
 });
 
 /**
