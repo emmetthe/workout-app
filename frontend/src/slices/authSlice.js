@@ -81,11 +81,11 @@ export const loginAsync = (username, password) => async (dispatch) => {
       localStorage.setItem('token', access);
       localStorage.setItem('refresh_token', refresh);
       axios.defaults.headers.common['Authorization'] = `Bearer ${access}`;
-
+      
+      const profile = await axiosInstance.get(`/profile/user`);
       dispatch(clearErrors());
       dispatch(login(res.data));
 
-      const profile = await axiosInstance.get(`/profile/user`);
       dispatch(loadUserProfile(profile.data))
     } else {
       dispatch(receiveErrors(res.data.error));
