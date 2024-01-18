@@ -20,9 +20,13 @@ const initialState = {
  */
 export const LoadUserAsync = () => async (dispatch) => {
   try {
-    const response = await axiosInstance.get(`/profile/user`);
-    console.log('loaduser', response.data)
-    dispatch(loadUserProfile(response.data))
+    const response = await axiosInstance.get(`/profile/user`, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log('loaduser', response.data);
+    dispatch(loadUserProfile(response.data));
   } catch (error) {
     console.error('LoadUserAsync error: ', error);
     throw error;
