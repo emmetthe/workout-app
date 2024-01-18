@@ -21,6 +21,7 @@ const initialState = {
 export const LoadUserAsync = createAsyncThunk('auth/load_user', async () => {
   try {
     const response = await axiosInstance.get(`/profile/user`);
+    console.log('loaduser', response.data)
     return response.data;
   } catch (error) {
     console.error('LoadUserAsync error:', error);
@@ -41,13 +42,7 @@ export const UpdateProfileAsync = createAsyncThunk('auth/update_user', async (pr
     bodyWeight: profile_object['bodyWeight']
   };
 
-  try {
-    const response = await axiosInstance.put(`/profile/update/`, body);
-    return response.data;
-  } catch (error) {
-    console.error('Update Profile error:', error);
-    throw error;
-  }
+  return axiosInstance.put(`/profile/update/`, body).then((response) => response.data);
 });
 
 /**
@@ -110,8 +105,8 @@ export const logoutAsync = () => async (dispatch) => {
 
     await axiosInstance.post(`/users/logout/`, { refresh: refreshToken });
     dispatch(logout());
-    localStorage.removeItem('refresh_token')
-    localStorage.removeItem('token')
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('token');
   } catch (err) {
     dispatch(receiveErrors(err.message));
   }
