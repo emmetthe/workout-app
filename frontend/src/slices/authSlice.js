@@ -75,15 +75,16 @@ export const loginAsync = (username, password) => async (dispatch) => {
     const res = await axiosInstance.post(`/users/login/`, { username, password });
     if (res.data.success === 'User authenticated') {
       const res = await axiosInstance.post(`/token/`, { username, password });
-      const profile = await axiosInstance.get(`/profile/user`);
-      console.log(profile)
       const { access, refresh } = res.data;
-
+      
       // add token to local storage
       localStorage.setItem('token', access);
       localStorage.setItem('refresh_token', refresh);
       axios.defaults.headers.common['Authorization'] = `Bearer ${access}`;
-
+      
+      const profile = await axiosInstance.get(`/profile/user`);
+      console.log(profile)
+      
       dispatch(clearErrors());
       dispatch(login(res.data));
       // dispatch(LoadUserAsync());
