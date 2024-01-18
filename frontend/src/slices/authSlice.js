@@ -20,13 +20,8 @@ const initialState = {
  */
 export const LoadUserAsync = () => async (dispatch) => {
   try {
-    const response = await axiosInstance.get(`/profile/user`, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    console.log('loaduser', response.data);
-    dispatch(loadUserProfile(response.data));
+    const response = await axiosInstance.get(`/profile/user`);
+    dispatch(loadUserProfile(response.data))
   } catch (error) {
     console.error('LoadUserAsync error: ', error);
     throw error;
@@ -82,14 +77,16 @@ export const loginAsync = (username, password) => async (dispatch) => {
       const res = await axiosInstance.post(`/token/`, { username, password });
       const { access, refresh } = res.data;
 
+      // add token to local storage
       localStorage.setItem('token', access);
       localStorage.setItem('refresh_token', refresh);
-
       axios.defaults.headers.common['Authorization'] = `Bearer ${access}`;
 
       dispatch(clearErrors());
       dispatch(login(res.data));
-      dispatch(LoadUserAsync());
+
+      const profile = await axiosInstance.get(`/profile/user`);
+      dispatch(loadUserProfile(profile.data))
     } else {
       dispatch(receiveErrors(res.data.error));
     }
