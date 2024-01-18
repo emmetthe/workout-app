@@ -18,15 +18,11 @@ const initialState = {
  * - rejected: 'auth/load_user/rejected'
  * @returns user data
  */
-export const LoadUserAsync = () => async (dispatch) => {
-  try {
-    const response = await axiosInstance.get(`/profile/user/`);
-    dispatch(loadUserProfile(response.data));
-  } catch (error) {
-    console.error('LoadUserAsync error: ', error);
-    throw error;
-  }
-};
+export const LoadUserAsync = createAsyncThunk('auth/load_user', async () => {
+  return axiosInstance.get('/profile/user/').then((response) => {
+    return response.data;
+  });
+});
 
 /**
  * PUT '/profile/update/'
@@ -174,10 +170,6 @@ const authSlice = createSlice({
     },
     is_authenticated: (state, action) => {
       state.isAuthenticated = true;
-    },
-    loadUserProfile: (state, action) => {
-      state.profile = action.payload.profile;
-      state.username = action.payload.username;
     }
   },
 
