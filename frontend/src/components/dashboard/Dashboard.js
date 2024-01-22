@@ -30,7 +30,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(false)
+    setLoading(false);
   }, [profile]);
 
   const openModal = () => {
@@ -47,34 +47,37 @@ const Dashboard = () => {
     dispatch(UpdateProfileAsync(formData));
   };
 
-  // Render the content only if profile data is available
-  if (loading) {
-    return <CircularProgress />; // Render a loading spinner here
-  }
-
   return (
     <Grid container direction="column" alignItems="center" style={styles.container}>
-      <Typography variant="h4" style={styles.header}>
-        Profile Page
-      </Typography>
-      <Typography variant="h1" style={styles.welcome}>
-        Welcome back, {profile.firstName}
-      </Typography>
+      {loading ? (
+        <Grid style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
+          <CircularProgress />
+        </Grid>
+      ) : (
+        <>
+          <Typography variant="h4" style={styles.header}>
+            Profile Page
+          </Typography>
+          <Typography variant="h1" style={styles.welcome}>
+            Welcome back, {profile.firstName}
+          </Typography>
 
-      <Button variant="contained" onClick={openModal} style={styles.button}>
-        Update Profile
-      </Button>
+          <Button variant="contained" onClick={openModal} style={styles.button}>
+            Update Profile
+          </Button>
 
-      {/* displaying user's workout programs */}
-      <Grid item>
-        <WorkoutProgram />
-      </Grid>
+          {/* displaying user's workout programs */}
+          <Grid item>
+            <WorkoutProgram />
+          </Grid>
 
-      <ModalForm
-        componentForm={<UpdateProfileForm handleClose={closeModal} handleSubmit={handleSubmit} />}
-        modalState={modalOpen}
-        handleClose={closeModal}
-      />
+          <ModalForm
+            componentForm={<UpdateProfileForm handleClose={closeModal} handleSubmit={handleSubmit} />}
+            modalState={modalOpen}
+            handleClose={closeModal}
+          />
+        </>
+      )}
     </Grid>
   );
 };
