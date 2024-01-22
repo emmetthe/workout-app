@@ -9,14 +9,14 @@ function App() {
     <>
       <CssBaseline />
       <Router>
-        <Navbar />
-        {
-          <Routes>
-            {routes.map((route) => (
-              <Route exact key={route.path} path={route.path} element={route.element} />
-            ))}
-          </Routes>
-        }
+          <Navbar />
+          {
+            <Routes>
+              {routes.map((route) => (
+                <Route exact key={route.path} path={route.path} element={route.element} />
+              ))}
+            </Routes>
+          }
       </Router>
     </>
   );

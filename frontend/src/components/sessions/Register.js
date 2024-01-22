@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { signUpAsync } from '../../slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import CSRFToken from '../CSRFToken';
 import { clearErrors } from '../../slices/errorSlice';
 import { TextField, Button, Container, Paper, Typography } from '@mui/material';
 import { Alert } from '@mui/material';
 
 const Register = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const error = useSelector((state) => state.errors);
+  const error = useSelector((state) => state.errors) || [];
   const dispatch = useDispatch();
   localStorage.removeItem('to');
 
@@ -50,9 +49,9 @@ const Register = () => {
         </Typography>
 
         <form onSubmit={(e) => onSubmit(e)}>
-          <CSRFToken />
+ 
           <div>
-            <div>{error && <Alert severity="error">{error}</Alert>}</div>
+            <div>{error.length > 0 && <Alert severity="error">{error}</Alert>}</div>
 
             <TextField
               variant="outlined"

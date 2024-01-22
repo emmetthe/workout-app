@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Grid, TextField, Container, CircularProgress } from '@mui/material';
 import ExerciseFilter from './exerciseFilter';
 import ExercisePagination from './exercisePagination';
@@ -7,6 +6,7 @@ import ExerciseList from './exerciseList';
 import Autocomplete from '@mui/material/Autocomplete';
 import Papa from 'papaparse';
 import { convertToObject } from '../../utils/convertToObject';
+import axiosInstance from '../../utils/axiosInstance';
 
 const ExerciseHome = () => {
   // State variables
@@ -27,8 +27,12 @@ const ExerciseHome = () => {
       try {
         // Show the loading indicator while fetching data
         setIsLoading(true);
-        const response = await axios.get('/static/workout-data1.csv');
-        const parsedData = Papa.parse(response.data, { header: true }).data;
+        // const response = await axiosInstance.get(`/static/workout-data1.csv`);
+        // const parsedData = Papa.parse(response.data, { header: true }).data;
+
+        const response = await fetch('data/workout-data1.csv');;
+        const csvData = await response.text();
+        const parsedData = Papa.parse(csvData, { header: true }).data;
 
         // remove double quotes wrapping nested arrays and objects
         const convertedOutput = parsedData.map((data) => convertToObject(data));

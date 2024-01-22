@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import Cookies from 'js-cookie';
 import { receiveErrors, clearErrors } from './errorSlice';
+import axiosInstance from '../utils/axiosInstance';
 
 const initialState = {
   isAuthenticated: null,
@@ -19,7 +19,7 @@ const initialState = {
  * @returns user data
  */
 export const LoadUserAsync = createAsyncThunk('auth/load_user', async () => {
-  return axios.get('/profile/user').then((response) => {
+  return axiosInstance.get('/profile/user/').then((response) => {
     return response.data;
   });
 });
@@ -31,22 +31,13 @@ export const LoadUserAsync = createAsyncThunk('auth/load_user', async () => {
  * @returns none
  */
 export const UpdateProfileAsync = createAsyncThunk('auth/update_user', async (profile_object) => {
-  const body = JSON.stringify({
-    withCredentials: true,
+  const body = {
     first_name: profile_object['firstName'],
     last_name: profile_object['lastName'],
     bodyWeight: profile_object['bodyWeight']
-  });
-
-  const config = {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'X-CSRFToken': Cookies.get('csrftoken')
-    }
   };
 
-  return axios.put('/profile/update/', body, config).then((response) => response.data);
+  return axiosInstance.put(`/profile/update/`, body).then((response) => response.data);
 });
 
 /**
@@ -54,15 +45,8 @@ export const UpdateProfileAsync = createAsyncThunk('auth/update_user', async (pr
  * - authenticates current user and modifies redux store
  */
 export const checkAuthenticatedAsync = () => async (dispatch) => {
-  const config = {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json'
-    }
-  };
-
   try {
-    const res = await axios.get('/users/is_authenticated', config);
+    const res = await axiosInstance.get(`/users/is_authenticated`);
     if (res.data.error || res.data.isAuthenticated === 'error') {
       dispatch(is_authenticated(false));
     } else if (res.data.isAuthenticated === 'success') {
@@ -83,19 +67,17 @@ export const checkAuthenticatedAsync = () => async (dispatch) => {
  * @returns none
  */
 export const loginAsync = (username, password) => async (dispatch) => {
-  const config = {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'X-CSRFToken': Cookies.get('csrftoken')
-    }
-  };
-
-  const body = JSON.stringify({ username, password });
   try {
-    const res = await axios.post('/users/login/', body, config);
-
+    const res = await axiosInstance.post(`/users/login/`, { username, password });
     if (res.data.success === 'User authenticated') {
+      const res = await axiosInstance.post(`/token/`, { username, password });
+      const { access, refresh } = res.data;
+
+      // add token to local storage
+      localStorage.setItem('token', access);
+      localStorage.setItem('refresh_token', refresh);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${access}`;
+
       dispatch(clearErrors());
       dispatch(login(res.data));
       dispatch(LoadUserAsync());
@@ -113,22 +95,13 @@ export const loginAsync = (username, password) => async (dispatch) => {
  * @requires CSRFToken, User Authenticated
  */
 export const logoutAsync = () => async (dispatch) => {
-  const config = {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'X-CSRFToken': Cookies.get('csrftoken')
-    }
-  };
-
-  const body = JSON.stringify({
-    withCredentials: true
-  });
-
   try {
-    const res = await axios.post('/users/logout/', body, config);
-    dispatch(logout(res.data));
-    window.localStorage.removeItem('to');
+    const refreshToken = localStorage.getItem('refresh_token');
+
+    await axiosInstance.post(`/users/logout/`, { refresh: refreshToken });
+    dispatch(logout());
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('token');
   } catch (err) {
     dispatch(receiveErrors(err.message));
   }
@@ -142,27 +115,17 @@ export const logoutAsync = () => async (dispatch) => {
  * @returns none
  */
 export const signUpAsync = (username, password, re_password) => async (dispatch) => {
-  const config = {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'X-CSRFToken': Cookies.get('csrftoken')
-    }
-  };
-
-  const body = JSON.stringify({ username, password, re_password });
+  const body = { username, password, re_password };
 
   try {
-    const res = await axios.post('/users/signup/', body, config);
+    const res = await axiosInstance.post(`/users/signup/`, body);
 
     if (res.data.success === 'User created successfully') {
       dispatch(clearErrors());
       dispatch(signup(res.data));
 
       // automatically sign in after registering
-      const loginData = await axios.post('/users/login/', { username, password }, config);
-      dispatch(login(loginData.data));
-      dispatch(LoadUserAsync());
+      dispatch(loginAsync(username, password));
     } else {
       dispatch(receiveErrors(res.data.error));
     }
@@ -177,20 +140,8 @@ export const signUpAsync = (username, password, re_password) => async (dispatch)
  * @requires CSRFToken
  */
 export const delAccountAsync = () => async (dispatch) => {
-  const config = {
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'X-CSRFToken': Cookies.get('csrftoken')
-    }
-  };
-
-  const body = JSON.stringify({
-    withCredentials: true
-  });
-
   try {
-    await axios.delete('/accounts/delete/', config, body);
+    await axiosInstance.delete(`/accounts/delete/`);
     dispatch(deleteAccount());
   } catch (err) {
     dispatch(receiveErrors(err.message));
@@ -244,7 +195,7 @@ const authSlice = createSlice({
 /**
 dispatched inside components and other async functions
 */
-export const { login, logout, signup, deleteAccount, is_authenticated } = authSlice.actions;
+export const { login, logout, signup, deleteAccount, is_authenticated, loadUserProfile } = authSlice.actions;
 
 /**
  * reducer for user auth

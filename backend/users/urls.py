@@ -9,5 +9,4 @@ urlpatterns = [
     path('users/', views.GetUsersView.as_view(), name="user-list-view"),
     path('is_authenticated/', views.CheckAuthenticatedView.as_view(),
          name="check-authentication-view"),
-    path('csrf_cookie/', views.GetCSRFToken.as_view(), name="csrf-view"),
 ]
