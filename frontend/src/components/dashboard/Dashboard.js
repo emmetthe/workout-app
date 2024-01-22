@@ -27,7 +27,7 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.auth.profile);
   const [modalOpen, setModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(false)
