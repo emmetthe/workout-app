@@ -26,8 +26,12 @@ const styles = {
 const Dashboard = () => {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.auth.profile);
-
   const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(false)
+  }, [profile]);
 
   const openModal = () => {
     setModalOpen(true);
@@ -44,7 +48,7 @@ const Dashboard = () => {
   };
 
   // Render the content only if profile data is available
-  if (!profile) {
+  if (loading) {
     return <CircularProgress />; // Render a loading spinner here
   }
 
