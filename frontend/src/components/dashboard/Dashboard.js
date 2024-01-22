@@ -30,7 +30,9 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(false);
+    if (profile) {
+      setLoading(false);
+    }
   }, [profile]);
 
   const openModal = () => {
