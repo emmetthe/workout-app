@@ -6,7 +6,6 @@ import ExerciseList from './exerciseList';
 import Autocomplete from '@mui/material/Autocomplete';
 import Papa from 'papaparse';
 import { convertToObject } from '../../utils/convertToObject';
-import axiosInstance from '../../utils/axiosInstance';
 
 const ExerciseHome = () => {
   // State variables

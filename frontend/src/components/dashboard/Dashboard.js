@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { UpdateProfileAsync } from '../../slices/authSlice';
 import ModalForm from '../modal/modal';
-import { Button, Grid, Typography } from '@mui/material';
+import { Button, Grid, Typography, CircularProgress } from '@mui/material';
 import UpdateProfileForm from './updateProfileForm';
 import WorkoutProgram from '../workout-program/workoutProgram';
 
@@ -42,6 +42,11 @@ const Dashboard = () => {
     closeModal();
     dispatch(UpdateProfileAsync(formData));
   };
+
+  // Render the content only if profile data is available
+  if (!profile) {
+    return <CircularProgress />; // Render a loading spinner here
+  }
 
   return (
     <Grid container direction="column" alignItems="center" style={styles.container}>
