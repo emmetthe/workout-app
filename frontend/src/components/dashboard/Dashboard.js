@@ -31,7 +31,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     setLoading(true);
-    if (Object.keys(profile).length > 0) {
+    if (profile && Object.keys(profile).length > 0) {
       setLoading(false);
     }
   }, [profile]);
