@@ -45,13 +45,11 @@ const Dashboard = () => {
     setModalOpen(false);
   };
 
-  const handleSubmit = async (e, formData) => {
+  const handleSubmit = (e, formData) => {
     e.preventDefault();
-    try {
-      dispatch(UpdateProfileAsync(formData));
-    } finally {
+    dispatch(UpdateProfileAsync(formData)).then(() => {
       closeModal();
-    }
+    });
   };
 
   return (
