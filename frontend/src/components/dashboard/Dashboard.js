@@ -47,8 +47,10 @@ const Dashboard = () => {
 
   const handleSubmit = (e, formData) => {
     e.preventDefault();
+    setLoading(true);
     closeModal();
     dispatch(UpdateProfileAsync(formData));
+    setLoading(false);
   };
 
   return (
