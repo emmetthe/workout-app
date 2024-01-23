@@ -30,7 +30,8 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (profile) {
+    setLoading(true);
+    if (Object.keys(profile).length > 0) {
       setLoading(false);
     }
   }, [profile]);
