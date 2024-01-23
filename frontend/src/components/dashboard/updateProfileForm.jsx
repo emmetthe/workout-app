@@ -1,11 +1,11 @@
 import React from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Button, TextField, InputAdornment, Box } from '@mui/material';
+import { Button, TextField, InputAdornment, Box, CircularProgress, Backdrop } from '@mui/material';
 import CloseIcon from '@material-ui/icons/Close';
 import { CloseButtonStyle, UpdateFormTextField, UpdateFormWeight, UpdateProfileMainStyle } from './profileFormStyle';
 
-const UpdateProfileForm = ({ handleSubmit, handleClose }) => {
+const UpdateProfileForm = ({ handleSubmit, handleClose, backDropStatus }) => {
   const { firstName, lastName, bodyWeight, bodyWtInLbs } = useSelector((state) => state.auth.profile);
   const [formData, setFormData] = useState({
     firstName,
@@ -14,6 +14,14 @@ const UpdateProfileForm = ({ handleSubmit, handleClose }) => {
     bodyWtInLbs
   });
   const errors = useSelector((state) => state.errors);
+  const [backdrop, setBackDrop] = useState(backDropStatus);
+
+  const closeBackdrop = () => {
+    setBackDrop(false);
+  };
+  const openBackdrop = () => {
+    setBackDrop(true);
+  };
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,6 +35,12 @@ const UpdateProfileForm = ({ handleSubmit, handleClose }) => {
         </Button>
 
         {errors ? <>{errors}</> : null}
+
+        {backdrop && (
+          <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={backdrop} onClick={closeBackdrop}>
+            <CircularProgress color="inherit" />
+          </Backdrop>
+        )}
 
         <Box>
           <TextField
@@ -50,8 +64,8 @@ const UpdateProfileForm = ({ handleSubmit, handleClose }) => {
           />
         </Box>
 
-        {/* filler items */}
-        <Box>
+        {/* filler items to add in future*/}
+        {/* <Box>
           <TextField
             id="outlined-helperText"
             label="Filler Box"
@@ -71,13 +85,13 @@ const UpdateProfileForm = ({ handleSubmit, handleClose }) => {
             onChange={onChange}
             sx={UpdateFormTextField}
           />
-        </Box>
+        </Box> */}
         {/* end of filler items */}
 
         <Box>
           <TextField
             id="outlined-helperText"
-            label="Weight"
+            label="Body Weight"
             margin="normal"
             name="bodyWeight"
             defaultValue={bodyWeight}
@@ -89,7 +103,14 @@ const UpdateProfileForm = ({ handleSubmit, handleClose }) => {
           />
         </Box>
 
-        <Button variant="contained" type="submit" onClick={(e) => handleSubmit(e, formData)}>
+        <Button
+          variant="contained"
+          type="submit"
+          onClick={(e) => {
+            handleSubmit(e, formData);
+            openBackdrop();
+          }}
+        >
           Update
         </Button>
       </Box>

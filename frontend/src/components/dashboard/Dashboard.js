@@ -47,10 +47,8 @@ const Dashboard = () => {
 
   const handleSubmit = (e, formData) => {
     e.preventDefault();
-    setLoading(true);
-    closeModal();
     dispatch(UpdateProfileAsync(formData));
-    setLoading(false);
+    closeModal();
   };
 
   return (
@@ -77,8 +75,9 @@ const Dashboard = () => {
             <WorkoutProgram />
           </Grid>
 
+          {/* update user details form */}
           <ModalForm
-            componentForm={<UpdateProfileForm handleClose={closeModal} handleSubmit={handleSubmit} />}
+            componentForm={<UpdateProfileForm handleClose={closeModal} handleSubmit={handleSubmit} backDropStatus={false} />}
             modalState={modalOpen}
             handleClose={closeModal}
           />
