@@ -34,17 +34,14 @@ const Register = () => {
     dispatch(clearErrors());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (error.length > 0) {
-      closeBackdrop();
-    }
-  });
-
   const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(signUpAsync(username, password, re_password));
+    openBackdrop();
+    dispatch(signUpAsync(username, password, re_password)).then(() => {
+      closeBackdrop();
+    });
     if (isAuthenticated) {
       setAccountCreated(true);
     }

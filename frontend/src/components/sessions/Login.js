@@ -26,12 +26,6 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (error.length > 0) {
-      closeBackdrop();
-    }
-  });
-
-  useEffect(() => {
     dispatch(clearErrors());
   }, [dispatch]);
 
@@ -41,7 +35,10 @@ const Login = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginAsync(username, password));
+    openBackdrop();
+    dispatch(loginAsync(username, password)).then(() => {
+      closeBackdrop();
+    });
   };
 
   if (isAuthenticated) {
