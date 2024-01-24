@@ -52,7 +52,7 @@ const Login = () => {
           Sign into your account
         </Typography>
 
-        {error.length > 0 && <Alert severity="error">{error}</Alert>}
+        {error.length > 0 && <Alert severity="error" sx={{ width: '100%' }}>{error}</Alert>}
 
         {/* start spinner when calling login api */}
         {loading && <CircularProgress color="inherit" style={{ marginTop: '5px' }} />}
