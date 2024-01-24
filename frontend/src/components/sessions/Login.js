@@ -3,19 +3,23 @@ import { Navigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginAsync } from '../../slices/authSlice';
 import { clearErrors } from '../../slices/errorSlice';
-import { Box, Button, Typography, TextField, Container, Grid } from '@mui/material';
+import { Box, Button, Typography, TextField, Container, Grid, Backdrop, CircularProgress } from '@mui/material';
 import { Alert } from '@mui/material';
 
 const Login = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const error = useSelector((state) => state.errors) || [];
   const dispatch = useDispatch();
-
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   });
   const { username, password } = formData;
+  const [backDropStatus, setBackdropStatus] = useState(false);
+
+  const openBackdrop = () => {
+    setBackdropStatus(true);
+  };
 
   useEffect(() => {
     dispatch(clearErrors());
@@ -42,6 +46,12 @@ const Login = () => {
         </Typography>
 
         {error.length > 0 && <Alert severity="error">{error}</Alert>}
+        {/* open backdrop when calling login api */}
+        {backDropStatus && (
+          <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={openBackdrop}>
+            <CircularProgress color="inherit" />
+          </Backdrop>
+        )}
 
         <Box component="form" onSubmit={onSubmit} autoFocus sx={{ mt: 2 }}>
           <Grid container spacing={2}>
