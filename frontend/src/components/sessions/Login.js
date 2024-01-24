@@ -15,14 +15,14 @@ const Login = () => {
     password: ''
   });
   const { username, password } = formData;
-  const [backDropStatus, setBackdropStatus] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const openBackdrop = () => {
-    setBackdropStatus(true);
+    setLoading(true);
   };
 
   const closeBackdrop = () => {
-    setBackdropStatus(false);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -54,12 +54,8 @@ const Login = () => {
 
         {error.length > 0 && <Alert severity="error">{error}</Alert>}
 
-        {/* open backdrop when calling login api */}
-        {backDropStatus && (
-          <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={openBackdrop}>
-            <CircularProgress color="inherit" />
-          </Backdrop>
-        )}
+        {/* start spinner when calling login api */}
+        {loading && <CircularProgress color="inherit" style={{ marginTop: '5px' }} />}
 
         <Box
           component="form"
@@ -81,6 +77,7 @@ const Login = () => {
                 value={username}
                 required
                 autoComplete="true"
+                disabled={loading}
               />
             </Grid>
             <Grid item xs={12}>
@@ -94,14 +91,16 @@ const Login = () => {
                 value={password}
                 required
                 autoComplete="true"
+                disabled={loading}
               />
             </Grid>
           </Grid>
 
-          <Button fullWidth variant="contained" type="submit" sx={{ mt: 2 }}>
+          <Button fullWidth variant="contained" type="submit" sx={{ mt: 2 }} disabled={loading}>
             Login
           </Button>
           <Button
+            disabled={loading}
             fullWidth
             variant="outlined"
             onClick={(e) => {

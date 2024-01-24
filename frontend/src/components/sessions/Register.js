@@ -39,14 +39,12 @@ const Register = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     openBackdrop();
-    dispatch(signUpAsync(username, password, re_password));
-    if (isAuthenticated) {
-      setAccountCreated(true).then(() => {
+    dispatch(signUpAsync(username, password, re_password)).then(() => {
+      if (isAuthenticated) {
+        setAccountCreated(true);
+      }
         closeBackdrop();
-      });
-    } else {
-      closeBackdrop();
-    }
+    });
   };
 
   if (isAuthenticated) {
@@ -62,7 +60,7 @@ const Register = () => {
           Create an account
         </Typography>
 
-        {/* open backdrop when calling register api */}
+        {/* open spinner when calling register api */}
         {backDropStatus && (
           <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={openBackdrop}>
             <CircularProgress color="inherit" />
@@ -88,6 +86,7 @@ const Register = () => {
               value={username}
               required
               autoComplete="false"
+              disabled={backDropStatus}
             />
 
             <TextField
@@ -102,6 +101,7 @@ const Register = () => {
               minLength="6"
               required
               autoComplete="false"
+              disabled={backDropStatus}
             />
 
             <TextField
@@ -116,9 +116,17 @@ const Register = () => {
               minLength="6"
               required
               autoComplete="false"
+              disabled={backDropStatus}
             />
 
-            <Button type="submit" variant="contained" color="primary" fullWidth disabled={!areAllFieldsFilled} sx={{ mt: 1 }}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              disabled={!areAllFieldsFilled || backDropStatus}
+              sx={{ mt: 1 }}
+            >
               Sign Up
             </Button>
           </div>
