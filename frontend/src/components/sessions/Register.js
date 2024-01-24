@@ -39,11 +39,13 @@ const Register = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     openBackdrop();
-    dispatch(signUpAsync(username, password, re_password)).then(() => {
-      closeBackdrop();
-    });
+    dispatch(signUpAsync(username, password, re_password));
     if (isAuthenticated) {
-      setAccountCreated(true);
+      setAccountCreated(true).then(() => {
+        closeBackdrop();
+      });
+    } else {
+      closeBackdrop();
     }
   };
 
