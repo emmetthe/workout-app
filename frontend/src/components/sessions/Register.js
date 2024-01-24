@@ -3,7 +3,7 @@ import { Navigate, Link } from 'react-router-dom';
 import { signUpAsync } from '../../slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearErrors } from '../../slices/errorSlice';
-import { TextField, Button, Container, Paper, Typography, Grid, Backdrop, CircularProgress } from '@mui/material';
+import { TextField, Button, Container, Typography, Grid, Backdrop, CircularProgress } from '@mui/material';
 import { Alert } from '@mui/material';
 
 const Register = () => {
@@ -26,15 +26,19 @@ const Register = () => {
     setBackdropStatus(true);
   };
 
+  const closeBackdrop = () => {
+    setBackdropStatus(false);
+  };
+
   useEffect(() => {
     dispatch(clearErrors());
   }, [dispatch]);
 
   useEffect(() => {
-    if(error) {
-      setBackdropStatus(false)
-    };
-  }, [error]);
+    if (error.length > 0) {
+      closeBackdrop();
+    }
+  });
 
   const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -59,7 +63,7 @@ const Register = () => {
           Create an account
         </Typography>
 
-        {/* open backdrop when calling login api */}
+        {/* open backdrop when calling register api */}
         {backDropStatus && (
           <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={openBackdrop}>
             <CircularProgress color="inherit" />

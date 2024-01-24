@@ -21,15 +21,19 @@ const Login = () => {
     setBackdropStatus(true);
   };
 
+  const closeBackdrop = () => {
+    setBackdropStatus(false);
+  };
+
+  useEffect(() => {
+    if (error.length > 0) {
+      closeBackdrop();
+    }
+  });
+
   useEffect(() => {
     dispatch(clearErrors());
   }, [dispatch]);
-
-  useEffect(() => {
-    if(error) {
-      setBackdropStatus(false)
-    };
-  }, [error]);
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
