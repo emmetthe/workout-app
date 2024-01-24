@@ -25,6 +25,12 @@ const Login = () => {
     dispatch(clearErrors());
   }, [dispatch]);
 
+  useEffect(() => {
+    if(error) {
+      setBackdropStatus(false)
+    };
+  }, [error]);
+
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -46,6 +52,7 @@ const Login = () => {
         </Typography>
 
         {error.length > 0 && <Alert severity="error">{error}</Alert>}
+
         {/* open backdrop when calling login api */}
         {backDropStatus && (
           <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={openBackdrop}>
@@ -53,7 +60,15 @@ const Login = () => {
           </Backdrop>
         )}
 
-        <Box component="form" onSubmit={onSubmit} autoFocus sx={{ mt: 2 }}>
+        <Box
+          component="form"
+          onSubmit={(e) => {
+            onSubmit(e);
+            openBackdrop();
+          }}
+          autoFocus
+          sx={{ mt: 2 }}
+        >
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -91,6 +106,7 @@ const Login = () => {
             onClick={(e) => {
               e.preventDefault();
               dispatch(loginAsync('demo', '12345678'));
+              openBackdrop();
             }}
             sx={{ mt: 2 }}
           >

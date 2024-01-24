@@ -30,6 +30,12 @@ const Register = () => {
     dispatch(clearErrors());
   }, [dispatch]);
 
+  useEffect(() => {
+    if(error) {
+      setBackdropStatus(false)
+    };
+  }, [error]);
+
   const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = (e) => {
@@ -60,7 +66,12 @@ const Register = () => {
           </Backdrop>
         )}
 
-        <form onSubmit={(e) => onSubmit(e)}>
+        <form
+          onSubmit={(e) => {
+            onSubmit(e);
+            openBackdrop();
+          }}
+        >
           <div>
             <div>{error.length > 0 && <Alert severity="error">{error}</Alert>}</div>
 
