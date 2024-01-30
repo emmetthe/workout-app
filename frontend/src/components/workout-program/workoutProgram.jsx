@@ -5,6 +5,7 @@ import { fetchWorkouts } from '../../slices/workoutThunk';
 import WorkoutProgramForm from './createProgramForm';
 import { Link } from 'react-router-dom';
 import ModalForm from '../modal/modal';
+import { clearErrors } from '../../slices/errorSlice';
 
 const styles = {
   container: {
@@ -46,6 +47,7 @@ const WorkoutProgram = () => {
 
   const closeModal = () => {
     setModalOpen(false);
+    dispatch(clearErrors())
   };
 
   useEffect(() => {

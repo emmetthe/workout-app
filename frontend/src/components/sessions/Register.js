@@ -3,7 +3,7 @@ import { Navigate, Link } from 'react-router-dom';
 import { signUpAsync } from '../../slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearErrors } from '../../slices/errorSlice';
-import { TextField, Button, Container, Typography, Grid, Backdrop, CircularProgress, Box } from '@mui/material';
+import { TextField, Button, Container, Typography, Grid, CircularProgress, Box } from '@mui/material';
 import { Alert } from '@mui/material';
 
 const Register = () => {

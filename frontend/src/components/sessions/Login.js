@@ -3,7 +3,7 @@ import { Navigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginAsync } from '../../slices/authSlice';
 import { clearErrors } from '../../slices/errorSlice';
-import { Box, Button, Typography, TextField, Container, Grid, Backdrop, CircularProgress } from '@mui/material';
+import { Box, Button, Typography, TextField, Container, Grid, CircularProgress } from '@mui/material';
 import { Alert } from '@mui/material';
 
 const Login = () => {
@@ -55,7 +55,7 @@ const Login = () => {
         {error.length > 0 && <Alert severity="error" sx={{ width: '100%' }}>{error}</Alert>}
 
         {/* start spinner when calling login api */}
-        {loading && <CircularProgress color="inherit" style={{ marginTop: '5px' }} />}
+        {loading && <CircularProgress color="inherit" style={{ marginTop: '10px' }} />}
 
         <Box
           component="form"

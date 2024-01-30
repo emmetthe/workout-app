@@ -84,6 +84,17 @@ class WorkoutProgramViewSet(APIView):
 
     def post(self, request):
         data = request.data.copy()
+        
+        if not DayOfWeek.objects.filter(id=7).exists():
+            # Create objects only if they don't exist
+            DayOfWeek.objects.create(day_name='Monday')
+            DayOfWeek.objects.create(day_name='Tuesday')
+            DayOfWeek.objects.create(day_name='Wednesday')
+            DayOfWeek.objects.create(day_name='Thursday')
+            DayOfWeek.objects.create(day_name='Friday')
+            DayOfWeek.objects.create(day_name='Saturday')
+            DayOfWeek.objects.create(day_name='Sunday')
+        
         days_data = data.pop('days', [])
 
         data['user'] = request.user.id
@@ -118,7 +129,6 @@ class WorkoutProgramViewSet(APIView):
 
             # Extract the "days" field as a list of day objects
             days_data = data.get('days', [])
-
             # Extract the day from the day name and create a list of days 
             days = [DayOfWeek.objects.get(day_name=day) for day in days_data]
             # Set the "days" field with the updated days
