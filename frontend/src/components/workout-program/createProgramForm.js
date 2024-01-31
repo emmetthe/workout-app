@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Grid, Box, Button, TextField, Typography, FormControlLabel, CircularProgress } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { createWorkout } from '../../slices/workoutThunk';
-import { clearErrors } from '../../slices/errorSlice';
 import { Alert, IconButton } from '@mui/material';
 import CloseIcon from '@material-ui/icons/Close';
 import Checkbox from '@mui/material/Checkbox';
@@ -54,13 +53,10 @@ const WorkoutProgramForm = ({ handleClose }) => {
   const [workoutName, setWorkoutName] = useState('');
   const [workoutDescription, setWorkoutDescription] = useState('');
   const [selectedDays, setSelectedDays] = useState([]);
-  const error = useSelector((state) => state.errors);
+  // const errors = useSelector((state) => state.errors);
+  const [error, setError] = useState('');
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    dispatch(clearErrors());
-  }, [dispatch]);
 
   const openLoader = () => {
     setLoading(true);
@@ -78,10 +74,14 @@ const WorkoutProgramForm = ({ handleClose }) => {
   };
 
   const createProgram = async () => {
-    openLoader();
-    dispatch(createWorkout(data, resetForm, handleClose)).then(() => {
-      closeLoader();
-    });
+    if (data.name.length <= 0) {
+      setError('You must have a name for the workout');
+    } else {
+      openLoader();
+      dispatch(createWorkout(data, resetForm, handleClose)).then(() => {
+        closeLoader();
+      });
+    }
   };
 
   const resetForm = () => {
@@ -118,6 +118,7 @@ const WorkoutProgramForm = ({ handleClose }) => {
             fullWidth
             style={{ marginBottom: 10 }}
             disabled={loading}
+            required={true}
           />
           <TextField
             label="Workout Description"
