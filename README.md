@@ -1,5 +1,7 @@
 # Workout Tracker
 Workout Tracker is a comprehensive workout tracking application designed for individuals of all fitness levels, aiming to assist users in achieving their fitness goals effectively. With an extensive database comprising over 300 diverse exercises, the app empowers users to create, edit, and personalize their workout routines. Each exercise entry includes instructional videos to ensure users perform them with the correct form and technique.
+   
+Check out the project [here](https://workout-app-fe.onrender.com/)
 
 # Technologies Used
 1. Django
@@ -7,8 +9,6 @@ Workout Tracker is a comprehensive workout tracking application designed for ind
 3. Redux
 4. MaterialUI
    
-Check out the project [here](https://workout-app-fe.onrender.com/)
-
 # Features
 1. Basic User Authentication: Sign up, log in, and edit your profile securely.
 2. Workout Program Management: Create, delete, and update your workout programs according to your preferences.
@@ -18,8 +18,8 @@ Check out the project [here](https://workout-app-fe.onrender.com/)
 # Getting Started
 To get started with Workout Tracker, follow these steps:
 
-# Visit the Workout Tracker website.
-Sign up for an account or log in if you already have one.
-Start creating your personalized workout routines by selecting exercises from the extensive database.
-Utilize the search and filter options to find exercises that match your fitness goals and preferences.
-Track your progress and stay motivated on your fitness journey!
+1. Visit the Workout Tracker website.
+2. Sign up for an account or log in if you already have one.
+3. Start creating your personalized workout routines by selecting exercises from the extensive database.
+4. Utilize the search and filter options to find exercises that match your fitness goals and preferences.
+5. Track your progress and stay motivated on your fitness journey!
