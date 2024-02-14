@@ -6,7 +6,6 @@ import ExerciseList from './exerciseList';
 import Autocomplete from '@mui/material/Autocomplete';
 import Papa from 'papaparse';
 import { convertToObject } from '../../utils/convertToObject';
-import axiosInstance from '../../utils/axiosInstance';
 
 const ExerciseHome = () => {
   // State variables
@@ -30,7 +29,7 @@ const ExerciseHome = () => {
         // const response = await axiosInstance.get(`/static/workout-data1.csv`);
         // const parsedData = Papa.parse(response.data, { header: true }).data;
 
-        const response = await fetch('data/workout-data1.csv');;
+        const response = await fetch('data/workout-data1.csv');
         const csvData = await response.text();
         const parsedData = Papa.parse(csvData, { header: true }).data;
 
@@ -129,7 +128,7 @@ const ExerciseHome = () => {
   );
 
   return (
-    <Container>
+    <Container sx={{ marginTop: '50px' }}>
       {/* filters */}
       <ExerciseFilter
         muscles={{

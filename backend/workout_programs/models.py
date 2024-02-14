@@ -4,9 +4,29 @@ from django.contrib.auth.models import User
 class DayOfWeek(models.Model):
     day_name = models.CharField(max_length=15)
 
+    def save(self, *args, **kwargs):
+        # Hardcoding values for the days of the week
+        if self.day_name.lower() == 'monday':
+            self.id = 1
+        elif self.day_name.lower() == 'tuesday':
+            self.id = 2
+        elif self.day_name.lower() == 'wednesday':
+            self.id = 3
+        elif self.day_name.lower() == 'thursday':
+            self.id = 4
+        elif self.day_name.lower() == 'friday':
+            self.id = 5
+        elif self.day_name.lower() == 'saturday':
+            self.id = 6
+        elif self.day_name.lower() == 'sunday':
+            self.id = 7
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.day_name
     
+        
 class SetInExercise(models.Model):
     set_number = models.PositiveIntegerField()
     reps = models.PositiveIntegerField()

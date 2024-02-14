@@ -56,7 +56,7 @@ const styles = {
   },
   backButton: {
     position: 'absolute',
-    left: '75px',
+    left: '75px'
   }
 };
 
@@ -68,6 +68,8 @@ const ProgramPage = () => {
   // Update redux store after successfully making updates to individual exercises
   const workout = useSelector((state) => state.programs.workouts.find((exercise) => exercise.id === currentState.id));
   const { id, name, description, days, exercises } = workout;
+  const copyDays = [...days];
+  const sortedDays = copyDays.sort((a, b) => a.id - b.id);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
 
   const classes = useStyles();
@@ -129,7 +131,7 @@ const ProgramPage = () => {
             <Typography style={styles.descriptionStyle}>{description}</Typography>
             <Typography style={styles.titleStyle}>Days</Typography>
             <List>
-              {days.map((day, idx) => (
+              {sortedDays.map((day, idx) => (
                 <ListItem key={idx}>
                   <ListItemText primary={day.dayName} />
                 </ListItem>

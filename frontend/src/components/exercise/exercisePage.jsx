@@ -57,7 +57,7 @@ const ExercisePage = () => {
   };
 
   return (
-    <Grid container direction="column" alignItems="center" spacing={2}>
+    <Grid container direction="column" spacing={2} style={{ marginTop: '50px', alignItems: 'center' }}>
       <Grid item>
         <Button variant="contained" color="primary" onClick={openModal}>
           Add to Workout Program

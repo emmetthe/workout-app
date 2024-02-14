@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Grid, Button, TextField, Typography, FormControlLabel } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { Grid, Box, Button, TextField, Typography, FormControlLabel, CircularProgress } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
 import { createWorkout } from '../../slices/workoutThunk';
-import { clearErrors } from '../../slices/errorSlice';
 import { Alert, IconButton } from '@mui/material';
 import CloseIcon from '@material-ui/icons/Close';
 import Checkbox from '@mui/material/Checkbox';
@@ -37,6 +36,14 @@ const useStyles = makeStyles({
     '&:hover': {
       backgroundColor: '#1565c0'
     }
+  },
+  parentFormContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  daysOfWeekContainer: {
+    alignItems: 'center'
   }
 });
 
@@ -46,12 +53,18 @@ const WorkoutProgramForm = ({ handleClose }) => {
   const [workoutName, setWorkoutName] = useState('');
   const [workoutDescription, setWorkoutDescription] = useState('');
   const [selectedDays, setSelectedDays] = useState([]);
-  const error = useSelector((state) => state.errors);
+  // const errors = useSelector((state) => state.errors);
+  const [error, setError] = useState('');
   const classes = useStyles();
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    dispatch(clearErrors());
-  }, [dispatch]);
+  const openLoader = () => {
+    setLoading(true);
+  };
+
+  const closeLoader = () => {
+    setLoading(false);
+  };
 
   const data = {
     name: workoutName,
@@ -61,7 +74,14 @@ const WorkoutProgramForm = ({ handleClose }) => {
   };
 
   const createProgram = async () => {
-    dispatch(createWorkout(data, resetForm, handleClose));
+    if (data.name.length <= 0) {
+      setError('You must have a name for the workout');
+    } else {
+      openLoader();
+      dispatch(createWorkout(data, resetForm, handleClose)).then(() => {
+        closeLoader();
+      });
+    }
   };
 
   const resetForm = () => {
@@ -83,48 +103,59 @@ const WorkoutProgramForm = ({ handleClose }) => {
         <CloseIcon />
       </IconButton>
 
-      <Grid container direction="column" className={classes.centeredContainer}>
+      <Box className={classes.parentFormContainer}>
         {error && <Alert severity="error">{error}</Alert>}
 
-        <TextField
-          label="Workout Name"
-          variant="outlined"
-          value={workoutName}
-          onChange={(e) => setWorkoutName(e.target.value)}
-          fullWidth
-          style={{ marginBottom: 10 }}
-        />
-        <TextField
-          label="Workout Description"
-          variant="outlined"
-          value={workoutDescription}
-          onChange={(e) => setWorkoutDescription(e.target.value)}
-          multiline
-          minRows={3}
-          fullWidth
-          style={{ marginBottom: 20 }}
-        />
+        {/* start spinner when calling createworkout api */}
+        {loading && <CircularProgress color="inherit" style={{ marginTop: '10px' }} />}
 
-        <Typography variant="subtitle1" style={{ marginBottom: 10 }}>
-          Days
-        </Typography>
+        <Grid container direction="column" className={classes.centeredContainer}>
+          <TextField
+            label="Workout Name"
+            variant="outlined"
+            value={workoutName}
+            onChange={(e) => setWorkoutName(e.target.value)}
+            fullWidth
+            style={{ marginBottom: 10 }}
+            disabled={loading}
+            required
+          />
+          <TextField
+            label="Workout Description"
+            variant="outlined"
+            value={workoutDescription}
+            onChange={(e) => setWorkoutDescription(e.target.value)}
+            multiline
+            minRows={3}
+            fullWidth
+            style={{ marginBottom: 20 }}
+            disabled={loading}
+          />
 
-        <Grid container direction="column">
-          {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
-            <FormControlLabel
-              key={day}
-              control={<Checkbox checked={selectedDays.includes(day)} onChange={() => handleDayChange(day)} />}
-              label={day}
-              labelPlacement="start"
-              className={classes.centeredLabel}
-            />
-          ))}
+          <Typography variant="subtitle1" style={{ marginBottom: 10 }}>
+            Days
+          </Typography>
+
+          <Grid className={classes.daysOfWeekContainer}>
+            <Grid container direction="column">
+              {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
+                <FormControlLabel
+                  key={day}
+                  control={<Checkbox checked={selectedDays.includes(day)} onChange={() => handleDayChange(day)} />}
+                  label={day}
+                  labelPlacement="start"
+                  className={classes.centeredLabel}
+                  disabled={loading}
+                />
+              ))}
+            </Grid>
+          </Grid>
+
+          <Button variant="contained" onClick={createProgram} className={classes.createButton} disabled={loading}>
+            Create workout
+          </Button>
         </Grid>
-
-        <Button variant="contained" onClick={createProgram} className={classes.createButton}>
-          Create workout
-        </Button>
-      </Grid>
+      </Box>
     </Grid>
   );
 };

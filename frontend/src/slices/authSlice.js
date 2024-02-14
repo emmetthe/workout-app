@@ -62,7 +62,6 @@ export const checkAuthenticatedAsync = () => async (dispatch) => {
 /**
  * POST '/users/is_authenticated'
  * - Creates POST request to allow user sign in
- * @requires CSRFToken, User Authenticated
  * @params username, password
  * @returns none
  */
@@ -92,7 +91,6 @@ export const loginAsync = (username, password) => async (dispatch) => {
 /**
  * POST '/users/logout'
  * - Creates POST request to sign out user
- * @requires CSRFToken, User Authenticated
  */
 export const logoutAsync = () => async (dispatch) => {
   try {
@@ -110,7 +108,6 @@ export const logoutAsync = () => async (dispatch) => {
 /**
  * POST '/users/signup/'
  * - Creates POST request to register user
- * @requires CSRFToken
  * @params username, password, confirm password
  * @returns none
  */
@@ -137,7 +134,6 @@ export const signUpAsync = (username, password, re_password) => async (dispatch)
 /**
  * DEL '/accounts/delete/'
  * - Permanently removes current user's account
- * @requires CSRFToken
  */
 export const delAccountAsync = () => async (dispatch) => {
   try {
