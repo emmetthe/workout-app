@@ -6,7 +6,7 @@ import errorReducer from '../slices/errorSlice';
 import storage from 'redux-persist/lib/storage';
 import { combineReducers } from 'redux';
 import workoutReducer from '../slices/workoutSlice';
-import snackbarReducer from '../slices/snackbarSlice'
+import snackbarReducer from '../slices/snackbarSlice';
 
 const persistConfig = {
   key: 'main-root',
@@ -16,21 +16,34 @@ const reducers = combineReducers({
   auth: authReducer,
   errors: errorReducer,
   programs: workoutReducer,
-  snackbar: snackbarReducer,
+  snackbar: snackbarReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);
 
-export const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
-      }
-    }).concat(logger)
-});
-
+let storeSettings
+if (process.env.REACT_APP_NODE_ENV) {
+  storeSettings = configureStore({
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+        }
+      }).concat(logger)
+  });
+} else {
+  storeSettings = configureStore({
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+        }
+      })
+  });
+}
+export const store = storeSettings
 const Persistor = persistStore(store);
 
 export { Persistor };
