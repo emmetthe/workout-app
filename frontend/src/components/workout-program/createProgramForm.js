@@ -118,7 +118,7 @@ const WorkoutProgramForm = ({ handleClose }) => {
             fullWidth
             style={{ marginBottom: 10 }}
             disabled={loading}
-            required={true}
+            required
           />
           <TextField
             label="Workout Description"

@@ -9,7 +9,8 @@ import WorkoutProgram from '../workout-program/workoutProgram';
 
 const styles = {
   container: {
-    padding: '20px'
+    padding: '20px',
+    marginTop: '50px'
   },
   header: {
     marginBottom: '20px'

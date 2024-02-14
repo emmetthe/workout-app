@@ -34,7 +34,7 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ marginBottom: '50px' }}>
+    <AppBar position="static">
       <Toolbar>
         <nav>
           <ul style={listStyle}>

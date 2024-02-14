@@ -1,44 +1,63 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// import { useSelector } from 'react-redux';
-import { Button, Grid, Typography } from '@mui/material';
+import { Box, Button, Grid, Typography, Card } from '@mui/material';
+import { makeStyles } from '@material-ui/core/styles';
+import FeaturesInformation from './sections/Features';
+import ExerciseFeature from './sections/ExerciseFeature';
+
+const useStyles = makeStyles((theme) => ({
+  rootContainer: {
+    minHeight: '100vh'
+  },
+  header: {
+    height: '60vh',
+    width: '100%',
+    backgroundImage: `url(${'/images/workout.jpg'})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    color: 'white',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    [theme.breakpoints.down('sm')]: {
+      height: '40vh'
+    }
+  }
+}));
 
 const Home = () => {
-  const workoutImage = '/images/workout.png';
-  const squatImage = '/images/squat.png';
-  const chartImage = '/images/chart.png';
-  const scheudleImage = '/images/schedule.png';
-  // const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const classes = useStyles();
 
   return (
-    <Grid className="container">
-      <Typography variant="body1" paragraph>
-        Your Fitness Journey Starts Here
-      </Typography>
+    <Grid className={classes.rootContainer}>
+      <Box className={classes.header}>
+        <Typography sx={{ fontSize: { xs: '2em', sm: '2.5em', md: '4em', lg: '5em' } }} paragraph>
+          Your Fitness Journey Starts Here
+        </Typography>
 
-      <Typography variant="body1" paragraph>
-        A simple fitness experience for everyone
-      </Typography>
+        <Typography sx={{ fontSize: { xs: '1em', sm: '1.5em', md: '2rem', lg: '2.5em' } }} paragraph>
+          A simple fitness experience for everyone
+        </Typography>
 
-      <img src={workoutImage} alt="Workout" style={{ width: '100%', height: 'auto', maxWidth: '1000px', margin: '20px 0' }} />
-      <Button variant="contained" component={Link} to="/register">
-        Get Started
-      </Button>
+        <Button variant="contained" component={Link} to="/register">
+          Get Started
+        </Button>
+      </Box>
 
-      <img src={squatImage} alt="Workout" style={{ width: '100%', height: 'auto', maxWidth: '400px', margin: '20px 0' }} />
-      <Typography variant="body1" paragraph>
-        300+ Exercises to choose from
-      </Typography>
-
-      <img src={chartImage} alt="Workout" style={{ width: '100%', height: 'auto', maxWidth: '400px', margin: '20px 0' }} />
-      <Typography variant="body1" paragraph>
-        Track your progress
-      </Typography>
-
-      <img src={scheudleImage} alt="Workout" style={{ width: '100%', height: 'auto', maxWidth: '500px', margin: '20px 0' }} />
-      <Typography variant="body1" paragraph>
-        Create your own programs
-      </Typography>
+      <Card
+        sx={{
+          p: 2,
+          mx: { xs: 0, sm: 3, md: 3, lg: 3 },
+          mt: { xs: 0, sm: -7, md: -7, lg: -7 }
+        }}
+      >
+        {/* app features */}
+        <FeaturesInformation />
+        <ExerciseFeature />
+      </Card>
     </Grid>
   );
 };
