@@ -241,7 +241,7 @@ const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedPr
           {/* only show button when at least one set is created */}
           {exerciseSets.length > 0 && !addingSet && (
             <Button variant="contained" color="primary" onClick={handleAddExercise} style={styles.addButton}>
-              Add Sets To Program
+              Add Exercise To Program
             </Button>
           )}
         </>
