@@ -7,7 +7,7 @@ Workout Tracker is a comprehensive workout tracking application designed for ind
 3. Redux
 4. MaterialUI
    
-Check out the project [here]([https://www.google.com](https://workout-app-fe.onrender.com/))
+Check out the project [here](https://workout-app-fe.onrender.com/)
 Workout Tracker
 
 # Features
