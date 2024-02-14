@@ -8,7 +8,6 @@ Workout Tracker is a comprehensive workout tracking application designed for ind
 4. MaterialUI
    
 Check out the project [here](https://workout-app-fe.onrender.com/)
-Workout Tracker
 
 # Features
 1. Basic User Authentication: Sign up, log in, and edit your profile securely.
