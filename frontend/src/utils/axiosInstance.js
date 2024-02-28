@@ -45,7 +45,9 @@ const refreshAccessToken = async () => {
   } catch (error) {
     // Handle refresh token expiration or other errors
     console.error('Error refreshing access token:', error);
-    // Redirect user to login page or handle another way
+    // Remove tokens and force user to signout
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('token');
   }
 };
 

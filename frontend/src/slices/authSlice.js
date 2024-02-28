@@ -95,7 +95,7 @@ export const loginAsync = (username, password) => async (dispatch) => {
 export const logoutAsync = () => async (dispatch) => {
   try {
     const refreshToken = localStorage.getItem('refresh_token');
-
+    
     await axiosInstance.post(`/users/logout/`, { refresh: refreshToken });
     dispatch(logout());
     localStorage.removeItem('refresh_token');
