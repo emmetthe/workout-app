@@ -1,16 +1,14 @@
-from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from rest_framework.views import APIView
 from rest_framework import permissions
 from user_profiles.models import UserProfile
 from django.contrib.auth.models import User
 from rest_framework.response import Response
-from django.utils.decorators import method_decorator
 from django.contrib import auth
 from .serializers import UserSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import AllowAny
 
 
-# @method_decorator(csrf_protect, name='dispatch')
 class LoginView(APIView):
     permission_classes = (permissions.AllowAny,)
 
@@ -35,12 +33,11 @@ class LoginView(APIView):
             return Response({'error': 'Something went wrong when logging in'})
 
 
-# @method_decorator(csrf_protect, name='dispatch')
 class LogoutView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request, format=None):
         try:
             refresh_token = request.data.get('refresh')  # Get the refresh token from the request data
-
             if refresh_token:
                 # Blacklist the refresh token
                 refresh_token_instance = RefreshToken(refresh_token)
@@ -65,7 +62,6 @@ class CheckAuthenticatedView(APIView):
             return Response({'isAuthenticated': 'error'})
 
 
-# @method_decorator(csrf_protect, name='dispatch')
 class SignUpView(APIView):
     """
     using postman inside headers you need to add

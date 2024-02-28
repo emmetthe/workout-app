@@ -1,9 +1,9 @@
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 // Create an Axios instance with a request interceptor
 const axiosInstance = axios.create({
-  baseURL: `${process.env.REACT_APP_API_URL}`,
+  baseURL: `${process.env.REACT_APP_API_URL}`
 });
 
 axiosInstance.interceptors.request.use(
@@ -45,7 +45,7 @@ const refreshAccessToken = async () => {
   } catch (error) {
     // Handle refresh token expiration or other errors
     console.error('Error refreshing access token:', error);
-    // Redirect user to login page or handle the way you prefer
+    // Redirect user to login page or handle another way
   }
 };
 

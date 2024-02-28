@@ -47,9 +47,8 @@ const WorkoutProgram = () => {
 
   const closeModal = () => {
     setModalOpen(false);
-    dispatch(clearErrors())
+    dispatch(clearErrors());
   };
-
   useEffect(() => {
     dispatch(fetchWorkouts());
   }, [dispatch, modalOpen]);

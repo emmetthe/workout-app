@@ -1,6 +1,7 @@
 import { setWorkouts, setSelectedWorkout, addWorkout, updateWorkouts } from './workoutSlice';
 import { clearErrors, receiveErrors } from './errorSlice';
 import axiosInstance from '../utils/axiosInstance';
+import { logoutAsync } from './authSlice';
 
 const API_BASE_URL = 'workout_program';
 
@@ -9,7 +10,9 @@ export const fetchWorkouts = () => async (dispatch) => {
     const response = await axiosInstance.get(`/${API_BASE_URL}/workouts/`);
     dispatch(setWorkouts(response.data));
   } catch (error) {
+    // sign out if refresh token expires
     dispatch(receiveErrors(error.message));
+    dispatch(logoutAsync());
   }
 };
 
@@ -42,7 +45,6 @@ export const createWorkout = (workoutData, resetForm, handleClose) => async (dis
 };
 
 export const deleteWorkout = (id) => async (dispatch) => {
-
   try {
     await axiosInstance.delete(`/${API_BASE_URL}/delete/${id}/`);
   } catch (error) {
@@ -67,7 +69,6 @@ export const updateWorkout = (workoutData, programId, updatingExercise) => async
 };
 
 export const removeExercise = (programId, ExerciseInProgramId) => async (dispatch) => {
-
   try {
     await axiosInstance.delete(`/${API_BASE_URL}/delete_exercise/${programId}/${ExerciseInProgramId}/`);
     dispatch(fetchWorkouts());
