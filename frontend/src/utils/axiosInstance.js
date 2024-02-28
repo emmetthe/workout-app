@@ -44,7 +44,7 @@ const refreshAccessToken = async () => {
     axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
   } catch (error) {
     // Handle refresh token expiration or other errors
-    console.error('Error refreshing access token:', error);
+    // console.error('Error refreshing access token:', error);
     // Remove tokens and force user to signout
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('token');

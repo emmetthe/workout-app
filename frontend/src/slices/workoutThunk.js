@@ -11,7 +11,6 @@ export const fetchWorkouts = () => async (dispatch) => {
     dispatch(setWorkouts(response.data));
   } catch (error) {
     // sign out if refresh token expires
-    console.log('axios error')
     dispatch(receiveErrors(error.message));
     dispatch(logoutAsync());
   }
