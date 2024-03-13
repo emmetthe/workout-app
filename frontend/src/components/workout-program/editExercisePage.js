@@ -21,6 +21,9 @@ const useStyles = makeStyles({
 });
 
 const styles = {
+  editExPageContainer: {
+    marginTop: '50px'
+  },
   headerStyling: {
     borderBottom: '1px solid #ccc'
   },
@@ -113,7 +116,7 @@ const EditExercisePage = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" style={styles.editExPageContainer}>
       <Typography variant="h4" gutterBottom style={styles.headerStyling}>
         Edit Sets
       </Typography>
@@ -121,7 +124,7 @@ const EditExercisePage = () => {
       <Grid style={styles.titleStyling}>
         <Typography variant="h5">{exercise.exercise.exerciseName}</Typography>
 
-        <Button variant="contained" color="primary" style={styles.buttonWidth} onClick={handleAddSetClick}>
+        <Button variant="contained" color="primary" style={styles.updateButton} onClick={handleAddSetClick}>
           Add Set
         </Button>
       </Grid>

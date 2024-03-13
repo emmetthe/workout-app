@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Button, TextField, InputAdornment, Box } from '@mui/material';
+import { Grid, Button, TextField, InputAdornment, Box, Card, CardContent, Alert } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { Typography, IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
@@ -9,32 +9,41 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles({
   closeButton: {
     position: 'absolute',
-    right: '2px',
-    top: '2px',
+    right: '10px',
+    top: '12px',
     padding: '7px',
     color: 'gray',
     '&:hover': {
-      backgroundColor: '#EDEDED'
+      backgroundColor: '#F5F5F5'
     }
   },
   errorContainer: {
     marginBottom: '16px',
     textAlign: 'center'
+  },
+  setCard: {
+    marginBottom: '5px', // Add spacing between sets
+    border: '1px solid #E0E0E0', // Border to distinguish sets
+    borderRadius: '5px', // Rounded corners for the card
+    marginTop: '10px'
+  },
+  setTypography: {
+    marginBottom: '1px' // Spacing between set details
   }
 });
 
 const styles = {
   backButton: {
-    marginLeft: '5px',
+    marginLeft: '15px',
     position: 'absolute',
-    left: '5px',
-    top: '10px'
+    left: '15px',
+    top: '20px'
   },
   title: {
     fontSize: '24px',
-    marginBottom: '15px',
     textAlign: 'center',
-    marginTop: '20px'
+    marginTop: '20px',
+    marginBottom: '10px'
   },
   label: {
     fontSize: '16px',
@@ -44,7 +53,8 @@ const styles = {
     marginBottom: '16px'
   },
   addButton: {
-    marginTop: '20px'
+    marginTop: '20px',
+    width: '100%'
   },
   programNameContainer: {
     display: 'flex',
@@ -73,6 +83,16 @@ const styles = {
     },
     marginTop: '20px',
     marginLeft: '20px'
+  },
+  exerciseSubtitle: {
+    marginTop: '15px',
+    marginBottom: '10px'
+  },
+  errorStyling: {
+    width: '100%'
+  },
+  createSetBtn: {
+    marginTop: '20px'
   }
 };
 
@@ -97,7 +117,20 @@ const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedPr
       category: exercise.Category
       // Add more fields as needed
     };
-    handleAddToProgram(exerciseData, selectedProgram.id);
+
+    // check to see if exercise already in program
+    const checkExerciseInProgram = () => {
+      const { exercises } = selectedProgram;
+      const res = exercises.some((ex) => ex.exercise.id === exercise.id);
+      return res;
+    };
+
+    // display error if current exercise already in selected program
+    if (checkExerciseInProgram()) {
+      setFormError('Exercise Already In Selected Program');
+    } else {
+      handleAddToProgram(exerciseData, selectedProgram.id);
+    }
   };
 
   const handleGoBack = () => {
@@ -112,6 +145,7 @@ const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedPr
   };
 
   const handleShowForm = () => {
+    setFormError('');
     setShowForm(true);
     setAddingSet(true);
   };
@@ -144,6 +178,8 @@ const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedPr
     setAddingSet(false);
   };
 
+  const totalReps = exerciseSets.reduce((total, set) => total + set.reps, 0);
+
   return (
     <Grid>
       <IconButton className={classes.closeButton} variant="contained" onClick={handleClose}>
@@ -165,10 +201,17 @@ const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedPr
         // Display exercise form when a program is selected
         <>
           <Grid style={styles.programNameContainer}>
-            <Button style={styles.backButton} onClick={handleGoBack}>
+            <Button style={styles.backButton} variant="outlined" onClick={handleGoBack}>
               Change Program
             </Button>
-            <Typography style={styles.title}>{selectedProgram.name}</Typography>
+            <Box>
+              <Typography style={styles.title}>{selectedProgram.name}</Typography>
+              {formError.length > 0 && (
+                <Alert severity="error" sx={styles.errorStyling}>
+                  {formError}
+                </Alert>
+              )}
+            </Box>
           </Grid>
           {showForm ? (
             <>
@@ -207,8 +250,8 @@ const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedPr
                 }}
               />
               <Box display="flex" alignItems="center">
-                <Button variant="contained" color="primary" onClick={handleAddSet} style={styles.addButton}>
-                  Add Set
+                <Button variant="contained" color="primary" onClick={handleAddSet} style={styles.createSetBtn}>
+                  Create Set
                 </Button>
 
                 {exerciseSets.length > 0 && (
@@ -219,29 +262,27 @@ const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedPr
               </Box>
             </>
           ) : (
-            <Button variant="contained" color="primary" onClick={handleShowForm} style={styles.addButton}>
-              Create New Set
-            </Button>
-          )}
-
-          <Typography variant="subtitle1">Current Sets:</Typography>
-          {/* Display the added sets */}
-          {exerciseSets.length > 0 && (
-            <div>
-              <ul>
-                {exerciseSets.map((set, index) => (
-                  <li key={index}>
-                    Set: {index + 1}, Reps: {set.reps}, Weight: {set.weight} lbs
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <Box>
+              {/* Display the added sets */}
+              {exerciseSets.length > 0 && (
+                <Card className={classes.setCard}>
+                  <CardContent>
+                    <Typography variant="subtitle1">{exercise.exercise_name}:</Typography>
+                    <Typography className={classes.setTypography}> Total Sets: {exerciseSets.length}</Typography>
+                    <Typography className={classes.setTypography}>Total Reps: {totalReps}</Typography>
+                  </CardContent>
+                </Card>
+              )}
+              <Button variant="contained" color="primary" onClick={handleShowForm} style={styles.addButton}>
+                Create New Set
+              </Button>
+            </Box>
           )}
 
           {/* only show button when at least one set is created */}
           {exerciseSets.length > 0 && !addingSet && (
             <Button variant="contained" color="primary" onClick={handleAddExercise} style={styles.addButton}>
-              Add Exercise To Program
+              Add To Program
             </Button>
           )}
         </>

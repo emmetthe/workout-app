@@ -11,12 +11,12 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles({
   closeButton: {
     position: 'absolute',
-    left: '20px',
-    bottom: '20px',
+    left: '30px',
+    bottom: '30px',
     backgroundColor: '#F5F5F5',
     color: 'gray',
     '&:hover': {
-      backgroundColor: '#EDEDED'
+      backgroundColor: '#F8F8F8'
     }
   },
   centeredContainer: {

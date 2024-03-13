@@ -8,9 +8,9 @@ const ModalStyles = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 3
+  boxShadow: 20,
+  p: 5,
+  borderRadius: '5px',
 };
 
 export default function ModalForm({ componentForm, modalState, handleClose }) {

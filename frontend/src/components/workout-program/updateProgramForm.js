@@ -10,7 +10,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     [theme.breakpoints.up('sm')]: {
       maxWidth: '400px',
-      margin: '0 auto'
+      margin: '0 auto',
+      marginTop: '50px'
     }
   },
   inputField: {

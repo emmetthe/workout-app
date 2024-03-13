@@ -27,7 +27,8 @@ const styles = {
   cardStyle: {
     padding: '16px',
     marginBottom: '16px',
-    width: '100%'
+    width: '100%',
+    marginTop: '20px'
   },
   headerStyle: {
     textAlign: 'center',

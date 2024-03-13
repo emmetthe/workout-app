@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, TextField, InputAdornment, Box, CircularProgress, Backdrop } from '@mui/material';
 import CloseIcon from '@material-ui/icons/Close';
-import { CloseButtonStyle, UpdateFormTextField, UpdateFormWeight, UpdateProfileMainStyle } from './profileFormStyle';
+import { CloseButtonStyle, UpdateFormTextField, UpdateFormWeight, UpdateProfileMainStyle, UpdateFormStyle } from './profileFormStyle';
 
 const UpdateProfileForm = ({ handleSubmit, handleClose, backDropStatus }) => {
   const { firstName, lastName, bodyWeight, bodyWtInLbs } = useSelector((state) => state.auth.profile);
@@ -42,7 +42,7 @@ const UpdateProfileForm = ({ handleSubmit, handleClose, backDropStatus }) => {
           </Backdrop>
         )}
 
-        <Box>
+        <Box sx={UpdateFormStyle}>
           <TextField
             id="outlined-helperText"
             label="First Name"
