@@ -64,17 +64,16 @@ class CheckAuthenticatedView(APIView):
 
 class SignUpView(APIView):
     """
-    using postman inside headers you need to add
-    X-CSRFToken : your csrf token
-    and
-    Content-Type : application/json
+    POST /signup/
+    
+    username (string, required): The username for the new account.
+    password (string, required): The password for the new account.
+    re_password (string, required): Re-entered password to confirm.
 
-    and inside body raw
-        {
-        "username": "your_username",
-        "password": "pass",
-        "re_password": "pass"
-        }
+    Success Response:
+
+    Status Code: 200 OK
+    Content: {'success': 'User created successfully'}
     """
     permission_classes = (permissions.AllowAny,)
 

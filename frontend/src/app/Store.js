@@ -7,6 +7,7 @@ import storage from 'redux-persist/lib/storage';
 import { combineReducers } from 'redux';
 import workoutReducer from '../slices/workoutSlice';
 import snackbarReducer from '../slices/snackbarSlice';
+import tokenReducer from '../slices/tokenSlice';
 
 const persistConfig = {
   key: 'main-root',
@@ -16,7 +17,8 @@ const reducers = combineReducers({
   auth: authReducer,
   errors: errorReducer,
   programs: workoutReducer,
-  snackbar: snackbarReducer
+  snackbar: snackbarReducer,
+  token: tokenReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

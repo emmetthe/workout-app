@@ -4,7 +4,9 @@ import { Button, Grid, Typography } from '@material-ui/core';
 import { updateWorkout } from '../../slices/workoutThunk';
 import AddExerciseForm from './addExerciseForm';
 import ModalForm from '../modal/modal';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { openSnackbar } from '../../slices/snackbarSlice';
+import CustomSnackbar from '../snackbar/snackbar';
 
 const ExercisePage = () => {
   const location = useLocation();
@@ -15,6 +17,11 @@ const ExercisePage = () => {
   const targetMuscles = [...(Primary || []), ...(Secondary || [])];
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState(null);
+
+  // snackbar state
+  const snackbarOpen = useSelector((state) => state.snackbar.open);
+  const snackbarMessage = useSelector((state) => state.snackbar.message);
+  const snackbarSeverity = useSelector((state) => state.snackbar.severity);
 
   // create refs object to store video refs
   const videoRefs = useRef({});
@@ -40,6 +47,8 @@ const ExercisePage = () => {
     setSelectedProgram(null);
     // Close the modal after adding the exercise
     closeModal();
+    // add snackbar notification for users
+    dispatch(openSnackbar({ message: 'Exercise added to program', severity: 'success' }));
   };
 
   const openModal = () => {
@@ -130,6 +139,7 @@ const ExercisePage = () => {
           ))}
         </Grid>
       </Grid>
+      <CustomSnackbar open={snackbarOpen} message={snackbarMessage} severity={snackbarSeverity} />
     </Grid>
   );
 };
