@@ -1,7 +1,6 @@
 import { setWorkouts, setSelectedWorkout, addWorkout, updateWorkouts } from './workoutSlice';
 import { clearErrors, receiveErrors } from './errorSlice';
 import axiosInstance from '../utils/axiosInstance';
-import { logoutAsync } from './authSlice';
 
 const API_BASE_URL = 'workout_program';
 
@@ -10,9 +9,7 @@ export const fetchWorkouts = () => async (dispatch) => {
     const response = await axiosInstance.get(`/${API_BASE_URL}/workouts/`);
     dispatch(setWorkouts(response.data));
   } catch (error) {
-    // sign out if refresh token expires
-    dispatch(receiveErrors(error.message));
-    dispatch(logoutAsync());
+    // dispatch(receiveErrors(error.message));
   }
 };
 

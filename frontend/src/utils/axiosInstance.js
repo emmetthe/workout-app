@@ -1,10 +1,18 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import { logout } from '../slices/authSlice';
+import { tokenExpired } from '../slices/tokenSlice';
 
 // Create an Axios instance with a request interceptor
 const axiosInstance = axios.create({
   baseURL: `${process.env.REACT_APP_API_URL}`
 });
+
+let store
+
+export const injectStore = _store => {
+  store = _store
+}
 
 axiosInstance.interceptors.request.use(
   async (config) => {
@@ -45,9 +53,12 @@ const refreshAccessToken = async () => {
   } catch (error) {
     // Handle refresh token expiration or other errors
     // console.error('Error refreshing access token:', error);
+
     // Remove tokens and force user to signout
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('token');
+    store.dispatch(tokenExpired())
+    store.dispatch(logout())
   }
 };
 

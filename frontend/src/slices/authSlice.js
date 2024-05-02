@@ -2,6 +2,7 @@ import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { receiveErrors, clearErrors } from './errorSlice';
 import axiosInstance from '../utils/axiosInstance';
+import { tokenActive, tokenRemoved } from './tokenSlice';
 
 const initialState = {
   isAuthenticated: null,
@@ -80,6 +81,7 @@ export const loginAsync = (username, password) => async (dispatch) => {
       dispatch(clearErrors());
       dispatch(login(res.data));
       dispatch(LoadUserAsync());
+      dispatch(tokenActive())
     } else {
       dispatch(receiveErrors(res.data.error));
     }
@@ -94,12 +96,12 @@ export const loginAsync = (username, password) => async (dispatch) => {
  */
 export const logoutAsync = () => async (dispatch) => {
   try {
-    const refreshToken = localStorage.getItem('refresh_token');
-    
-    await axiosInstance.post(`/users/logout/`, { refresh: refreshToken });
-    dispatch(logout());
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('token');
+    const refreshToken = localStorage.getItem('refresh_token');
+    await axiosInstance.post(`/users/logout/`, { refresh: refreshToken });
+    dispatch(logout());
+    dispatch(tokenRemoved())
   } catch (err) {
     dispatch(receiveErrors(err.message));
   }
