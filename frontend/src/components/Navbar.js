@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logoutAsync } from '../slices/authSlice';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
+import { Button } from '@mui/material';
 
 const Navbar = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -14,42 +15,47 @@ const Navbar = () => {
   };
 
   const navLinkStyle = {
-    color: 'white',
     textDecoration: 'none',
-    marginRight: '16px'
+    marginRight: '16px',
+    marginLeft: '16px'
   };
 
   const buttonGroupStyle = {
     marginLeft: 'auto',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'flex-end'
   };
 
   const listStyle = {
-    listStyleType: 'none',
     display: 'flex',
     alignItems: 'center',
-    padding: '0',
-    margin: '0'
+    justifyContent: 'flex-start'
+  };
+
+  const appBarStyle = {
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    boxShadow: 'none'
   };
 
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <nav>
-          <ul style={listStyle}>
-            <li>
+    <AppBar position="static" sx={appBarStyle}>
+      <Toolbar sx={{ width: '73vw' }}>
+        <div>
+          <div style={listStyle}>
+            <div>
               <NavLink style={{ ...navLinkStyle }} exact to="/">
                 Home
               </NavLink>
-            </li>
-            <li>
+            </div>
+            <div>
               <NavLink style={navLinkStyle} exact to="/exercises">
                 Find Exercises
               </NavLink>
-            </li>
-          </ul>
-        </nav>
+            </div>
+          </div>
+        </div>
 
         <div style={buttonGroupStyle}>
           {isAuthenticated ? (
@@ -63,9 +69,11 @@ const Navbar = () => {
             </Fragment>
           ) : (
             <Fragment>
-              <NavLink style={{ ...navLinkStyle }} exact to="/login">
-                Login
-              </NavLink>
+              <Button variant='contained'>
+                <NavLink style={{ ...navLinkStyle }} exact to="/login">
+                  Login
+                </NavLink>
+              </Button>
 
               <NavLink style={navLinkStyle} exact to="/register">
                 Register

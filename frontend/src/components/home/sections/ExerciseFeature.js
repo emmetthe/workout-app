@@ -37,14 +37,6 @@ function ExerciseFeature() {
 
   return (
     <Grid container direction="column" alignItems="center">
-      <Typography variant="h4" align="center" style={{ maxWidth: '90vw' }}>
-        With over 300 exercises to explore, our app empowers you to discover new workouts to help reach your fitness goals
-      </Typography>
-
-      <Typography variant="h6" align="center" style={{ maxWidth: '90vw', marginBottom: '40px', marginTop: '10px' }}>
-        Each exercise comes with accompanying videos, ensuring you master proper form and technique every step of the way
-      </Typography>
-
       <Grid container direction="row" className={classes.centerSection} spacing={2}>
         <Grid item xs={12} sm={4}>
           <Grid container direction="column" alignItems="center">
