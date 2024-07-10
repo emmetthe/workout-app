@@ -69,7 +69,7 @@ const Navbar = () => {
             </Fragment>
           ) : (
             <Fragment>
-              <Button variant='contained'>
+              <Button variant="contained">
                 <NavLink style={{ ...navLinkStyle }} exact to="/login">
                   Login
                 </NavLink>

@@ -1,4 +1,4 @@
-import Home from './components/home/Home';
+// import Home from './components/home/Home';
 // import Register from './components/sessions/Register';
 // import Login from './components/sessions/Login';
 import Dashboard from './components/dashboard/Dashboard';
@@ -9,9 +9,9 @@ import ProgramPage from './components/workout-program/ProgramPage';
 import EditExercisePage from './components/workout-program/editExercisePage';
 import Login from './components/sessions/testLogin';
 import Register from './components/sessions/testRegister';
-
+import TestHome from './components/home/testHome'
 const routes = [
-  { path: '/', element: <Home /> },
+  { path: '/', element: <TestHome /> },
   { path: '/login', element: <Login /> },
   { path: '/register', element: <Register /> },
   { path: '/exercises', element: <ExerciseHome /> },

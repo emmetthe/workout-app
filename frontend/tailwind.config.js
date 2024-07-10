@@ -1,11 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    './src/**/*.{js,jsx,ts,tsx}',
-    './*.{js,jsx,ts,tsx}',
-    './app/**/*.{js,ts,jsx,tsx}',
-    './components/**/*.{js,ts,jsx,tsx}',
-  ],
+  content: ['./src/**/*.{js,jsx,ts,tsx}', './*.{js,jsx,ts,tsx}', './app/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class',
   theme: {
     container: {
@@ -33,6 +28,10 @@ module.exports = {
       // => @media (min-width: 1400px) { ... }
     },
     extend: {
+      backgroundImage: {
+        hero: "url('../public/images/workout.jpg')",
+        shape: "url('../public/images/shapes/shape.svg')"
+      },
       colors: {
         current: 'currentColor',
         transparent: 'transparent',
@@ -47,7 +46,7 @@ module.exports = {
         'gray-light': '#F0F2F9',
         stroke: '#E3E8EF',
         'stroke-dark': '#353943',
-        'dark-bg': '#171C28',
+        'dark-bg': '#171C28'
       },
 
       boxShadow: {
