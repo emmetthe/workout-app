@@ -1,40 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Typography, Button } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchWorkouts } from '../../slices/workoutThunk';
 import WorkoutProgramForm from './createProgramForm';
 import { Link } from 'react-router-dom';
 import ModalForm from '../modal/modal';
 import { clearErrors } from '../../slices/errorSlice';
-
-const styles = {
-  container: {
-    textAlign: 'center',
-    padding: '20px'
-  },
-  header: {
-    marginBottom: '20px'
-  },
-  addButton: {
-    marginBottom: '20px'
-  },
-  noWorkouts: {
-    margin: '20px'
-  },
-  workoutItem: {
-    marginBottom: '10px',
-    padding: '10px',
-    borderRadius: '5px',
-    textDecoration: 'none',
-    color: 'black',
-    transition: 'background-color 0.2s, color 0.2s',
-    '&:hover': {
-      backgroundColor: '#e0e0e0',
-      color: 'blue',
-      transform: 'scale(1.02)'
-    }
-  }
-};
 
 const WorkoutProgram = () => {
   const { workouts } = useSelector((state) => state.programs);
@@ -49,37 +19,40 @@ const WorkoutProgram = () => {
     setModalOpen(false);
     dispatch(clearErrors());
   };
+
   useEffect(() => {
     dispatch(fetchWorkouts());
   }, [dispatch, modalOpen]);
 
   return (
-    <Grid container direction="column" alignItems="center" style={styles.container}>
-      <Typography variant="h4" style={styles.header}>
-        Workout Program
-      </Typography>
+    <div className="text-center p-5">
+      <h4 className="mb-5 text-4xl font-semibold text-gray-100">Workout Program</h4>
 
-      <Button variant="contained" onClick={openModal} style={styles.addButton}>
+      <button className="mb-5 px-4 py-2 bg-primary text-white rounded hover:bg-opacity-80" onClick={openModal}>
         Create New Program
-      </Button>
+      </button>
+
       <ModalForm componentForm={<WorkoutProgramForm handleClose={closeModal} />} modalState={modalOpen} handleClose={closeModal} />
 
-      <Typography variant="h4">Your Current Workouts</Typography>
+      <h4 className="text-2xl font-semibold text-gray-100">Your Current Workouts</h4>
       {workouts.length === 0 ? (
-        <Typography variant="subtitle1" style={styles.noWorkouts}>
-          No exercises added to the program yet.
-        </Typography>
+        <p className="text-lg text-gray-100 mt-5">No exercises added to the program yet.</p>
       ) : (
-        <Grid container direction="column" alignItems="center">
+        <div className="flex flex-col items-center">
           {workouts.map((workout, index) => (
-            <Link key={index} state={workout} to={{ pathname: `/workouts/${workout.id}` }} style={styles.workoutItem}>
-              <Typography variant="h6">{workout.name}</Typography>
-              <Typography>{workout.description}</Typography>
+            <Link
+              key={index}
+              state={workout}
+              to={{ pathname: `/workouts/${workout.id}` }}
+              className="mb-2 p-2 rounded text-gray-light hover:text-gray-400"
+            >
+              <h6 className="text-xl font-semibold">{workout.name}</h6>
+              <p>{workout.description}</p>
             </Link>
           ))}
-        </Grid>
+        </div>
       )}
-    </Grid>
+    </div>
   );
 };
 

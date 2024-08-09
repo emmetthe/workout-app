@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, TextField, Container, CircularProgress } from '@mui/material';
 import ExerciseFilter from './exerciseFilter';
 import ExercisePagination from './exercisePagination';
 import ExerciseList from './exerciseList';
-import Autocomplete from '@mui/material/Autocomplete';
 import Papa from 'papaparse';
 import { convertToObject } from '../../utils/convertToObject';
+import Spinner from '../spinner/spinner';
+import { Link } from 'react-router-dom';
 
-const ExerciseHome = () => {
+const ExerciseIndex = () => {
   // State variables
   const [exercises, setExercises] = useState([]);
   const [filteredExercises, setFilteredExercises] = useState([]);
@@ -16,6 +16,15 @@ const ExerciseHome = () => {
   const [selectedMuscle, setSelectedMuscle] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [isFocused, setIsFocused] = useState(false);
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
 
   const exercisesPerPage = 9;
   const paginationRange = 5; // Show 5 page numbers at a time
@@ -78,8 +87,13 @@ const ExerciseHome = () => {
     setCurrentPage(1); // Reset page to 1 whenever the search query or selected muscle changes
   }, [searchQuery, selectedMuscle, selectedCategory, exercises]);
 
-  const handleSearchChange = (event, newValue) => {
-    setSearchQuery(newValue);
+  // search bar functions
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
   };
 
   const handleFilterChange = (event, val, filterType) => {
@@ -128,60 +142,83 @@ const ExerciseHome = () => {
   );
 
   return (
-    <Container sx={{ marginTop: '50px' }}>
-      {/* filters */}
-      <ExerciseFilter
-        muscles={{
-          all: muscleList,
-          selected: selectedMuscle
-        }}
-        categories={{
-          all: categoryList,
-          selected: selectedCategory
-        }}
-        onFilterChange={handleFilterChange}
-      />
+    <div className={`container mx-auto mt-12`}>
+      <div className={`${isFocused ? 'brightness-50 pointer-events-none' : ''}`}>
+        {/* filters */}
+        <ExerciseFilter
+          muscles={{
+            all: muscleList,
+            selected: selectedMuscle
+          }}
+          categories={{
+            all: categoryList,
+            selected: selectedCategory
+          }}
+          onFilterChange={handleFilterChange}
+        />
+      </div>
 
       {/* search bar */}
-      <Autocomplete
-        freeSolo
-        options={
-          filteredExercises.length > 0
-            ? filteredExercises.map((exercise) => exercise.exercise_name)
-            : exercises.map((exercise) => exercise.exercise_name)
-        }
-        value={searchQuery}
-        onChange={handleSearchChange}
-        renderInput={(params) => <TextField {...params} label="Search exercises" variant="outlined" fullWidth sx={{ marginBottom: 5 }} />}
-      />
+      <div onSubmit={handleFormSubmit} className="mb-5 mt-5 relative">
+        <input
+          type="text"
+          className="w-full p-2 border border-gray-300 rounded"
+          placeholder="Search exercises"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          list="exercise-options"
+          autoComplete="off"
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+        />
+
+        {/* dim background on input focus */}
+        {/* autocomplete for search bar */}
+        <div>
+          {searchQuery !== '' && (
+            <ul
+              id="exercise-options"
+              className="absolute left-0 right-0 max-h-40 bg-white overflow-y-scroll border border-gray-300 rounded mt-1
+              z-50
+              "
+            >
+              {(filteredExercises.length > 0 ? filteredExercises : exercises).map((exercise, index) => (
+                <Link state={exercise} to={`/exercise/${exercise.exercise_name.replaceAll(' ', '-')}`}>
+                  <li key={index} className="p-2 hover:bg-gray-200 cursor-pointer">
+                    {exercise.exercise_name}
+                  </li>
+                </Link>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
 
       {/* Circular Progress while fetching exercise data */}
       {isLoading ? (
-        <Grid style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
-          <CircularProgress />
-        </Grid>
+        <Spinner />
       ) : (
         <>
           {/* exercise list */}
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
+          <div className={`grid gap-4 ${isFocused ? 'brightness-50 pointer-events-none' : ''}`}>
+            <div className="col-span-12">
               <ExerciseList exercises={currentExercises} />
-            </Grid>
+            </div>
 
             {/* pagination controls */}
-            <Grid item xs={12}>
+            <div className="col-span-12">
               <ExercisePagination
                 currentPage={currentPage}
                 totalPages={totalPages}
                 pageNumbers={pageNumbers}
                 handlePageChange={setCurrentPage}
               />
-            </Grid>
-          </Grid>
+            </div>
+          </div>
         </>
       )}
-    </Container>
+    </div>
   );
 };
 
-export default ExerciseHome;
+export default ExerciseIndex;

@@ -1,55 +1,33 @@
 import React from 'react';
-import { Button } from '@mui/material';
-
-const paginationWrapperStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  marginTop: '16px'
-};
-
-const paginationButtonStyle = {
-  marginLeft: '2px',
-  marginRight: '2px',
-  minWidth: '80px'
-};
-
-const nextButtonStyle = {
-  marginLeft: '2px',
-  marginRight: '2px',
-  minWidth: '107px'
-};
 
 const ExercisePagination = ({ currentPage, totalPages, pageNumbers, handlePageChange }) => {
   return (
-    <div style={paginationWrapperStyle}>
-      <Button
-        variant="contained"
+    <div className="flex justify-center mt-4">
+      <button
+        className="mx-1 px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        style={paginationButtonStyle}
       >
         Previous
-      </Button>
+      </button>
 
       {pageNumbers.map((pageNumber) => (
-        <Button
+        <button
           key={pageNumber}
-          variant={currentPage === pageNumber ? 'contained' : 'outlined'}
+          className={`mx-1 px-4 py-2 rounded ${currentPage === pageNumber ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
           onClick={() => handlePageChange(pageNumber)}
-          style={paginationButtonStyle}
         >
           {pageNumber}
-        </Button>
+        </button>
       ))}
 
-      <Button
-        variant="contained"
+      <button
+        className="mx-1 px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        style={nextButtonStyle}
       >
         Next
-      </Button>
+      </button>
     </div>
   );
 };
