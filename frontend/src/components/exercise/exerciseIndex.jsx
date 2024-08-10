@@ -1,165 +1,71 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ExerciseFilter from './exerciseFilter';
 import ExercisePagination from './exercisePagination';
 import ExerciseList from './exerciseList';
-import Papa from 'papaparse';
-import { convertToObject } from '../../utils/convertToObject';
 import Spinner from '../spinner/spinner';
 import { Link } from 'react-router-dom';
+import { useFetchExercises } from './utility/fetchExercises';
+import { useExerciseFilter } from './utility/useExerciseFilter';
+import { usePagination } from './utility/usePagination';
 
 const ExerciseIndex = () => {
-  // State variables
-  const [exercises, setExercises] = useState([]);
-  const [filteredExercises, setFilteredExercises] = useState([]);
+  const { exercises, isLoading } = useFetchExercises();
   const [searchQuery, setSearchQuery] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
   const [selectedMuscle, setSelectedMuscle] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const { filteredExercises } = useExerciseFilter(exercises, searchQuery, selectedMuscle, selectedCategory);
+  const { currentPage, setCurrentPage, totalPages, pageNumbers, indexOfFirstExercise, indexOfLastExercise } = usePagination(
+    filteredExercises.length,
+    9,
+    5
+  );
+
   const [isFocused, setIsFocused] = useState(false);
 
-  const handleFocus = () => {
-    setIsFocused(true);
-  };
-
-  const handleBlur = () => {
-    setIsFocused(false);
-  };
-
-  const exercisesPerPage = 9;
-  const paginationRange = 5; // Show 5 page numbers at a time
-
-  // Fetch all exercises on component mount
-  useEffect(() => {
-    const fetchExercises = async () => {
-      try {
-        // Show the loading indicator while fetching data
-        setIsLoading(true);
-        // const response = await axiosInstance.get(`/static/workout-data1.csv`);
-        // const parsedData = Papa.parse(response.data, { header: true }).data;
-
-        const response = await fetch('data/workout-data1.csv');
-        const csvData = await response.text();
-        const parsedData = Papa.parse(csvData, { header: true }).data;
-
-        // remove double quotes wrapping nested arrays and objects
-        const convertedOutput = parsedData.map((data) => convertToObject(data));
-
-        // Filter out entries with undefined exercise_name
-        const exerciseObjects = convertedOutput.filter((exercise) => exercise.exercise_name);
-
-        // Sort exercises alphabetically by name
-        exerciseObjects.sort((a, b) => a.exercise_name.localeCompare(b.exercise_name));
-
-        // Remove duplicate exercises
-        const uniqueExerciseList = exerciseObjects.filter((v, i, a) => a.findIndex((v2) => v2.exercise_name === v.exercise_name) === i);
-
-        setExercises(uniqueExerciseList);
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Error fetching exercises:', error);
-        // Hide the loading indicator in case of an error
-        setIsLoading(false);
-      }
-    };
-    fetchExercises();
-  }, []);
-
-  // Filter exercises based on search query and selected muscle
-  useEffect(() => {
-    let filtered = exercises;
-
-    if (searchQuery) {
-      filtered = filtered.filter(
-        (exercise) => exercise.exercise_name && exercise.exercise_name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    if (selectedMuscle) {
-      filtered = filtered.filter((exercise) => exercise.target.Primary && exercise.target.Primary.includes(selectedMuscle));
-    }
-
-    if (selectedCategory) {
-      filtered = filtered.filter((exercise) => exercise.Category && exercise.Category === selectedCategory);
-    }
-
-    setFilteredExercises(filtered);
-    setCurrentPage(1); // Reset page to 1 whenever the search query or selected muscle changes
-  }, [searchQuery, selectedMuscle, selectedCategory, exercises]);
-
-  // search bar functions
-  const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
-  };
-
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-  };
-
+  const handleSearchChange = (event) => setSearchQuery(event.target.value);
   const handleFilterChange = (event, val, filterType) => {
     if (val === true) {
-      // Clear the filters
       setSelectedMuscle('');
       setSelectedCategory('');
     } else {
-      // Set the selected filters according to the filter type
       const newValue = event.target.value;
-      if (filterType === 'muscle') {
-        setSelectedMuscle(newValue);
-      } else if (filterType === 'category') {
-        setSelectedCategory(newValue);
-      }
+      if (filterType === 'muscle') setSelectedMuscle(newValue);
+      else if (filterType === 'category') setSelectedCategory(newValue);
     }
   };
 
-  // Pagination logic
-  const totalExercises = filteredExercises.length;
-  const totalPages = Math.ceil(totalExercises / exercisesPerPage);
-  const lastPageInRange = Math.min(currentPage + paginationRange - 1, totalPages);
-  const firstPageInRange = Math.max(lastPageInRange - paginationRange + 1, 1);
-  const pageNumbers = Array.from({ length: lastPageInRange - firstPageInRange + 1 }, (_, index) => firstPageInRange + index);
-  const indexOfLastExercise = currentPage * exercisesPerPage;
-  const indexOfFirstExercise = indexOfLastExercise - exercisesPerPage;
-  const currentExercises = filteredExercises.slice(indexOfFirstExercise, indexOfLastExercise);
+  const handleFocus = () => setIsFocused(true);
+  const handleBlur = () => setIsFocused(false);
 
-  // create unique list of muscle for filters
   const muscleList = Array.from(
     new Set(
       exercises
-        .filter((exercise) => exercise.target.Primary !== undefined)
+        .filter((exercise) => exercise.target.Primary)
         .map((exercise) => exercise.target.Primary)
         .flat()
     )
   );
-  // create unique list of categories for filters
   const categoryList = Array.from(
     new Set(
       exercises
-        .filter((exercise) => exercise.Category !== undefined)
+        .filter((exercise) => exercise.Category)
         .map((exercise) => exercise.Category)
         .flat()
     )
   );
+  const currentExercises = filteredExercises.slice(indexOfFirstExercise, indexOfLastExercise);
 
   return (
-    <div className={`container mx-auto mt-12`}>
+    <div className="container mx-auto mt-12">
       <div className={`${isFocused ? 'brightness-50 pointer-events-none' : ''}`}>
-        {/* filters */}
         <ExerciseFilter
-          muscles={{
-            all: muscleList,
-            selected: selectedMuscle
-          }}
-          categories={{
-            all: categoryList,
-            selected: selectedCategory
-          }}
+          muscles={{ all: muscleList, selected: selectedMuscle }}
+          categories={{ all: categoryList, selected: selectedCategory }}
           onFilterChange={handleFilterChange}
         />
       </div>
 
-      {/* search bar */}
-      <div onSubmit={handleFormSubmit} className="mb-5 mt-5 relative">
+      <div onSubmit={(e) => e.preventDefault()} className="mb-5 mt-5 relative">
         <input
           type="text"
           className="w-full p-2 border border-gray-300 rounded"
@@ -171,41 +77,28 @@ const ExerciseIndex = () => {
           onFocus={handleFocus}
           onBlur={handleBlur}
         />
-
-        {/* dim background on input focus */}
-        {/* autocomplete for search bar */}
-        <div>
-          {searchQuery !== '' && (
-            <ul
-              id="exercise-options"
-              className="absolute left-0 right-0 max-h-40 bg-white overflow-y-scroll border border-gray-300 rounded mt-1
-              z-50
-              "
-            >
-              {(filteredExercises.length > 0 ? filteredExercises : exercises).map((exercise, index) => (
-                <Link state={exercise} to={`/exercise/${exercise.exercise_name.replaceAll(' ', '-')}`}>
-                  <li key={index} className="p-2 hover:bg-gray-200 cursor-pointer">
-                    {exercise.exercise_name}
-                  </li>
-                </Link>
-              ))}
-            </ul>
-          )}
-        </div>
+        {isFocused && (
+          <ul
+            id="exercise-options"
+            className="absolute left-0 right-0 max-h-40 bg-white overflow-y-scroll border border-gray-300 rounded mt-1 z-50"
+          >
+            {(filteredExercises.length ? filteredExercises : exercises).map((exercise, index) => (
+              <Link state={exercise} to={`/exercise/${exercise.exercise_name.replaceAll(' ', '-')}`} key={index}>
+                <li className="p-2 hover:bg-gray-200 cursor-pointer">{exercise.exercise_name}</li>
+              </Link>
+            ))}
+          </ul>
+        )}
       </div>
 
-      {/* Circular Progress while fetching exercise data */}
       {isLoading ? (
         <Spinner />
       ) : (
         <>
-          {/* exercise list */}
           <div className={`grid gap-4 ${isFocused ? 'brightness-50 pointer-events-none' : ''}`}>
             <div className="col-span-12">
               <ExerciseList exercises={currentExercises} />
             </div>
-
-            {/* pagination controls */}
             <div className="col-span-12">
               <ExercisePagination
                 currentPage={currentPage}
