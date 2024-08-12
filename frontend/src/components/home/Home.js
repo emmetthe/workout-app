@@ -1,19 +1,20 @@
 import React from 'react';
-import { Grid } from '@mui/material';
-import Features from './sections/Features';
-import ExerciseFeature from './sections/ExerciseFeature';
-import Hero from './sections/Hero';
+import Hero from './hero/Hero';
+import Features from './features/features';
+// import Video from './video/video';
+import AboutSectionOne from './about/AboutSectionOne'
+import AboutSectionTwo from './about/AboutSectionTwo';
 
-const Home = () => {
+const TestHome = () => {
   return (
-    <Grid sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <>
       <Hero />
-
-      {/* app features */}
       <Features />
-      <ExerciseFeature />
-    </Grid>
+      {/* <Video /> */}
+      <AboutSectionOne />
+      <AboutSectionTwo />
+    </>
   );
 };
 
-export default Home;
+export default TestHome;

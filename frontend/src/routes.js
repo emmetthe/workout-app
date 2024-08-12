@@ -1,15 +1,12 @@
-// import Home from './components/home/Home';
-// import Register from './components/sessions/Register';
-// import Login from './components/sessions/Login';
 import Dashboard from './components/dashboard/Dashboard';
 import PrivateRoute from './hocs/PrivateRoute';
 import ExerciseIndex from './components/exercise/exerciseIndex';
 import ExercisePage from './components/exercise/exercisePage';
 import ProgramPage from './components/workout-program/ProgramPage';
 import EditExercisePage from './components/workout-program/editExercisePage';
-import Login from './components/sessions/testLogin';
-import Register from './components/sessions/testRegister';
-import TestHome from './components/home/testHome'
+import Login from './components/sessions/Login';
+import Register from './components/sessions/Register';
+import TestHome from './components/home/Home';
 const routes = [
   { path: '/', element: <TestHome /> },
   { path: '/login', element: <Login /> },
