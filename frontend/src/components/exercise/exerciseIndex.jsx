@@ -77,7 +77,7 @@ const ExerciseIndex = () => {
           onFocus={handleFocus}
           onBlur={handleBlur}
         />
-        {isFocused && (
+        {searchQuery !== "" && (
           <ul
             id="exercise-options"
             className="absolute left-0 right-0 max-h-40 bg-white overflow-y-scroll border border-gray-300 rounded mt-1 z-50"
