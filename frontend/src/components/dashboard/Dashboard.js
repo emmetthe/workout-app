@@ -5,6 +5,7 @@ import { UpdateProfileAsync } from '../../slices/authSlice';
 import ModalForm from '../modal/modal';
 import UpdateProfileForm from './updateProfileForm';
 import WorkoutProgram from '../workout-program/workoutProgram';
+import Spinner from '../spinner/spinner';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -38,15 +39,10 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col items-center p-5 mt-12">
       {loading ? (
-        <div className="flex justify-center items-center h-52">
-          <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        </div>
+        <Spinner />
       ) : (
         <>
-          <h4 className="mb-5 text-4xl font-semibold text-gray-100">Profile Page</h4>
-          <h1 className="mb-5 text-6xl font-bold text-gray-100">Welcome back, {profile.firstName}</h1>
+          <h1 className="mb-5 text-6xl text-gray-100">{profile.firstName} Profile</h1>
 
           <button className="mb-5 px-4 py-2 bg-primary text-white rounded hover:bg-opacity-80" onClick={openModal}>
             Update Profile

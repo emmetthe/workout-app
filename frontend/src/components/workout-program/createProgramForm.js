@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Grid, Box, Button, TextField, Typography, FormControlLabel, CircularProgress } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { createWorkout } from '../../slices/workoutThunk';
-import { Alert, IconButton } from '@mui/material';
-import CloseIcon from '@material-ui/icons/Close';
+import { Alert } from '@mui/material';
+// import CloseIcon from '@material-ui/icons/Close';
 import Checkbox from '@mui/material/Checkbox';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -99,9 +99,9 @@ const WorkoutProgramForm = ({ handleClose }) => {
 
   return (
     <Grid container direction="column" alignItems="flex-end">
-      <IconButton className={classes.closeButton} variant="contained" onClick={handleClose}>
+      {/* <IconButton className={classes.closeButton} variant="contained" onClick={handleClose}>
         <CloseIcon />
-      </IconButton>
+      </IconButton> */}
 
       <Box className={classes.parentFormContainer}>
         {error && <Alert severity="error">{error}</Alert>}
