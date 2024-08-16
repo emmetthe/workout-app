@@ -122,7 +122,7 @@ const UpdateProfileForm = ({ handleSubmit, handleClose, backDropStatus }) => {
 
         <button
           type="submit"
-          className="mt-6 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+          className="mt-6 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
           onClick={(e) => {
             handleSubmit(e, formData);
             openBackdrop();

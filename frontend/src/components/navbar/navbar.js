@@ -47,7 +47,7 @@ export default function Navbar() {
                           <Link
                             to={menuItem.path}
                             className={`flex py-2 text-base lg:mr-0 lg:inline-flex lg:px-0 lg:py-6  
-                              dark:text-white/70 dark:hover:text-white`}
+                              dark:text-white dark:hover:text-white/70`}
                           >
                             {menuItem.title}
                           </Link>
@@ -57,6 +57,7 @@ export default function Navbar() {
                   </ul>
                 </nav>
               </div>
+
               {/* sign in and logout options if user is authenticated */}
               <div>
                 {isAuthenticated ? (

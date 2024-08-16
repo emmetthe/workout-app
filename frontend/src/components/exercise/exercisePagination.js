@@ -28,7 +28,7 @@ const ExercisePagination = ({ currentPage, totalPages, pageNumbers, handlePageCh
       {pageNumbers.map((pageNumber) => (
         <button
           key={pageNumber}
-          className={`mx-1 px-4 py-2 rounded ${currentPage === pageNumber ? 'bg-[#5b79f8] text-white' : 'bg-gray-200'}`}
+          className={`mx-1 px-4 py-2 rounded ${currentPage === pageNumber ? 'bg-[#5b79f8] text-white hover:bg-[#4d6dfd]' : 'bg-gray-200'}`}
           onClick={() => handlePageChange(pageNumber)}
         >
           {pageNumber}
