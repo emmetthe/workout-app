@@ -26,10 +26,10 @@ const WorkoutProgram = () => {
 
   return (
     <div className="text-center p-5">
-      <h4 className="mb-5 text-4xl font-semibold text-gray-100">Workout Program</h4>
+      {/* <h4 className="mb-5 text-4xl font-semibold text-gray-100">Workout Program</h4> */}
 
-      <button className="mb-5 px-4 py-2 bg-primary text-white rounded hover:bg-opacity-80" onClick={openModal}>
-        Create New Program
+      <button className="mb-5 px-3 py-2 bg-primary text-white rounded hover:bg-opacity-80" onClick={openModal}>
+        Create Program
       </button>
 
       <ModalForm componentForm={<WorkoutProgramForm handleClose={closeModal} />} modalState={modalOpen} handleClose={closeModal} />

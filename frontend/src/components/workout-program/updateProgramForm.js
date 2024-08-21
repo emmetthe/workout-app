@@ -1,43 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Grid, FormGroup, FormControlLabel, Typography, makeStyles } from '@material-ui/core';
-import Checkbox from '@mui/material/Checkbox';
-
-const useStyles = makeStyles((theme) => ({
-  formContainer: {
-    marginTop: theme.spacing(2),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    [theme.breakpoints.up('sm')]: {
-      maxWidth: '400px',
-      margin: '0 auto',
-      marginTop: '50px'
-    }
-  },
-  inputField: {
-    width: '100%',
-    marginBottom: theme.spacing(2)
-  },
-  button: {
-    width: '50%',
-    marginTop: theme.spacing(2)
-  },
-  updateButton: {
-    width: '50%',
-    marginTop: theme.spacing(2),
-    backgroundColor: '#1976d2',
-    color: 'white',
-    '&:hover': {
-      backgroundColor: '#1565c0'
-    }
-  }
-}));
 
 const UpdateProgramForm = ({ workout, onUpdate, showUpdateForm }) => {
   const { name, description, days } = workout;
   const [updatedName, setUpdatedName] = useState(name);
   const [updatedDescription, setUpdatedDescription] = useState(description);
-  const classes = useStyles();
 
   // Create a state variable for selected days
   const [selectedDays, setSelectedDays] = useState([]);
@@ -68,71 +34,50 @@ const UpdateProgramForm = ({ workout, onUpdate, showUpdateForm }) => {
   };
 
   return (
-    <Grid container className={classes.formContainer}>
-      <TextField
-        label="Program Name"
-        variant="outlined"
+    <div className="flex flex-col items-center mt-10 mx-auto w-full max-w-md">
+      <label htmlFor="programName" className="mb-3 text-white-700 text-lg">
+        Program Name
+      </label>
+      <input
+        type="text"
+        placeholder="Program Name"
+        id="programName"
         value={updatedName}
         onChange={(e) => setUpdatedName(e.target.value)}
-        className={classes.inputField}
+        className="w-full mb-4 p-2 border border-gray-300 rounded text-black"
       />
-      <TextField
-        label="Description"
-        variant="outlined"
+
+      <label htmlFor="description" className="mb-3 text-white-700 text-lg">
+        Description
+      </label>
+      <textarea
         value={updatedDescription}
         onChange={(e) => setUpdatedDescription(e.target.value)}
-        multiline
-        className={classes.inputField}
+        placeholder="Enter a description"
+        className="w-full mb-4 p-2 border border-gray-300 rounded text-black"
+        rows={4}
       />
 
-      <Typography>Days:</Typography>
+      <div className="mb-4 text-center">
+        <p className="mb-2 font-semibold">Days:</p>
+        <div className="flex flex-col items-start">
+          {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
+            <label key={day} className="flex items-center mb-2">
+              <input type="checkbox" checked={selectedDays.includes(day)} onChange={() => handleCheckboxChange(day)} className="mr-2" />
+              {day}
+            </label>
+          ))}
+        </div>
+      </div>
 
-      <FormGroup>
-        <FormControlLabel
-          label="Monday"
-          labelPlacement="start"
-          control={<Checkbox checked={selectedDays.includes('Monday')} onChange={() => handleCheckboxChange('Monday')} />}
-        />
-        <FormControlLabel
-          label="Tuesday"
-          labelPlacement="start"
-          control={<Checkbox checked={selectedDays.includes('Tuesday')} onChange={() => handleCheckboxChange('Tuesday')} />}
-        />
-        <FormControlLabel
-          label="Wednesday"
-          labelPlacement="start"
-          control={<Checkbox checked={selectedDays.includes('Wednesday')} onChange={() => handleCheckboxChange('Wednesday')} />}
-        />
-        <FormControlLabel
-          label="Thursday"
-          labelPlacement="start"
-          control={<Checkbox checked={selectedDays.includes('Thursday')} onChange={() => handleCheckboxChange('Thursday')} />}
-        />
-        <FormControlLabel
-          label="Friday"
-          labelPlacement="start"
-          control={<Checkbox checked={selectedDays.includes('Friday')} onChange={() => handleCheckboxChange('Friday')} />}
-        />
-        <FormControlLabel
-          label="Saturday"
-          labelPlacement="start"
-          control={<Checkbox checked={selectedDays.includes('Saturday')} onChange={() => handleCheckboxChange('Saturday')} />}
-        />
-        <FormControlLabel
-          label="Sunday"
-          labelPlacement="start"
-          control={<Checkbox checked={selectedDays.includes('Sunday')} onChange={() => handleCheckboxChange('Sunday')} />}
-        />
-      </FormGroup>
-
-      <Button variant="contained" className={classes.updateButton} onClick={handleUpdate}>
+      <button onClick={handleUpdate} className="w-1/2 py-2 mb-2 bg-blue-600 text-white rounded hover:bg-blue-700">
         Update Program
-      </Button>
+      </button>
 
-      <Button variant="contained" className={classes.button} onClick={showUpdateForm}>
+      <button onClick={showUpdateForm} className="w-1/2 py-2 bg-gray-300 text-black rounded hover:bg-gray-400">
         Cancel
-      </Button>
-    </Grid>
+      </button>
+    </div>
   );
 };
 
