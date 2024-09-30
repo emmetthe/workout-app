@@ -6,19 +6,7 @@ const AboutSectionTwo = () => {
           <div className="w-full px-4 lg:w-1/2">
             <div className="wow fadeInUp relative mx-auto mb-12 aspect-[25/24] max-w-[500px] text-center lg:m-0" data-wow-delay=".15s">
               {/* Image for about section */}
-
-              {/* <Image
-                src="/images/about/about-image-2.svg"
-                alt="about image"
-                fill
-                className="drop-shadow-three dark:hidden dark:drop-shadow-none"
-              />
-              <Image
-                src="/images/about/about-image-2-dark.svg"
-                alt="about image"
-                fill
-                className="drop-shadow-three hidden dark:block dark:drop-shadow-none"
-              /> */}
+              <img src="/images/workout-mobile.png" alt="about" />
             </div>
           </div>
 
