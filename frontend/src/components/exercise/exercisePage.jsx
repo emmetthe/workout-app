@@ -1,10 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Button, Grid, Typography } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateWorkout } from '../../slices/workoutThunk';
 import AddExerciseForm from './addExerciseForm';
 import ModalForm from '../modal/modal';
-import { useDispatch, useSelector } from 'react-redux';
 import { openSnackbar } from '../../slices/snackbarSlice';
 import CustomSnackbar from '../snackbar/snackbar';
 
@@ -26,33 +25,26 @@ const ExercisePage = () => {
   // create refs object to store video refs
   const videoRefs = useRef({});
 
-  // initialized as a dictionary to determine whether each video should be shown or hidden on the page.
-  const [showVideos, setShowVideos] = useState(
-    videoURL.reduce((acc, url) => {
-      acc[url] = false;
-      return acc;
-    }, {})
-  );
-
-  const toggleVideo = (url) => {
-    setShowVideos((prevShowVideos) => ({
-      ...prevShowVideos,
-      [url]: !prevShowVideos[url]
-    }));
-  };
+  // Pause all videos on page load
+  useEffect(() => {
+    Object.values(videoRefs.current).forEach((video) => {
+      if (video) {
+        video.pause(); // Ensure all videos are paused when the page loads
+      }
+    });
+  }, []);
 
   const handleAddToProgram = (exerciseData, programId) => {
     // Dispatch an action to update the workout program in the Redux store
     dispatch(updateWorkout(exerciseData, programId, true));
     setSelectedProgram(null);
-    // Close the modal after adding the exercise
     closeModal();
     // add snackbar notification for users
     dispatch(openSnackbar({ message: 'Exercise added to program', severity: 'success' }));
   };
 
   const openModal = () => {
-    setSelectedProgram(null); // Reset selected program when opening modal
+    setSelectedProgram(null);
     setModalOpen(true);
   };
 
@@ -65,13 +57,12 @@ const ExercisePage = () => {
     setModalOpen(false);
   };
 
+  console.log(steps);
   return (
-    <Grid container direction="column" spacing={2} style={{ marginTop: '50px', alignItems: 'center' }}>
-      <Grid item>
-        <Button variant="contained" color="primary" onClick={openModal}>
-          Add to Workout Program
-        </Button>
-      </Grid>
+    <div className="flex flex-col items-center my-12 px-24">
+      <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700" onClick={openModal}>
+        Add to Workout Program
+      </button>
 
       <ModalForm
         componentForm={
@@ -88,59 +79,43 @@ const ExercisePage = () => {
         handleClose={closeModal}
       />
 
-      <Grid item>
-        {/* general information */}
-        <Typography variant="h4">{exercise_name}</Typography>
-        {Difficulty ? (
-          <Typography variant="subtitle1">Difficulty: {Difficulty}</Typography>
-        ) : (
-          <Typography variant="subtitle1">Difficulty: N/A</Typography>
-        )}
-        <Typography variant="subtitle1">Type: {Category}</Typography>
-        {targetMuscles.length > 0 && (
-          <Typography variant="subtitle1">
-            Muscles Targeted: {targetMuscles.map((muscle, i) => muscle + `${i !== targetMuscles.length - 1 ? ', ' : ''}`)}
-          </Typography>
-        )}
+      {/* exercise details */}
+      <div className="text-center text-white my-6">
+        <h2 className="text-3xl font-bold my-2">{exercise_name}</h2>
+        <div className="flex flex-col items-center">
+          <p className="text-lg">{Difficulty ? `Difficulty: ${Difficulty}` : 'Difficulty: N/A'}</p>
+          <p className="text-lg">Type: {Category}</p>
+          {targetMuscles.length > 0 && (
+            <p className="text-lg">
+              Muscles Targeted: {targetMuscles.map((muscle, i) => muscle + `${i !== targetMuscles.length - 1 ? ', ' : ''}`)}
+            </p>
+          )}
+        </div>
 
-        <Typography variant="h6">Instructions:</Typography>
-        <ol>
+        <h3 className="text-xl font-semibold my-4">Instructions:</h3>
+        <ol className="list-decimal list-outside text-lg space-y-2">
           {steps.map((step, i) => (
-            <li key={i}>
-              <Typography variant="body1">{step}</Typography>
+            <li key={i} className="flex">
+              <span className="mr-2">{i + 1}.</span>
+              <span>{step}</span>
             </li>
           ))}
         </ol>
+      </div>
 
-        {/* Add more information about the exercise here */}
+      {/* video player */}
+      <div className="flex flex-col items-center space-y-4 w-full">
+        {videoURL.map((url, index) => (
+          <div key={index} className="w-full flex justify-center">
+            <video ref={(el) => (videoRefs.current[url] = el)} className="w-full max-w-xl" controls>
+              <source src={url} />
+            </video>
+          </div>
+        ))}
+      </div>
 
-        {/* video player */}
-        <Grid container direction="column" alignItems="center" spacing={2}>
-          {videoURL.map((url, index) => (
-            <Grid item key={index}>
-              <Grid container direction="column" alignItems="center" spacing={1}>
-                <Grid item>
-                  <Button onClick={() => toggleVideo(url)} variant="contained" color="primary">
-                    {showVideos[url] ? 'Hide Video' : 'Show Video'}
-                  </Button>
-                </Grid>
-
-                {showVideos[url] && (
-                  <Grid item>
-                    <Grid container justifyContent="center">
-                      <video ref={(el) => (videoRefs.current[url] = el)} width="600" height="auto" controls autoPlay>
-                        <source src={url} />
-                      </video>
-                    </Grid>
-                  </Grid>
-                )}
-              </Grid>
-            </Grid>
-          ))}
-        </Grid>
-      </Grid>
       <CustomSnackbar open={snackbarOpen} message={snackbarMessage} severity={snackbarSeverity} />
-    </Grid>
+    </div>
   );
 };
 

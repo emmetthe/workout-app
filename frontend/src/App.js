@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import routes from './routes';
-// import Navbar from './components/Navbar';
 import SignedOutNotification from './components/sessions/SignOutNotif/SignOutNotif';
 import './index.css';
 import Navbar from './components/navbar/navbar';

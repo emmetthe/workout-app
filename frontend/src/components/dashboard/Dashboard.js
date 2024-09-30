@@ -44,7 +44,7 @@ const Dashboard = () => {
         <>
           <h1 className="mb-5 text-6xl text-gray-100">Profile</h1>
 
-          <button className="mb-5 px-4 py-2 bg-primary text-white rounded hover:bg-opacity-80" onClick={openModal}>
+          <button className="mb-1 px-4 py-2 bg-primary text-white rounded hover:bg-opacity-80" onClick={openModal}>
             Update Profile
           </button>
 

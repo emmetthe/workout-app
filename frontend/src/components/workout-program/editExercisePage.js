@@ -1,64 +1,8 @@
 import React, { useState } from 'react';
-import { TextField, Button, Grid, Typography, Container } from '@material-ui/core';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { updateWorkout } from '../../slices/workoutThunk';
 import { openSnackbar } from '../../slices/snackbarSlice';
-
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles({
-  updateButton: {
-    backgroundColor: '#1976d2',
-    color: 'white',
-    width: '100px',
-    height: '40px',
-    margin: '5px',
-    '&:hover': {
-      backgroundColor: '#1565c0'
-    }
-  }
-});
-
-const styles = {
-  editExPageContainer: {
-    marginTop: '50px'
-  },
-  headerStyling: {
-    borderBottom: '1px solid #ccc'
-  },
-  titleStyling: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '20px'
-  },
-  buttonStyling: {
-    marginTop: '20px'
-  },
-  buttonWidth: {
-    width: '100px',
-    height: '40px',
-    margin: '5px'
-  },
-  labelStyling: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  setNumStyling: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  updateButton: {
-    backgroundColor: '#1976d2',
-    color: 'white',
-    width: '100px',
-    height: '40px',
-    margin: '5px'
-  }
-};
 
 const EditExercisePage = () => {
   const location = useLocation();
@@ -68,8 +12,6 @@ const EditExercisePage = () => {
   const { program } = exercise;
   const [editedSets, setEditedSets] = useState([...exercise.sets]);
   const [error, setError] = useState('');
-
-  const classes = useStyles();
 
   const handleInputChange = (index, field, value) => {
     const updatedSets = [...editedSets];
@@ -116,76 +58,69 @@ const EditExercisePage = () => {
   };
 
   return (
-    <Container maxWidth="sm" style={styles.editExPageContainer}>
-      <Typography variant="h4" gutterBottom style={styles.headerStyling}>
-        Edit Sets
-      </Typography>
+    <div className="container mx-auto mt-12 max-w-lg text-white px-4">
+      <h4 className="text-2xl font-semibold border-b pb-2 mb-6">Edit Sets</h4>
 
-      <Grid style={styles.titleStyling}>
-        <Typography variant="h5">{exercise.exercise.exerciseName}</Typography>
+      <h5 className="text-xl mb-5">{exercise.exercise.exerciseName}</h5>
 
-        <Button variant="contained" color="primary" style={styles.updateButton} onClick={handleAddSetClick}>
-          Add Set
-        </Button>
-      </Grid>
+      {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
 
-      {error && (
-        <Typography variant="body2" color="error" gutterBottom>
-          {error}
-        </Typography>
-      )}
-
-      <Grid container spacing={2}>
-        <Grid item xs={2}>
-          <Typography variant="body1" style={styles.labelStyling}>
-            Set
-          </Typography>
-        </Grid>
-        <Grid item xs={5}>
-          <Typography variant="body1" style={styles.labelStyling}>
-            Reps
-          </Typography>
-        </Grid>
-        <Grid item xs={5}>
-          <Typography variant="body1" style={styles.labelStyling}>
-            Weight (lbs)
-          </Typography>
-        </Grid>
-      </Grid>
+      <div className="grid grid-cols-12 gap-4 mb-2">
+        <div className="col-span-2 flex justify-center items-center">
+          <span className="text-lg">Set</span>
+        </div>
+        <div className="col-span-5 flex justify-center items-center">
+          <span className="text-lg">Reps</span>
+        </div>
+        <div className="col-span-5 flex justify-center items-center">
+          <span className="text-lg">Weight (lbs)</span>
+        </div>
+      </div>
 
       {editedSets.map((set, index) => (
-        <Grid container spacing={2} key={index}>
-          <Grid item xs={2} style={styles.setNumStyling}>
-            <Typography variant="body1">{index + 1}</Typography>
-          </Grid>
-          <Grid item xs={5}>
-            <TextField
-              variant="outlined"
-              fullWidth
+        <div className="grid grid-cols-12 gap-4 mb-2 text-black" key={index}>
+          <div className="col-span-2 flex justify-center items-center text-white">
+            <span className="text-lg">{index + 1}</span>
+          </div>
+          <div className="col-span-5">
+            <input
+              type="number"
+              className="w-full p-2 border rounded"
               value={set.reps}
               onChange={(e) => handleInputChange(index, 'reps', Number(e.target.value))}
             />
-          </Grid>
-          <Grid item xs={5}>
-            <TextField
-              variant="outlined"
-              fullWidth
+          </div>
+          <div className="col-span-5">
+            <input
+              type="number"
+              className="w-full p-2 border rounded"
               value={set.weight}
               onChange={(e) => handleInputChange(index, 'weight', Number(e.target.value))}
             />
-          </Grid>
-        </Grid>
+          </div>
+        </div>
       ))}
 
-      <Container style={styles.buttonStyling}>
-        <Button variant="contained" className={classes.updateButton} onClick={handleUpdateClick}>
+      {/* Centered Plus Button */}
+      <div className="flex justify-center mt-6">
+        <button
+          className="bg-blue-600 text-white text-2xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-blue-700"
+          onClick={handleAddSetClick}
+        >
+          +
+        </button>
+      </div>
+
+      {/* Centered Update and Cancel Buttons */}
+      <div className="flex justify-center space-x-4 mt-6">
+        <button className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700" onClick={handleUpdateClick}>
           Update
-        </Button>
-        <Button variant="contained" style={styles.buttonWidth} onClick={handleCancelClick}>
+        </button>
+        <button className="bg-gray-300 text-black px-6 py-2 rounded hover:bg-gray-400" onClick={handleCancelClick}>
           Cancel
-        </Button>
-      </Container>
-    </Container>
+        </button>
+      </div>
+    </div>
   );
 };
 
