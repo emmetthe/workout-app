@@ -31,7 +31,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between w-full">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <img src="/images/logo.png" alt="Logo" className="w-12 h-10" /> {/* Adjust width and height as needed */}
+            <img src="/images/logo.png" alt="Logo" className="w-15 h-10" /> {/* Adjust width and height as needed */}
           </Link>
 
           {/* Mobile Menu Button */}
