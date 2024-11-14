@@ -1,110 +1,122 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect  } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutAsync } from '../../slices/authSlice';
 
 export default function Navbar() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const menuData = [
-    {
-      id: 1,
-      title: 'Home',
-      path: '/',
-      newTab: false
-    },
-    {
-      id: 2,
-      title: 'Exercises',
-      path: '/exercises',
-      newTab: false
-    }
+    // { id: 1, title: 'Home', path: '/', newTab: false },
+    { id: 2, title: 'Exercises', path: '/exercises', newTab: false }
   ];
+
+  const location = useLocation();
+  // Close the mobile menu whenever the route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location]);
 
   const handleLogOut = (e) => {
     e.preventDefault();
     dispatch(logoutAsync());
+    setIsMobileMenuOpen(false); // Close menu after logout
   };
 
   return (
-    <>
-      <header className={`header flex w-full items-center`}>
-        <div className="container">
-          <div className="relative -mx-4 flex items-center justify-between">
-            {/* nav bar logo */}
-            {/* <div className="w-60 max-w-full px-4 xl:mr-12">
-              <Link to="/hero" className={`header-logo block w-full py-8`}></Link>
-            </div> */}
+    <header className="bg-white dark:bg-gray-800 shadow-md">
+      <div className="container mx-auto flex items-center justify-between p-4 md:py-6">
+        <div className="flex items-center justify-between w-full">
+          {/* Logo */}
+          <Link to="/" className="flex items-center">
+            <img src="/images/logo.png" alt="Logo" className="w-12 h-10" /> {/* Adjust width and height as needed */}
+          </Link>
 
-            <div className="flex w-full items-center justify-between px-10">
-              <div>
-                <nav>
-                  <ul className="block lg:flex lg:space-x-12">
-                    {menuData.map((menuItem, index) => (
-                      <li key={index} className="group relative">
-                        {menuItem.path && (
-                          <Link
-                            to={menuItem.path}
-                            className={`flex py-2 text-base lg:mr-0 lg:inline-flex lg:px-0 lg:py-6  
-                              dark:text-white dark:hover:text-white/70`}
-                          >
-                            {menuItem.title}
-                          </Link>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
-              </div>
+          {/* Mobile Menu Button */}
+          <button className="text-gray-500 dark:text-white lg:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d={isMobileMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}
+              ></path>
+            </svg>
+          </button>
 
-              {/* sign in and logout options if user is authenticated */}
-              <div>
-                {isAuthenticated ? (
-                  // navbar options when user authenticated
-                  <div className="flex items-center justify-end pr-16 lg:pr-0">
-                    <Link
-                      to="/dashboard"
-                      className="hidden px-7 py-3 text-base font-medium text-dark 
-                      hover:opacity-70 dark:text-white md:block"
-                    >
-                      Dashboard
-                    </Link>
-                    <a
-                      className="ease-in-up shadow-btn hover:shadow-btn-hover hidden rounded-sm
-                    bg-primary px-8 py-3 text-base font-medium text-white transition 
-                      duration-300 hover:bg-opacity-90 md:block md:px-9 lg:px-6 xl:px-9"
-                      onClick={(e) => handleLogOut(e)}
-                      href="#!"
-                    >
-                      Logout
-                    </a>
-                  </div>
-                ) : (
-                  // navbar options when user not authenticated
-                  <div className="flex items-center justify-end pr-16 lg:pr-0">
-                    <Link
-                      to="/login"
-                      className="hidden px-7 py-3 text-base font-medium text-dark 
-                      hover:opacity-70 dark:text-white md:block"
-                    >
-                      Sign In
-                    </Link>
-                    <Link
-                      to="/register"
-                      className="ease-in-up shadow-btn hover:shadow-btn-hover hidden rounded-sm
-                    bg-primary px-8 py-3 text-base font-medium text-white transition 
-                      duration-300 hover:bg-opacity-90 md:block md:px-9 lg:px-6 xl:px-9"
-                    >
-                      Sign Up
-                    </Link>
-                  </div>
-                )}
-              </div>
-            </div>
+          {/* Desktop Menu */}
+          <nav className="hidden lg:flex lg:space-x-4">
+            {menuData.map((menuItem) => (
+              <Link key={menuItem.id} to={menuItem.path} className="text-gray-800 dark:text-white hover:text-primary">
+                {menuItem.title}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Auth Links */}
+          <div className="hidden lg:flex items-center space-x-4">
+            {isAuthenticated ? (
+              <>
+                <Link to="/dashboard" className="text-gray-800 dark:text-white hover:text-primary">
+                  Dashboard
+                </Link>
+                <button
+                  onClick={handleLogOut}
+                  className="bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition duration-300"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="text-gray-800 dark:text-white hover:text-primary">
+                  Sign In
+                </Link>
+                <Link to="/register" className="bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition duration-300">
+                  Sign Up
+                </Link>
+              </>
+            )}
           </div>
         </div>
-      </header>
-    </>
+      </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden">
+          <nav className="flex flex-col space-y-2 p-4 bg-white dark:bg-gray-800">
+            {menuData.map((menuItem) => (
+              <Link key={menuItem.id} to={menuItem.path} className="text-gray-800 dark:text-white hover:text-primary">
+                {menuItem.title}
+              </Link>
+            ))}
+
+            <div className="flex flex-col space-y-2 mt-4">
+              {isAuthenticated ? (
+                <>
+                  <Link to="/dashboard" className="text-gray-800 dark:text-white hover:text-primary">
+                    Dashboard
+                  </Link>
+                  <button onClick={handleLogOut} className="text-gray-800 dark:text-white hover:text-primary text-left">
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="text-gray-800 dark:text-white hover:text-primary">
+                    Sign In
+                  </Link>
+                  <Link to="/register" className="hover:text-primary dark:text-white">
+                    Sign Up
+                  </Link>
+                </>
+              )}
+            </div>
+          </nav>
+        </div>
+      )}
+    </header>
   );
 }
