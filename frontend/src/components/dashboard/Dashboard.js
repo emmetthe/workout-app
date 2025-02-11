@@ -37,12 +37,12 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-5 mt-12">
+    <div className="flex flex-col items-center p-5 mx-auto mt-12">
       {loading ? (
         <Spinner />
       ) : (
         <>
-          <h1 className="mb-5 text-6xl text-gray-100">Profile</h1>
+         <h1 className="mb-5 text-6xl text-gray-100 text-center">Profile</h1>
 
           <button className="mb-1 px-4 py-2 bg-primary text-white rounded hover:bg-opacity-80" onClick={openModal}>
             Update Profile

@@ -58,67 +58,69 @@ const EditExercisePage = () => {
   };
 
   return (
-    <div className="container mx-auto mt-12 max-w-lg text-white px-4">
-      <h4 className="text-2xl font-semibold border-b pb-2 mb-6">Edit Sets</h4>
+    <div className="flex flex-col items-center mt-12 text-white px-4">
+      <div className=" max-w-lg">
+        <h4 className="text-2xl font-semibold border-b pb-2 mb-6">Edit Sets</h4>
 
-      <h5 className="text-xl mb-5">{exercise.exercise.exerciseName}</h5>
+        <h5 className="text-xl mb-5">{exercise.exercise.exerciseName}</h5>
 
-      {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
+        {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
 
-      <div className="grid grid-cols-12 gap-4 mb-2">
-        <div className="col-span-2 flex justify-center items-center">
-          <span className="text-lg">Set</span>
-        </div>
-        <div className="col-span-5 flex justify-center items-center">
-          <span className="text-lg">Reps</span>
-        </div>
-        <div className="col-span-5 flex justify-center items-center">
-          <span className="text-lg">Weight (lbs)</span>
-        </div>
-      </div>
-
-      {editedSets.map((set, index) => (
-        <div className="grid grid-cols-12 gap-4 mb-2 text-black" key={index}>
-          <div className="col-span-2 flex justify-center items-center text-white">
-            <span className="text-lg">{index + 1}</span>
+        <div className="grid grid-cols-12 gap-4 mb-2">
+          <div className="col-span-2 flex justify-start items-center">
+            <span className="text-lg">Set</span>
           </div>
-          <div className="col-span-5">
-            <input
-              type="number"
-              className="w-full p-2 border rounded"
-              value={set.reps}
-              onChange={(e) => handleInputChange(index, 'reps', Number(e.target.value))}
-            />
+          <div className="col-span-4 flex justify-center items-center">
+            <span className="text-lg">Reps</span>
           </div>
-          <div className="col-span-5">
-            <input
-              type="number"
-              className="w-full p-2 border rounded"
-              value={set.weight}
-              onChange={(e) => handleInputChange(index, 'weight', Number(e.target.value))}
-            />
+          <div className="col-span-4 flex justify-center items-center">
+            <span className="text-lg">Weight (lbs)</span>
           </div>
         </div>
-      ))}
 
-      {/* Centered Plus Button */}
-      <div className="flex justify-center mt-6">
-        <button
-          className="bg-blue-600 text-white text-2xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-blue-700"
-          onClick={handleAddSetClick}
-        >
-          +
-        </button>
-      </div>
+        {editedSets.map((set, index) => (
+          <div className="grid grid-cols-12 gap-4 mb-2 text-black" key={index}>
+            <div className="col-span-2 text-white">
+              <span className="text-lg">{index + 1}</span>
+            </div>
+            <div className="col-span-4">
+              <input
+                type="number"
+                className="w-full p-2 border rounded"
+                value={set.reps}
+                onChange={(e) => handleInputChange(index, 'reps', Number(e.target.value))}
+              />
+            </div>
+            <div className="col-span-4">
+              <input
+                type="number"
+                className="w-full p-2 border rounded"
+                value={set.weight}
+                onChange={(e) => handleInputChange(index, 'weight', Number(e.target.value))}
+              />
+            </div>
+          </div>
+        ))}
 
-      {/* Centered Update and Cancel Buttons */}
-      <div className="flex justify-center space-x-4 mt-6">
-        <button className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700" onClick={handleUpdateClick}>
-          Update
-        </button>
-        <button className="bg-gray-300 text-black px-6 py-2 rounded hover:bg-gray-400" onClick={handleCancelClick}>
-          Cancel
-        </button>
+        {/* Centered Plus Button */}
+        <div className="flex justify-center mt-6">
+          <button
+            className="bg-blue-600 text-white text-2xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-blue-700"
+            onClick={handleAddSetClick}
+          >
+            +
+          </button>
+        </div>
+
+        {/* Centered Update and Cancel Buttons */}
+        <div className="flex justify-center space-x-4 mt-6">
+          <button className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700" onClick={handleUpdateClick}>
+            Update
+          </button>
+          <button className="bg-gray-300 text-black px-6 py-2 rounded hover:bg-gray-400" onClick={handleCancelClick}>
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
   );
