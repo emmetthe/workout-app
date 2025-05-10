@@ -19,10 +19,16 @@ const EditExercisePage = () => {
     setEditedSets(updatedSets);
   };
 
+  // const handleDeleteSet = (index) => {
+  //   setEditedSets((prevArray) => {
+  //     return [...prevArray.slice(0, index), ...prevArray.slice(index + 1)];
+  //   });
+  // };
+
   const handleUpdateClick = () => {
     if (validateFields()) {
       const newExerciseData = { ...exercise, sets: editedSets };
-
+      console.log('new', editedSets);
       dispatch(updateWorkout(newExerciseData, program, true))
         .then(() => {
           dispatch(openSnackbar({ message: 'Exercise updated successfully', severity: 'success' }));
@@ -58,7 +64,7 @@ const EditExercisePage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center mt-12 text-white px-4">
+    <div className="flex flex-col items-center mt-12 text-white px-4 min-h-screen">
       <div className=" max-w-lg">
         <h4 className="text-2xl font-semibold border-b pb-2 mb-6">Edit Sets</h4>
 
@@ -66,6 +72,7 @@ const EditExercisePage = () => {
 
         {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
 
+        {/* labels */}
         <div className="grid grid-cols-12 gap-4 mb-2">
           <div className="col-span-2 flex justify-start items-center">
             <span className="text-lg">Set</span>
@@ -79,7 +86,8 @@ const EditExercisePage = () => {
         </div>
 
         {editedSets.map((set, index) => (
-          <div className="grid grid-cols-12 gap-4 mb-2 text-black" key={index}>
+          <div className="grid grid-cols-12 gap-4 mb-2 text-black items-center" key={index}>
+            {/* rep number */}
             <div className="col-span-2 text-white">
               <span className="text-lg">{index + 1}</span>
             </div>
@@ -91,6 +99,8 @@ const EditExercisePage = () => {
                 onChange={(e) => handleInputChange(index, 'reps', Number(e.target.value))}
               />
             </div>
+
+            {/* weight value */}
             <div className="col-span-4">
               <input
                 type="number"
@@ -99,6 +109,18 @@ const EditExercisePage = () => {
                 onChange={(e) => handleInputChange(index, 'weight', Number(e.target.value))}
               />
             </div>
+
+            {/* delete button */}
+            {/* <div>
+              <button
+                class="flex justify-center items-center w-9 h-9 rounded-full text-white focus:outline-none bg-red-500 hover:bg-red-600"
+                onClick={(e) => handleDeleteSet(index)}
+              >
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path  stroke-width="2" d="M20 12H4"></path>
+                </svg>
+              </button>
+            </div> */}
           </div>
         ))}
 

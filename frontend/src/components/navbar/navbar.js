@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutAsync } from '../../slices/authSlice';
@@ -27,81 +27,44 @@ export default function Navbar() {
 
   return (
     <header className="bg-white dark:bg-gray-800 shadow-md">
-  <div className="container relative flex items-center justify-between p-4 md:py-6">
-    
-    {/* Logo */}
-    <Link to="/" className="flex items-center">
-      <img src="/images/logo.png" alt="Logo" className="w-15 h-10" />
-    </Link>
-
-    {/* Centered Navigation Links */}
-    <nav className="hidden lg:flex absolute left-1/2 transform -translate-x-1/2">
-      {menuData.map((menuItem) => (
-        <Link 
-          key={menuItem.id} 
-          to={menuItem.path} 
-          className="text-gray-800 dark:text-white hover:text-primary text-lg"
-        >
-          {menuItem.title}
+      <div className="container relative flex items-center justify-between p-4 md:py-6">
+        {/* Logo */}
+        <Link to="/" className="flex items-center">
+          <img src="/images/logo.png" alt="Logo" className="w-15 h-10" />
         </Link>
-      ))}
-    </nav>
 
-    {/* Mobile Menu Button */}
-    <button 
-      className="text-gray-500 dark:text-white lg:hidden" 
-      onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-    >
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-          d={isMobileMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}
-        ></path>
-      </svg>
-    </button>
+        {/* Centered Navigation Links */}
+        <nav className="hidden lg:flex absolute left-1/2 transform -translate-x-1/2">
+          {menuData.map((menuItem) => (
+            <Link key={menuItem.id} to={menuItem.path} className="text-gray-800 dark:text-white hover:text-primary text-lg">
+              {menuItem.title}
+            </Link>
+          ))}
+        </nav>
 
-    {/* Auth Links */}
-    <div className="hidden lg:flex items-center space-x-4">
-      {isAuthenticated ? (
-        <>
-          <Link to="/dashboard" className="text-gray-800 dark:text-white hover:text-primary">
-            Dashboard
-          </Link>
-          <button
-            onClick={handleLogOut}
-            className="bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition duration-300"
-          >
-            Logout
-          </button>
-        </>
-      ) : (
-        <>
-          <Link to="/login" className="text-gray-800 dark:text-white hover:text-primary">
-            Sign In
-          </Link>
-          <Link to="/register" className="bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition duration-300">
-            Sign Up
-          </Link>
-        </>
-      )}
-    </div>
-  </div>
+        {/* Mobile Menu Button */}
+        <button className="text-gray-500 dark:text-white lg:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d={isMobileMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'}
+            ></path>
+          </svg>
+        </button>
 
-  {/* Mobile Menu */}
-  {isMobileMenuOpen && (
-    <div className="lg:hidden">
-      <nav className="container flex flex-col space-y-2 p-4 bg-white dark:bg-gray-800">
-        {menuData.map((menuItem) => (
-          <Link key={menuItem.id} to={menuItem.path} className="text-gray-800 dark:text-white hover:text-primary">
-            {menuItem.title}
-          </Link>
-        ))}
-        <div className="flex flex-col space-y-2 mt-4">
+        {/* Auth Links */}
+        <div className="hidden lg:flex items-center space-x-4">
           {isAuthenticated ? (
             <>
               <Link to="/dashboard" className="text-gray-800 dark:text-white hover:text-primary">
                 Dashboard
               </Link>
-              <button onClick={handleLogOut} className="text-gray-800 dark:text-white hover:text-primary text-left">
+              <button
+                onClick={handleLogOut}
+                className="bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition duration-300"
+              >
                 Logout
               </button>
             </>
@@ -110,16 +73,47 @@ export default function Navbar() {
               <Link to="/login" className="text-gray-800 dark:text-white hover:text-primary">
                 Sign In
               </Link>
-              <Link to="/register" className="hover:text-primary dark:text-white">
+              <Link to="/register" className="bg-primary text-white px-4 py-2 rounded hover:bg-opacity-90 transition duration-300">
                 Sign Up
               </Link>
             </>
           )}
         </div>
-      </nav>
-    </div>
-  )}
-</header>
+      </div>
 
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden">
+          <nav className="container flex flex-col space-y-2 p-4 bg-white dark:bg-gray-800">
+            {menuData.map((menuItem) => (
+              <Link key={menuItem.id} to={menuItem.path} className="text-gray-800 dark:text-white hover:text-primary">
+                {menuItem.title}
+              </Link>
+            ))}
+            <div className="flex flex-col space-y-2 mt-4">
+              {isAuthenticated ? (
+                <>
+                  <Link to="/dashboard" className="text-gray-800 dark:text-white hover:text-primary">
+                    Dashboard
+                  </Link>
+                  <button onClick={handleLogOut} className="text-gray-800 dark:text-white hover:text-primary text-left">
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="text-gray-800 dark:text-white hover:text-primary">
+                    Sign In
+                  </Link>
+                  <Link to="/register" className="hover:text-primary dark:text-white">
+                    Sign Up
+                  </Link>
+                </>
+              )}
+            </div>
+          </nav>
+        </div>
+      )}
+    </header>
   );
 }

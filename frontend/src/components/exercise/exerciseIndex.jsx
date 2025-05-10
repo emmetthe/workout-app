@@ -56,8 +56,8 @@ const ExerciseIndex = () => {
   const currentExercises = filteredExercises.slice(indexOfFirstExercise, indexOfLastExercise);
 
   return (
-    <div className="container mx-auto mt-12">
-      <div className={`${isFocused ? 'brightness-50 pointer-events-none' : ''}`}>
+    <div className="container mx-auto mt-10 min-h-screen">
+      <div className={`mb-8 ${isFocused ? 'brightness-50 pointer-events-none' : ''}`}>
         <ExerciseFilter
           muscles={{ all: muscleList, selected: selectedMuscle }}
           categories={{ all: categoryList, selected: selectedCategory }}
@@ -65,7 +65,7 @@ const ExerciseIndex = () => {
         />
       </div>
 
-      <div onSubmit={(e) => e.preventDefault()} className="mb-5 mt-5 relative">
+      <div onSubmit={(e) => e.preventDefault()} className="mb-12 mt-5 relative">
         <input
           type="text"
           className="w-full p-2 border border-gray-300 rounded"
@@ -96,10 +96,10 @@ const ExerciseIndex = () => {
       ) : (
         <>
           <div className={`grid gap-4 ${isFocused ? 'brightness-50 pointer-events-none' : ''}`}>
-            <div className="col-span-12">
+            <div className="col-span-12 mb-10">
               <ExerciseList exercises={currentExercises} />
             </div>
-            <div className="col-span-12">
+            <div className="col-span-12 mt-10">
               <ExercisePagination
                 currentPage={currentPage}
                 totalPages={totalPages}

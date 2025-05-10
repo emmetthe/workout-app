@@ -54,7 +54,7 @@ const ProgramPage = () => {
   };
 
   return (
-    <div className="p-4 mb-4 mt-5 w-full shadow-lg dark:text-white">
+    <div className="p-4 mt-2 w-full shadow-lg dark:text-white min-h-screen">
       {showUpdateForm ? (
         <div>
           <UpdateProgramForm workout={workout} onUpdate={handleUpdate} showUpdateForm={handleUpdateForm} />
@@ -93,7 +93,7 @@ const ProgramPage = () => {
           </div>
 
           <div className="mt-4 flex flex-col space-y-2">
-            <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700" onClick={() => setShowUpdateForm(true)}>
+            <button className="mb-3 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700" onClick={() => setShowUpdateForm(true)}>
               Update Details
             </button>
             <button className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700" onClick={handleDelete}>

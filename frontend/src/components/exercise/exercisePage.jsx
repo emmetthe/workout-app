@@ -57,7 +57,6 @@ const ExercisePage = () => {
     setModalOpen(false);
   };
 
-  console.log(steps);
   return (
     <div className="flex flex-col items-center my-12 px-24">
       <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700" onClick={openModal}>

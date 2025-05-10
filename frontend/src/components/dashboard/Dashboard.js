@@ -37,7 +37,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-5 mx-auto mt-12">
+    <div className="flex flex-col items-center p-5 mx-auto mt-12 min-h-screen">
       {loading ? (
         <Spinner />
       ) : (
