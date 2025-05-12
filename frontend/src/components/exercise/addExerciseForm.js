@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedProgram, selectProgram, setSelectedProgram }) => {
   const workouts = useSelector((state) => state.programs);
@@ -97,10 +98,13 @@ const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedPr
         </div>
       ) : (
         <div className="w-full p-5 space-y-4">
-          <div className="flex justify-between items-center">
-            <button className="text-blue-500 border border-blue-500 px-3 py-1 rounded hover:bg-blue-50" onClick={handleGoBack}>
-              Change Program
+          <div className="relative flex items-center justify-center border-b pb-4">
+            {/* Back button */}
+            <button className="absolute -top-9 -left-8" onClick={handleGoBack}>
+              <FaArrowLeft className="h-5 w-5 text-gray-500 hover:text-gray-700" />
             </button>
+
+            {/* Centered title */}
             <h2 className="text-xl font-bold">{selectedProgram.name}</h2>
           </div>
 

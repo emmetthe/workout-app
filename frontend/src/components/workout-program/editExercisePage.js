@@ -19,11 +19,11 @@ const EditExercisePage = () => {
     setEditedSets(updatedSets);
   };
 
-  // const handleDeleteSet = (index) => {
-  //   setEditedSets((prevArray) => {
-  //     return [...prevArray.slice(0, index), ...prevArray.slice(index + 1)];
-  //   });
-  // };
+  const handleDeleteSet = (index) => {
+    setEditedSets((prevArray) => {
+      return [...prevArray.slice(0, index), ...prevArray.slice(index + 1)];
+    });
+  };
 
   const handleUpdateClick = () => {
     if (validateFields()) {
@@ -111,16 +111,16 @@ const EditExercisePage = () => {
             </div>
 
             {/* delete button */}
-            {/* <div>
+            <div>
               <button
                 class="flex justify-center items-center w-9 h-9 rounded-full text-white focus:outline-none bg-red-500 hover:bg-red-600"
                 onClick={(e) => handleDeleteSet(index)}
               >
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path  stroke-width="2" d="M20 12H4"></path>
+                  <path stroke-width="2" d="M20 12H4"></path>
                 </svg>
               </button>
-            </div> */}
+            </div>
           </div>
         ))}
 

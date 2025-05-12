@@ -6,6 +6,7 @@ import AddExerciseForm from './addExerciseForm';
 import ModalForm from '../modal/modal';
 import { openSnackbar } from '../../slices/snackbarSlice';
 import CustomSnackbar from '../snackbar/snackbar';
+import SignedOut from './signedOutOption';
 
 const ExercisePage = () => {
   const location = useLocation();
@@ -16,6 +17,7 @@ const ExercisePage = () => {
   const targetMuscles = [...(Primary || []), ...(Secondary || [])];
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState(null);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   // snackbar state
   const snackbarOpen = useSelector((state) => state.snackbar.open);
@@ -62,21 +64,25 @@ const ExercisePage = () => {
       <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700" onClick={openModal}>
         Add to Workout Program
       </button>
-
-      <ModalForm
-        componentForm={
-          <AddExerciseForm
-            handleClose={closeModal}
-            handleAddToProgram={handleAddToProgram}
-            exercise={exercise}
-            selectedProgram={selectedProgram}
-            selectProgram={selectProgram}
-            setSelectedProgram={setSelectedProgram}
-          />
-        }
-        modalState={modalOpen}
-        handleClose={closeModal}
-      />
+      {/* modal options for exercise adding to workout */}
+      {!isAuthenticated ? (
+        <ModalForm componentForm={<SignedOut />} modalState={modalOpen} handleClose={closeModal} />
+      ) : (
+        <ModalForm
+          componentForm={
+            <AddExerciseForm
+              handleClose={closeModal}
+              handleAddToProgram={handleAddToProgram}
+              exercise={exercise}
+              selectedProgram={selectedProgram}
+              selectProgram={selectProgram}
+              setSelectedProgram={setSelectedProgram}
+            />
+          }
+          modalState={modalOpen}
+          handleClose={closeModal}
+        />
+      )}
 
       {/* exercise details */}
       <div className="text-center text-white my-6">
