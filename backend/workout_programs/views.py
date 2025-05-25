@@ -158,7 +158,7 @@ class WorkoutProgramExerciseViewSet(APIView):
             instance = WorkoutProgram.objects.get(pk=pk)
             if instance.user != request.user:
                 return Response({"error": "Workout program not found with associated user."}, status=status.HTTP_403_FORBIDDEN)
-
+            
             data = request.data.copy()
             exercises_data = data.get('exercise', None)
             sets_data = data.get('sets', [])
@@ -167,6 +167,9 @@ class WorkoutProgramExerciseViewSet(APIView):
             exercise_name = None
             category = None
             target = None
+            # If delete_sets is provided, delete the specified sets
+            delete_sets = data.get('delete_sets', None)
+
             # Handle Exercise data
             if exercises_data:
                 # If exercise is being edited in program 
@@ -185,9 +188,23 @@ class WorkoutProgramExerciseViewSet(APIView):
             exercise, created = Exercise.objects.get_or_create(id=exercise_id, defaults={'exercise_name': f"{exercise_name}",'category': f"{category}", 'target': f"{target}"})
             program = WorkoutProgram.objects.get(id=program_id)
             sets_list = []
+
+            # Delete the sets from the database
+            for set_id in delete_sets:
+                try:
+                    set_to_delete = SetInExercise.objects.get(id=set_id, exercise_id=exercise_id)
+                    set_to_delete.delete()
+                except SetInExercise.DoesNotExist:
+                    continue
+
             # Handle Sets data
             for set_data in sets_data:
                 set_id = set_data.get('id', None)
+
+                # Skip sets that were just deleted
+                if set_id is not None and set_id in delete_sets:
+                    continue
+
                 set_number = set_data.get('set_number', None)
                 reps = set_data.get('reps', None)
                 weight = set_data.get('weight', None)

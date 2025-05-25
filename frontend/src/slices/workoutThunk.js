@@ -41,6 +41,7 @@ export const createWorkout = (workoutData, resetForm, handleClose) => async (dis
   }
 };
 
+// Delete a workout program from the program page by its ID
 export const deleteWorkout = (id) => async (dispatch) => {
   try {
     await axiosInstance.delete(`/${API_BASE_URL}/delete/${id}/`);
@@ -54,9 +55,12 @@ export const updateWorkout = (workoutData, programId, updatingExercise) => async
   dispatch(clearErrors());
   try {
     let response;
+    // determine the endpoint based on whether we're updating an exercise or the program itself
     if (updatingExercise === true) {
+      // If updating an exercise, use the update-exercise endpoint
       response = await axiosInstance.put(`/${API_BASE_URL}/update-exercise/${programId}/`, body);
     } else {
+      // If updating the program itself, use the update endpoint
       response = await axiosInstance.put(`/${API_BASE_URL}/update/${programId}/`, body);
     }
     dispatch(updateWorkouts(response.data));
@@ -65,6 +69,7 @@ export const updateWorkout = (workoutData, programId, updatingExercise) => async
   }
 };
 
+// Remove an exercise from the workout program by its ID
 export const removeExercise = (programId, ExerciseInProgramId) => async (dispatch) => {
   try {
     await axiosInstance.delete(`/${API_BASE_URL}/delete_exercise/${programId}/${ExerciseInProgramId}/`);

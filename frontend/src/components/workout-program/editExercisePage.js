@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { updateWorkout } from '../../slices/workoutThunk';
@@ -12,6 +12,7 @@ const EditExercisePage = () => {
   const { program } = exercise;
   const [editedSets, setEditedSets] = useState([...exercise.sets]);
   const [error, setError] = useState('');
+  const [deleteSets, setDeleteSets] = useState([]); 
 
   const handleInputChange = (index, field, value) => {
     const updatedSets = [...editedSets];
@@ -19,16 +20,25 @@ const EditExercisePage = () => {
     setEditedSets(updatedSets);
   };
 
-  // const handleDeleteSet = (index) => {
-  //   setEditedSets((prevArray) => {
-  //     return [...prevArray.slice(0, index), ...prevArray.slice(index + 1)];
-  //   });
-  // };
+  const handleDeleteSet = (index) => {
+    setEditedSets((prevArray) => {
+      // adding the set ID to deleteSets if it exists
+      const setId = prevArray[index]?.id;
+      if (setId) {
+        setDeleteSets((prev) => {
+          // Prevent duplicates
+          return prev.includes(setId) ? prev : [...prev, setId];
+        });
+      }
+      // Remove the set from the editedSets array to render the UI without it
+      return [...prevArray.slice(0, index), ...prevArray.slice(index + 1)];
+    });
+  };
 
   const handleUpdateClick = () => {
     if (validateFields()) {
-      const newExerciseData = { ...exercise, sets: editedSets };
-      console.log('new', editedSets);
+      // deleted sets is optional, if there are sets to delete it will be included in the update, otherwise it will be an empty array
+      const newExerciseData = { ...exercise, sets: editedSets, deleteSets: deleteSets };
       dispatch(updateWorkout(newExerciseData, program, true))
         .then(() => {
           dispatch(openSnackbar({ message: 'Exercise updated successfully', severity: 'success' }));
@@ -111,7 +121,7 @@ const EditExercisePage = () => {
             </div>
 
             {/* delete button */}
-            {/* <div>
+            <div>
               <button
                 class="flex justify-center items-center w-9 h-9 rounded-full text-white focus:outline-none bg-red-500 hover:bg-red-600"
                 onClick={(e) => handleDeleteSet(index)}
@@ -120,7 +130,7 @@ const EditExercisePage = () => {
                   <path stroke-width="2" d="M20 12H4"></path>
                 </svg>
               </button>
-            </div> */}
+            </div>
           </div>
         ))}
 
