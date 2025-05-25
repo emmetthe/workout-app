@@ -3,26 +3,9 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { UpdateProfileAsync } from '../../slices/authSlice';
 import ModalForm from '../modal/modal';
-import { Button, Grid, Typography, CircularProgress } from '@mui/material';
 import UpdateProfileForm from './updateProfileForm';
 import WorkoutProgram from '../workout-program/workoutProgram';
-
-const styles = {
-  container: {
-    padding: '20px',
-    marginTop: '50px'
-  },
-  header: {
-    marginBottom: '20px'
-  },
-  welcome: {
-    fontSize: '24px',
-    marginBottom: '20px'
-  },
-  button: {
-    marginBottom: '20px'
-  }
-};
+import Spinner from '../spinner/spinner';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -54,28 +37,21 @@ const Dashboard = () => {
   };
 
   return (
-    <Grid container direction="column" alignItems="center" style={styles.container}>
+    <div className="flex flex-col items-center p-5 mx-auto mt-12 min-h-screen">
       {loading ? (
-        <Grid style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
-          <CircularProgress />
-        </Grid>
+        <Spinner />
       ) : (
         <>
-          <Typography variant="h4" style={styles.header}>
-            Profile Page
-          </Typography>
-          <Typography variant="h1" style={styles.welcome}>
-            Welcome back, {profile.firstName}
-          </Typography>
+         <h1 className="mb-5 text-6xl text-gray-100 text-center">Profile</h1>
 
-          <Button variant="contained" onClick={openModal} style={styles.button}>
+          <button className="mb-1 px-4 py-2 bg-primary text-white rounded hover:bg-opacity-80" onClick={openModal}>
             Update Profile
-          </Button>
+          </button>
 
           {/* displaying user's workout programs */}
-          <Grid item>
+          <div>
             <WorkoutProgram />
-          </Grid>
+          </div>
 
           {/* update user details form */}
           <ModalForm
@@ -85,7 +61,7 @@ const Dashboard = () => {
           />
         </>
       )}
-    </Grid>
+    </div>
   );
 };
 

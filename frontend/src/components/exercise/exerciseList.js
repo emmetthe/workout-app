@@ -1,32 +1,21 @@
 import React from 'react';
 import ExerciseCard from './exerciseCard';
-import { Grid, Typography } from '@mui/material';
-
-const styles = {
-  noExercisesContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-};
 
 const ExerciseList = ({ exercises }) => {
   return (
-    <Grid container spacing={2}>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       {exercises.length ? (
         exercises.map((exercise) => (
-          <Grid item xs={12} sm={6} md={4} key={exercise.id}>
+          <div key={exercise.id} className="col-span-1">
             <ExerciseCard exercise={exercise} />
-          </Grid>
+          </div>
         ))
       ) : (
-        <Grid item xs={12} sx={styles.noExercisesContainer}>
-          <Typography variant="h6" align="center">
-            No exercises found
-          </Typography>
-        </Grid>
+        <div className="col-span-full flex justify-center items-center">
+          <p className="text-lg text-center">No exercises found</p>
+        </div>
       )}
-    </Grid>
+    </div>
   );
 };
 

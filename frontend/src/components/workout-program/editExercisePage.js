@@ -1,64 +1,8 @@
-import React, { useState } from 'react';
-import { TextField, Button, Grid, Typography, Container } from '@material-ui/core';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { updateWorkout } from '../../slices/workoutThunk';
 import { openSnackbar } from '../../slices/snackbarSlice';
-
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles({
-  updateButton: {
-    backgroundColor: '#1976d2',
-    color: 'white',
-    width: '100px',
-    height: '40px',
-    margin: '5px',
-    '&:hover': {
-      backgroundColor: '#1565c0'
-    }
-  }
-});
-
-const styles = {
-  editExPageContainer: {
-    marginTop: '50px'
-  },
-  headerStyling: {
-    borderBottom: '1px solid #ccc'
-  },
-  titleStyling: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '20px'
-  },
-  buttonStyling: {
-    marginTop: '20px'
-  },
-  buttonWidth: {
-    width: '100px',
-    height: '40px',
-    margin: '5px'
-  },
-  labelStyling: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  setNumStyling: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  updateButton: {
-    backgroundColor: '#1976d2',
-    color: 'white',
-    width: '100px',
-    height: '40px',
-    margin: '5px'
-  }
-};
 
 const EditExercisePage = () => {
   const location = useLocation();
@@ -68,8 +12,7 @@ const EditExercisePage = () => {
   const { program } = exercise;
   const [editedSets, setEditedSets] = useState([...exercise.sets]);
   const [error, setError] = useState('');
-
-  const classes = useStyles();
+  const [deleteSets, setDeleteSets] = useState([]); 
 
   const handleInputChange = (index, field, value) => {
     const updatedSets = [...editedSets];
@@ -77,10 +20,25 @@ const EditExercisePage = () => {
     setEditedSets(updatedSets);
   };
 
+  const handleDeleteSet = (index) => {
+    setEditedSets((prevArray) => {
+      // adding the set ID to deleteSets if it exists
+      const setId = prevArray[index]?.id;
+      if (setId) {
+        setDeleteSets((prev) => {
+          // Prevent duplicates
+          return prev.includes(setId) ? prev : [...prev, setId];
+        });
+      }
+      // Remove the set from the editedSets array to render the UI without it
+      return [...prevArray.slice(0, index), ...prevArray.slice(index + 1)];
+    });
+  };
+
   const handleUpdateClick = () => {
     if (validateFields()) {
-      const newExerciseData = { ...exercise, sets: editedSets };
-
+      // deleted sets is optional, if there are sets to delete it will be included in the update, otherwise it will be an empty array
+      const newExerciseData = { ...exercise, sets: editedSets, deleteSets: deleteSets };
       dispatch(updateWorkout(newExerciseData, program, true))
         .then(() => {
           dispatch(openSnackbar({ message: 'Exercise updated successfully', severity: 'success' }));
@@ -116,76 +74,87 @@ const EditExercisePage = () => {
   };
 
   return (
-    <Container maxWidth="sm" style={styles.editExPageContainer}>
-      <Typography variant="h4" gutterBottom style={styles.headerStyling}>
-        Edit Sets
-      </Typography>
+    <div className="flex flex-col items-center mt-12 text-white px-4 min-h-screen">
+      <div className=" max-w-lg">
+        <h4 className="text-2xl font-semibold border-b pb-2 mb-6">Edit Sets</h4>
 
-      <Grid style={styles.titleStyling}>
-        <Typography variant="h5">{exercise.exercise.exerciseName}</Typography>
+        <h5 className="text-xl mb-5">{exercise.exercise.exerciseName}</h5>
 
-        <Button variant="contained" color="primary" style={styles.updateButton} onClick={handleAddSetClick}>
-          Add Set
-        </Button>
-      </Grid>
+        {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
 
-      {error && (
-        <Typography variant="body2" color="error" gutterBottom>
-          {error}
-        </Typography>
-      )}
+        {/* labels */}
+        <div className="grid grid-cols-12 gap-4 mb-2">
+          <div className="col-span-2 flex justify-start items-center">
+            <span className="text-lg">Set</span>
+          </div>
+          <div className="col-span-4 flex justify-center items-center">
+            <span className="text-lg">Reps</span>
+          </div>
+          <div className="col-span-4 flex justify-center items-center">
+            <span className="text-lg">Weight (lbs)</span>
+          </div>
+        </div>
 
-      <Grid container spacing={2}>
-        <Grid item xs={2}>
-          <Typography variant="body1" style={styles.labelStyling}>
-            Set
-          </Typography>
-        </Grid>
-        <Grid item xs={5}>
-          <Typography variant="body1" style={styles.labelStyling}>
-            Reps
-          </Typography>
-        </Grid>
-        <Grid item xs={5}>
-          <Typography variant="body1" style={styles.labelStyling}>
-            Weight (lbs)
-          </Typography>
-        </Grid>
-      </Grid>
+        {editedSets.map((set, index) => (
+          <div className="grid grid-cols-12 gap-4 mb-2 text-black items-center" key={index}>
+            {/* rep number */}
+            <div className="col-span-2 text-white">
+              <span className="text-lg">{index + 1}</span>
+            </div>
+            <div className="col-span-4">
+              <input
+                type="number"
+                className="w-full p-2 border rounded"
+                value={set.reps}
+                onChange={(e) => handleInputChange(index, 'reps', Number(e.target.value))}
+              />
+            </div>
 
-      {editedSets.map((set, index) => (
-        <Grid container spacing={2} key={index}>
-          <Grid item xs={2} style={styles.setNumStyling}>
-            <Typography variant="body1">{index + 1}</Typography>
-          </Grid>
-          <Grid item xs={5}>
-            <TextField
-              variant="outlined"
-              fullWidth
-              value={set.reps}
-              onChange={(e) => handleInputChange(index, 'reps', Number(e.target.value))}
-            />
-          </Grid>
-          <Grid item xs={5}>
-            <TextField
-              variant="outlined"
-              fullWidth
-              value={set.weight}
-              onChange={(e) => handleInputChange(index, 'weight', Number(e.target.value))}
-            />
-          </Grid>
-        </Grid>
-      ))}
+            {/* weight value */}
+            <div className="col-span-4">
+              <input
+                type="number"
+                className="w-full p-2 border rounded"
+                value={set.weight}
+                onChange={(e) => handleInputChange(index, 'weight', Number(e.target.value))}
+              />
+            </div>
 
-      <Container style={styles.buttonStyling}>
-        <Button variant="contained" className={classes.updateButton} onClick={handleUpdateClick}>
-          Update
-        </Button>
-        <Button variant="contained" style={styles.buttonWidth} onClick={handleCancelClick}>
-          Cancel
-        </Button>
-      </Container>
-    </Container>
+            {/* delete button */}
+            <div>
+              <button
+                class="flex justify-center items-center w-9 h-9 rounded-full text-white focus:outline-none bg-red-500 hover:bg-red-600"
+                onClick={(e) => handleDeleteSet(index)}
+              >
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-width="2" d="M20 12H4"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        ))}
+
+        {/* Centered Plus Button */}
+        <div className="flex justify-center mt-6">
+          <button
+            className="bg-blue-600 text-white text-2xl w-10 h-10 flex items-center justify-center rounded-full hover:bg-blue-700"
+            onClick={handleAddSetClick}
+          >
+            +
+          </button>
+        </div>
+
+        {/* Centered Update and Cancel Buttons */}
+        <div className="flex justify-center space-x-4 mt-6">
+          <button className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700" onClick={handleUpdateClick}>
+            Update
+          </button>
+          <button className="bg-gray-300 text-black px-6 py-2 rounded hover:bg-gray-400" onClick={handleCancelClick}>
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

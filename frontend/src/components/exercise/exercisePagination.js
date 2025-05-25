@@ -1,55 +1,57 @@
 import React from 'react';
-import { Button } from '@mui/material';
-
-const paginationWrapperStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  marginTop: '16px'
-};
-
-const paginationButtonStyle = {
-  marginLeft: '2px',
-  marginRight: '2px',
-  minWidth: '80px'
-};
-
-const nextButtonStyle = {
-  marginLeft: '2px',
-  marginRight: '2px',
-  minWidth: '107px'
-};
+import { MdKeyboardDoubleArrowLeft } from 'react-icons/md';
+import { MdKeyboardArrowLeft } from 'react-icons/md';
+import { MdKeyboardArrowRight } from 'react-icons/md';
+import { MdKeyboardDoubleArrowRight } from 'react-icons/md';
 
 const ExercisePagination = ({ currentPage, totalPages, pageNumbers, handlePageChange }) => {
   return (
-    <div style={paginationWrapperStyle}>
-      <Button
-        variant="contained"
-        onClick={() => handlePageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        style={paginationButtonStyle}
+    <div className="flex justify-center mt-4">
+      {/* go to first page */}
+      <button className="mx-1" onClick={() => handlePageChange(1)}>
+        <MdKeyboardDoubleArrowLeft className="h-7 w-7 fill-white" />
+      </button>
+
+      {/* go to prev page */}
+      <button
+        className="mx-1 fill-white"
+        onClick={() => {
+          if (currentPage !== 1) {
+            handlePageChange(currentPage - 1);
+          }
+        }}
+        // disabled={currentPage === 1}
       >
-        Previous
-      </Button>
+        <MdKeyboardArrowLeft className="h-7 w-7 fill-white" />
+      </button>
 
       {pageNumbers.map((pageNumber) => (
-        <Button
+        <button
           key={pageNumber}
-          variant={currentPage === pageNumber ? 'contained' : 'outlined'}
+          className={`mx-1 px-4 py-2 rounded ${currentPage === pageNumber ? 'bg-[#5b79f8] text-white hover:bg-[#4d6dfd]' : 'bg-gray-200'}`}
           onClick={() => handlePageChange(pageNumber)}
-          style={paginationButtonStyle}
         >
           {pageNumber}
-        </Button>
+        </button>
       ))}
 
-      <Button
-        variant="contained"
-        onClick={() => handlePageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-        style={nextButtonStyle}
+      {/* go to next page */}
+      <button
+        className="mx-1"
+        onClick={() => {
+          if (currentPage < totalPages) {
+            handlePageChange(currentPage + 1);
+          }
+        }}
+        // disabled={currentPage === totalPages}
       >
-        Next
-      </Button>
+        <MdKeyboardArrowRight className="h-7 w-7 fill-white" />
+      </button>
+
+      {/* skip to last page */}
+      <button className="mx-1" onClick={() => handlePageChange(totalPages)}>
+        <MdKeyboardDoubleArrowRight className="h-7 w-7 fill-white" />
+      </button>
     </div>
   );
 };

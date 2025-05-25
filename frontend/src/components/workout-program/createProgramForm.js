@@ -1,51 +1,7 @@
 import React, { useState } from 'react';
-import { Grid, Box, Button, TextField, Typography, FormControlLabel, CircularProgress } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { createWorkout } from '../../slices/workoutThunk';
-import { Alert, IconButton } from '@mui/material';
-import CloseIcon from '@material-ui/icons/Close';
-import Checkbox from '@mui/material/Checkbox';
-
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles({
-  closeButton: {
-    position: 'absolute',
-    left: '30px',
-    bottom: '30px',
-    backgroundColor: '#F5F5F5',
-    color: 'gray',
-    '&:hover': {
-      backgroundColor: '#F8F8F8'
-    }
-  },
-  centeredContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: 20,
-    textAlign: 'center'
-  },
-  centeredLabel: {
-    marginRight: '20%'
-  },
-  createButton: {
-    marginTop: 20,
-    backgroundColor: '#1976d2',
-    color: 'white',
-    '&:hover': {
-      backgroundColor: '#1565c0'
-    }
-  },
-  parentFormContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center'
-  },
-  daysOfWeekContainer: {
-    alignItems: 'center'
-  }
-});
+import Spinner from '../spinner/spinner';
 
 const WorkoutProgramForm = ({ handleClose }) => {
   const [selectedExercises, setSelectedExercises] = useState([]);
@@ -53,9 +9,7 @@ const WorkoutProgramForm = ({ handleClose }) => {
   const [workoutName, setWorkoutName] = useState('');
   const [workoutDescription, setWorkoutDescription] = useState('');
   const [selectedDays, setSelectedDays] = useState([]);
-  // const errors = useSelector((state) => state.errors);
   const [error, setError] = useState('');
-  const classes = useStyles();
   const [loading, setLoading] = useState(false);
 
   const openLoader = () => {
@@ -98,65 +52,63 @@ const WorkoutProgramForm = ({ handleClose }) => {
   };
 
   return (
-    <Grid container direction="column" alignItems="flex-end">
-      <IconButton className={classes.closeButton} variant="contained" onClick={handleClose}>
-        <CloseIcon />
-      </IconButton>
+    <div className="flex flex-col items-end">
+      {/* Close button can be added here if needed */}
 
-      <Box className={classes.parentFormContainer}>
-        {error && <Alert severity="error">{error}</Alert>}
+      <div className="flex flex-col items-center">
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span className="block sm:inline">{error}</span>
+          </div>
+        )}
 
-        {/* start spinner when calling createworkout api */}
-        {loading && <CircularProgress color="inherit" style={{ marginTop: '10px' }} />}
+        {loading && <Spinner />}
 
-        <Grid container direction="column" className={classes.centeredContainer}>
-          <TextField
-            label="Workout Name"
-            variant="outlined"
+        <div className="flex flex-col items-center p-5 text-center">
+          <input
+            type="text"
+            placeholder="Workout Name"
             value={workoutName}
             onChange={(e) => setWorkoutName(e.target.value)}
-            fullWidth
-            style={{ marginBottom: 10 }}
+            className="w-full mb-2 p-2 border rounded disabled:bg-gray-100"
             disabled={loading}
             required
           />
-          <TextField
-            label="Workout Description"
-            variant="outlined"
+          <textarea
+            placeholder="Workout Description"
             value={workoutDescription}
             onChange={(e) => setWorkoutDescription(e.target.value)}
-            multiline
-            minRows={3}
-            fullWidth
-            style={{ marginBottom: 20 }}
+            className="w-full mb-4 p-2 border rounded disabled:bg-gray-100"
             disabled={loading}
           />
 
-          <Typography variant="subtitle1" style={{ marginBottom: 10 }}>
-            Days
-          </Typography>
+          <p className="mb-2 text-lg">Workout Frequency</p>
 
-          <Grid className={classes.daysOfWeekContainer}>
-            <Grid container direction="column">
-              {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
-                <FormControlLabel
-                  key={day}
-                  control={<Checkbox checked={selectedDays.includes(day)} onChange={() => handleDayChange(day)} />}
-                  label={day}
-                  labelPlacement="start"
-                  className={classes.centeredLabel}
+          <div className="flex flex-col items-start">
+            {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map((day) => (
+              <label key={day} className="flex items-center mb-1">
+                <input
+                  type="checkbox"
+                  checked={selectedDays.includes(day)}
+                  onChange={() => handleDayChange(day)}
+                  className="form-checkbox h-5 w-5 text-blue-600 hover:cursor-pointer"
                   disabled={loading}
                 />
-              ))}
-            </Grid>
-          </Grid>
+                <span className="ml-2">{day}</span>
+              </label>
+            ))}
+          </div>
 
-          <Button variant="contained" onClick={createProgram} className={classes.createButton} disabled={loading}>
+          <button
+            onClick={createProgram}
+            className="mt-5 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-blue-400"
+            disabled={loading}
+          >
             Create workout
-          </Button>
-        </Grid>
-      </Box>
-    </Grid>
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

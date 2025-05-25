@@ -1,100 +1,6 @@
 import React, { useState } from 'react';
-import { Grid, Button, TextField, InputAdornment, Box, Card, CardContent, Alert } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { Typography, IconButton } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles({
-  closeButton: {
-    position: 'absolute',
-    right: '10px',
-    top: '12px',
-    padding: '7px',
-    color: 'gray',
-    '&:hover': {
-      backgroundColor: '#F5F5F5'
-    }
-  },
-  errorContainer: {
-    marginBottom: '16px',
-    textAlign: 'center'
-  },
-  setCard: {
-    marginBottom: '5px', // Add spacing between sets
-    border: '1px solid #E0E0E0', // Border to distinguish sets
-    borderRadius: '5px', // Rounded corners for the card
-    marginTop: '10px'
-  },
-  setTypography: {
-    marginBottom: '1px' // Spacing between set details
-  }
-});
-
-const styles = {
-  backButton: {
-    marginLeft: '15px',
-    position: 'absolute',
-    left: '15px',
-    top: '20px'
-  },
-  title: {
-    fontSize: '24px',
-    textAlign: 'center',
-    marginTop: '20px',
-    marginBottom: '10px'
-  },
-  label: {
-    fontSize: '16px',
-    marginBottom: '8px'
-  },
-  textField: {
-    marginBottom: '16px'
-  },
-  addButton: {
-    marginTop: '20px',
-    width: '100%'
-  },
-  programNameContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '10px'
-  },
-  workoutListButton: {
-    marginBottom: '10px',
-    width: '100%'
-  },
-  commonFormStyles: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '20px',
-    minWidth: '250px',
-    minHeight: '200px'
-  },
-  cancelButton: {
-    backgroundColor: 'red',
-    color: 'white',
-    '&:hover': {
-      backgroundColor: '#ff0000'
-    },
-    marginTop: '20px',
-    marginLeft: '20px'
-  },
-  exerciseSubtitle: {
-    marginTop: '15px',
-    marginBottom: '10px'
-  },
-  errorStyling: {
-    width: '100%'
-  },
-  createSetBtn: {
-    marginTop: '20px'
-  }
-};
+import { FaArrowLeft } from 'react-icons/fa';
 
 const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedProgram, selectProgram, setSelectedProgram }) => {
   const workouts = useSelector((state) => state.programs);
@@ -105,7 +11,6 @@ const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedPr
   const [showForm, setShowForm] = useState(true);
   const [addingSet, setAddingSet] = useState(false);
   const [formError, setFormError] = useState('');
-  const classes = useStyles();
 
   const handleAddExercise = () => {
     const exerciseData = {
@@ -115,17 +20,14 @@ const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedPr
       programName: selectedProgram.name,
       target: exercise.target.Primary,
       category: exercise.Category
-      // Add more fields as needed
     };
 
     // check to see if exercise already in program
     const checkExerciseInProgram = () => {
       const { exercises } = selectedProgram;
-      const res = exercises.some((ex) => ex.exercise.id === exercise.id);
-      return res;
+      return exercises.some((ex) => ex.exercise.id === exercise.id);
     };
 
-    // display error if current exercise already in selected program
     if (checkExerciseInProgram()) {
       setFormError('Exercise Already In Selected Program');
     } else {
@@ -134,7 +36,6 @@ const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedPr
   };
 
   const handleGoBack = () => {
-    // Clear the input fields
     setSelectedProgram(null);
     setExerciseSets([]);
     setReps('');
@@ -155,14 +56,14 @@ const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedPr
       setFormError('Please fill in all fields.');
       return;
     }
-    // Create a new set object and add it to the exerciseSets state
+
     const newSet = {
       reps: Number(reps),
       set_number: exerciseSets.length + 1,
       weight: Number(weight)
     };
+
     setExerciseSets([...exerciseSets, newSet]);
-    // Clear the input fields
     setReps('');
     setWeight('');
     setFormError('');
@@ -181,113 +82,86 @@ const AddExerciseForm = ({ handleClose, handleAddToProgram, exercise, selectedPr
   const totalReps = exerciseSets.reduce((total, set) => total + set.reps, 0);
 
   return (
-    <Grid>
-      <IconButton className={classes.closeButton} variant="contained" onClick={handleClose}>
-        <CloseIcon />
-      </IconButton>
+    <div className="flex flex-col items-center">
       {!selectedProgram ? (
-        // Display list of workout programs
-        <>
-          <Grid style={styles.commonFormStyles}>
-            <Typography style={styles.title}>Select a program</Typography>
-            {workoutList.map((program, idx) => (
-              <Button key={idx} variant="contained" style={styles.workoutListButton} onClick={() => selectProgram(program)}>
-                {program.name}
-              </Button>
-            ))}
-          </Grid>
-        </>
+        <div className="flex flex-col items-center p-5 space-y-4">
+          <h2 className="text-2xl font-bold text-center">Select a program</h2>
+          {workoutList.map((program, idx) => (
+            <button
+              key={idx}
+              className="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-600"
+              onClick={() => selectProgram(program)}
+            >
+              {program.name}
+            </button>
+          ))}
+        </div>
       ) : (
-        // Display exercise form when a program is selected
-        <>
-          <Grid style={styles.programNameContainer}>
-            <Button style={styles.backButton} variant="outlined" onClick={handleGoBack}>
-              Change Program
-            </Button>
-            <Box>
-              <Typography style={styles.title}>{selectedProgram.name}</Typography>
-              {formError.length > 0 && (
-                <Alert severity="error" sx={styles.errorStyling}>
-                  {formError}
-                </Alert>
-              )}
-            </Box>
-          </Grid>
+        <div className="w-full p-5 space-y-4">
+          <div className="relative flex items-center justify-center border-b pb-4">
+            {/* Back button */}
+            <button className="absolute -top-9 -left-8" onClick={handleGoBack}>
+              <FaArrowLeft className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+            </button>
+
+            {/* Centered title */}
+            <h2 className="text-xl font-bold">{selectedProgram.name}</h2>
+          </div>
+
+          {formError && <div className="bg-red-100 text-red-600 p-3 rounded">{formError}</div>}
+
           {showForm ? (
-            <>
-              <Typography style={styles.label}>Set {exerciseSets.length + 1}</Typography>
-              <Typography style={styles.label}>Enter Reps and Weight:</Typography>
+            <div className="space-y-4">
+              <label className="block text-lg">Set {exerciseSets.length + 1}</label>
+              <div className="space-y-2">
+                <label className="block">Enter Reps:</label>
+                <input type="number" className="border p-2 w-full rounded" value={reps} onChange={(e) => setReps(e.target.value)} min={1} />
+              </div>
+              <div className="space-y-2">
+                <label className="block">Enter Weight (lbs):</label>
+                <input
+                  type="number"
+                  className="border p-2 w-full rounded"
+                  value={weight}
+                  onChange={(e) => setWeight(e.target.value)}
+                  min={1}
+                />
+              </div>
 
-              {/* display error */}
-              {formError && (
-                <Typography color="error" className={classes.errorContainer} variant="subtitle1">
-                  {formError}
-                </Typography>
-              )}
-              <TextField
-                type="number"
-                label="Reps"
-                value={reps}
-                onChange={(e) => setReps(e.target.value)}
-                variant="outlined"
-                fullWidth
-                style={styles.textField}
-                InputProps={{
-                  inputProps: { min: 1 }
-                }}
-              />
-              <TextField
-                type="number"
-                label="Weight"
-                value={weight}
-                onChange={(e) => setWeight(e.target.value)}
-                variant="outlined"
-                fullWidth
-                style={styles.textField}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">{'lbs'}</InputAdornment>,
-                  inputProps: { min: 1 }
-                }}
-              />
-              <Box display="flex" alignItems="center">
-                <Button variant="contained" color="primary" onClick={handleAddSet} style={styles.createSetBtn}>
+              <div className="flex space-x-4">
+                <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onClick={handleAddSet}>
                   Create Set
-                </Button>
-
+                </button>
                 {exerciseSets.length > 0 && (
-                  <Button variant="contained" style={styles.cancelButton} onClick={handleCancelForm}>
+                  <button className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600" onClick={handleCancelForm}>
                     Cancel
-                  </Button>
+                  </button>
                 )}
-              </Box>
-            </>
+              </div>
+            </div>
           ) : (
-            <Box>
-              {/* Display the added sets */}
+            <div className="space-y-4">
               {exerciseSets.length > 0 && (
-                <Card className={classes.setCard}>
-                  <CardContent>
-                    <Typography variant="subtitle1">{exercise.exercise_name}:</Typography>
-                    <Typography className={classes.setTypography}> Total Sets: {exerciseSets.length}</Typography>
-                    <Typography className={classes.setTypography}>Total Reps: {totalReps}</Typography>
-                  </CardContent>
-                </Card>
+                <div className="border border-gray-300 rounded p-4">
+                  <h3 className="text-lg font-semibold">{exercise.exercise_name}:</h3>
+                  <p>Total Sets: {exerciseSets.length}</p>
+                  <p>Total Reps: {totalReps}</p>
+                </div>
               )}
-              <Button variant="contained" color="primary" onClick={handleShowForm} style={styles.addButton}>
+              <button className="bg-blue-500 text-white py-2 w-full rounded hover:bg-blue-600" onClick={handleShowForm}>
                 Create New Set
-              </Button>
-            </Box>
+              </button>
+            </div>
           )}
 
-          {/* only show button when at least one set is created */}
           {exerciseSets.length > 0 && !addingSet && (
-            <Button variant="contained" color="primary" onClick={handleAddExercise} style={styles.addButton}>
+            <button className="bg-green-500 text-white py-2 w-full rounded hover:bg-green-600 mt-4" onClick={handleAddExercise}>
               Add To Program
-            </Button>
+            </button>
           )}
-        </>
+        </div>
       )}
-    </Grid>
+    </div>
   );
 };
 
